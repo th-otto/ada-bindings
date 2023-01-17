@@ -715,6 +715,120 @@ begin
 end;
 
 
+function menu_unregister(
+            id    : int16)
+           return int16 is
+begin
+	aes_control.opcode := 36;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := id;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function menu_popup(
+            me_menu : in MENU;
+            me_xpos : int16;
+            me_ypos : int16;
+            me_mdata: out MENU)
+           return int16 is
+begin
+	aes_control.opcode := 36;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := me_xpos;
+	aes_intin(1) := me_ypos;
+	aes_addrin(0) := me_menu'Address;
+	aes_addrin(1) := me_mdata'Address;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function menu_attach(
+            me_flag : int16;
+            me_tree : in AEStree;
+            me_item : int16;
+            me_mdata: MENU_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(MENU_ptr, System.Address);
+begin
+	aes_control.opcode := 37;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := me_flag;
+	aes_intin(1) := me_item;
+	aes_addrin(0) := me_tree'Address;
+	aes_addrin(1) := to_address(me_mdata);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function menu_click(
+            click : int16;
+            setit : int16)
+           return int16 is
+begin
+	aes_control.opcode := 37;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := click;
+	aes_intin(1) := setit;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function menu_istart(
+            me_flag : int16;
+            me_tree : in AEStree;
+            me_imenu: int16;
+            me_item : int16)
+           return int16 is
+begin
+	aes_control.opcode := 38;
+	aes_control.num_intin := 3;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := me_flag;
+	aes_intin(1) := me_imenu;
+	aes_intin(2) := me_item;
+	aes_addrin(0) := me_tree'Address;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function menu_settings(
+            me_flag  : int16;
+            me_values: in MN_SET)
+           return int16 is
+begin
+	aes_control.opcode := 39;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := me_flag;
+	aes_addrin(0) := me_values'Address;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+
 
 function graf_handle(
             Wchar     : out int16;

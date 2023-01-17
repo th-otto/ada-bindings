@@ -998,6 +998,7 @@ package Atari.Aes is
             mn_scroll  : aliased int16;
             mn_keystate: aliased int16;
         end record;
+    type MENU_ptr is access all MENU;
 
     type MOBLK is
         record
@@ -1464,6 +1465,41 @@ package Atari.Aes is
     function menu_register(
                 ap_id  : int16;
                 me_text: const_chars_ptr)
+               return int16;
+
+    function menu_unregister(
+                id    : int16)
+               return int16;
+
+    function menu_popup(
+                me_menu : in MENU;
+                me_xpos : int16;
+                me_ypos : int16;
+                me_mdata: out MENU)
+               return int16;
+
+    function menu_attach(
+                me_flag : int16;
+                me_tree : in AEStree;
+                me_item : int16;
+                me_mdata: MENU_ptr)
+               return int16;
+
+    function menu_click(
+                click : int16;
+                setit : int16)
+               return int16;
+
+    function menu_istart(
+                me_flag : int16;
+                me_tree : in AEStree;
+                me_imenu: int16;
+                me_item : int16)
+               return int16;
+
+    function menu_settings(
+                me_flag  : int16;
+                me_values: in MN_SET)
                return int16;
 
 
