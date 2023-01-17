@@ -245,6 +245,6 @@ begin
             end loop;
             close_vwork;
         end if;
-        dummy := appl_exit;
+        appl_exit;
     end if;
 end eyes;

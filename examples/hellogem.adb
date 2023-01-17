@@ -9,5 +9,5 @@ procedure hellogem is
 begin
     dummy := appl_init;
     dummy := form_alert(1, "[1][Hello from GemAES Ada][OK]");
-    dummy := appl_exit;
+    appl_exit;
 end hellogem;

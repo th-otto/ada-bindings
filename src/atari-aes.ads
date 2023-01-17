@@ -1292,7 +1292,7 @@ package Atari.Aes is
     procedure aes(pb: AESPB_ptr);
 
     function appl_init return int16;
-    function appl_exit return int16;
+    procedure appl_exit;
     function appl_read(
                 ap_id     : int16;
                 length    : int16;
@@ -1310,11 +1310,10 @@ package Atari.Aes is
                return int16;
     function appl_find(name: chars_ptr) return int16;
     function appl_find(name: String) return int16;
-    function appl_tplay(
+    procedure appl_tplay(
                 mem       : System.Address;
                 num       : int16;
-                scale     : int16)
-               return int16;
+                scale     : int16);
     function appl_trecord(
                 mem       : System.Address;
                 count     : int16)
@@ -1374,7 +1373,7 @@ package Atari.Aes is
                 ButtonState: out int16;
                 KeyState   : out int16)
                return int16;
-    function evnt_mouse(
+    procedure evnt_mouse(
                 EnterExit  : int16;
                 InX        : int16;
                 InY        : int16;
@@ -1383,17 +1382,15 @@ package Atari.Aes is
                 OutX       : out int16;
                 OutY       : out int16;
                 ButtonState: out int16;
-                KeyState   : out int16)
-               return int16;
+                KeyState   : out int16);
     function evnt_mesag(
                 MesagBuf  : short_ptr)
                return int16;
     function evnt_mesag(
                 MesagBuf  : array_8_ptr)
                return int16;
-    function evnt_timer(
-                Interval  : uint32)
-               return int16;
+    procedure evnt_timer(
+                Interval  : uint32);
     function evnt_timer(
                 locount  : int16;
                 hicount  : int16)
@@ -1504,6 +1501,173 @@ package Atari.Aes is
 
 
 
+    procedure objc_add(
+                tree  : OBJECT_ptr;
+                Parent: int16;
+                Child : int16);
+
+    function objc_delete(
+                tree      : OBJECT_ptr;
+                Obj       : int16)
+               return int16;
+
+    procedure objc_draw(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Cx        : int16;
+                Cy        : int16;
+                Cw        : int16;
+                Ch        : int16);
+
+    procedure objc_draw(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                r         : in GRECT);
+
+    function objc_find(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Mx        : int16;
+                My        : int16)
+               return int16;
+
+    procedure objc_offset(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                X         : out int16;
+                Y         : out int16);
+
+    function objc_order(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                NewPos    : int16)
+               return int16;
+
+    function objc_edit(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                Kchar     : int16;
+                Index     : in out int16;
+                Kind      : int16)
+               return int16;
+
+    function objc_edit(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                Kchar     : int16;
+                Index     : in out int16;
+                Kind      : int16;
+                r         : out GRECT)
+               return int16;
+
+    procedure objc_change(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Cx        : int16;
+                Cy        : int16;
+                Cw        : int16;
+                Ch        : int16;
+                NewState  : int16;
+                Redraw    : int16);
+
+    procedure objc_change(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                r         : in GRECT;
+                NewState  : int16;
+                Redraw    : int16);
+
+    function objc_sysvar(
+                mode      : int16;
+                which     : int16;
+                in1       : int16;
+                in2       : int16;
+                out1      : out int16;
+                out2      : out int16)
+               return int16;
+
+	function objc_xfind(
+	            tree      : OBJECT_ptr;
+	            Start     : int16;
+	            Depth     : int16;
+	            Mx        : int16;
+	            My        : int16)
+	           return int16;
+
+
+
+
+    function form_do(
+                tree      : OBJECT_ptr;
+                StartObj  : int16)
+               return int16;
+
+    function form_dial(
+                Flag      : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Sw        : int16;
+                Sh        : int16;
+                Bx        : int16;
+                By        : int16;
+                Bw        : int16;
+                Bh        : int16)
+               return int16;
+
+    function form_dial(
+                Flag      : int16;
+                little    : in GRECT;
+                big       : in GRECT)
+               return int16;
+
+    function form_alert(fo_adefbttn: int16; alertstr: String) return int16;
+    function form_alert(fo_adefbttn: int16; alertstr: chars_ptr) return int16;
+
+    function form_error(
+                ErrorCode : int16)
+               return int16;
+
+    function form_center(
+                tree      : OBJECT_ptr;
+                Cx        : out int16;
+                Cy        : out int16;
+                Cw        : out int16;
+                Ch        : out int16)
+               return int16;
+
+    function form_center(
+                tree      : OBJECT_ptr;
+                r         : out GRECT)
+               return int16;
+
+    function form_keybd(
+                tree      : OBJECT_ptr;
+                Kobject   : int16;
+                Kobnext   : int16;
+                Kchar     : int16;
+                Knxtobject: out int16;
+                Knxtchar  : out int16)
+               return int16;
+
+    function form_button(
+                tree      : OBJECT_ptr;
+                Bobject   : int16;
+                Bclicks   : int16;
+                Bnxtobj   : out int16)
+               return int16;
+
+
+
+
+
+
+
+
     function graf_handle(
                 Wchar     : out int16;
                 Hchar     : out int16;
@@ -1535,8 +1699,6 @@ package Atari.Aes is
 
 
 
-    function form_alert(fo_adefbttn: int16; alertstr: String) return int16;
-    function form_alert(fo_adefbttn: int16; alertstr: chars_ptr) return int16;
 
 
 
