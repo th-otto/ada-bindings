@@ -541,9 +541,9 @@ end;
 
 
 function evnt_multi(
-            em_i       : EVMULT_IN_const_ptr;
+            em_i       : in EVMULT_IN;
             MesagBuf   : array_8_ptr;
-            em_o       : access EVMULT_OUT)
+            em_o       : out EVMULT_OUT)
            return int16 is
     function to_address is new Ada.Unchecked_Conversion(array_8_ptr, System.Address);
 begin
@@ -760,7 +760,7 @@ begin
 end;
 
 function graf_mouse(
-            Form       : int16;
+            Form       : Mouse_Type;
             FormAddress: MFORM_const_ptr := null)
            return int16 is
     function to_address is new Ada.Unchecked_Conversion(MFORM_const_ptr, System.Address);
@@ -770,7 +770,7 @@ begin
 	aes_control.num_intout := 1;
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
-	aes_intin(0) := Form;
+	aes_intin(0) := Form'Enum_Rep;
 	aes_addrin(0) := to_address(FormAddress);
 	aes_trap;
 	return aes_intout(0);
@@ -975,7 +975,7 @@ end;
 
 function wind_get(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             W1          : short_ptr;
             W2          : short_ptr;
             W3          : short_ptr;
@@ -992,7 +992,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 	case What is
 	   when WF_DCOLOR | WF_COLOR =>
 	      aes_intin(2) := W1.all;
@@ -1026,7 +1026,7 @@ end;
 
 function wind_get(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             r           : out GRECT)
            return int16 is
 begin
@@ -1036,7 +1036,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 
 	aes_trap;
 
@@ -1050,8 +1050,8 @@ end;
 
 function wind_get(
             WindowHandle: int16;
-            What        : int16;
-            clip        : GRECT_const_ptr;
+            What        : wind_get_set_type;
+            clip        : in GRECT;
             r           : out GRECT)
            return int16 is
 begin
@@ -1061,7 +1061,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 	aes_intin(2) := clip.g_x;
 	aes_intin(3) := clip.g_y;
 	aes_intin(4) := clip.g_w;
@@ -1079,7 +1079,7 @@ end;
 
 function wind_get(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             W1          : short_ptr)
            return int16 is
     dummy: aliased int16;
@@ -1090,7 +1090,7 @@ end;
 
 function wind_set(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             W1          : int16;
             W2          : int16;
             W3          : int16;
@@ -1103,7 +1103,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 	aes_intin(2) := W1;
 	aes_intin(3) := W2;
 	aes_intin(4) := W3;
@@ -1118,8 +1118,8 @@ end;
 
 function wind_set(
             WindowHandle: int16;
-            What        : int16;
-            r           : GRECT_const_ptr)
+            What        : wind_get_set_type;
+            r           : in GRECT)
            return int16 is
 begin
 	aes_control.opcode := 105;
@@ -1128,7 +1128,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 	aes_intin(2) := r.g_x;
 	aes_intin(3) := r.g_y;
 	aes_intin(4) := r.g_w;
@@ -1142,9 +1142,9 @@ end;
 
 function wind_set(
             WindowHandle: int16;
-            What        : int16;
-            s           : GRECT_const_ptr;
-            r           : GRECT_ptr)
+            What        : wind_get_set_type;
+            s           : in GRECT;
+            r           : out GRECT)
            return int16 is
 begin
 	aes_control.opcode := 105;
@@ -1153,7 +1153,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 	aes_intin(2) := s.g_x;
 	aes_intin(3) := s.g_y;
 	aes_intin(4) := s.g_w;
@@ -1171,7 +1171,7 @@ end;
 
 function wind_set(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             str         : const_chars_ptr)
            return int16 is
     type const_chars_ptr_ptr is access all const_chars_ptr;
@@ -1185,7 +1185,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
     ptr := aes_intin(2)'Address;
     pptr := to_address(ptr);
     pptr.all := str;
@@ -1200,7 +1200,7 @@ end;
 
 function wind_set(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             W1          : int16 := 0)
            return int16 is
 begin
@@ -1210,7 +1210,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
 	aes_intin(2) := W1;
 	aes_intin(3) := 0;
 	aes_intin(4) := 0;
@@ -1224,7 +1224,7 @@ end;
 
 function wind_set(
             WindowHandle: int16;
-            What        : int16;
+            What        : wind_get_set_type;
             v           : System.Address;
             W3          : int16 := 0)
            return int16 is
@@ -1239,7 +1239,7 @@ begin
 	aes_control.num_addrin := 0;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := WindowHandle;
-	aes_intin(1) := What;
+	aes_intin(1) := What'Enum_Rep;
     ptr := aes_intin(2)'Address;
     pptr := to_address(ptr);
     pptr.all := v;

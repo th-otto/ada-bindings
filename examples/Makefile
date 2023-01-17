@@ -1,5 +1,5 @@
 GNAT = m68k-atari-mint-gnatmake -I../src -gnatwa
-GNATCFLAGS = -cargs  -O2
+GNATCFLAGS = -cargs  -O2 -g
 
 DEPS = \
 	../src/atari-aes.adb \
