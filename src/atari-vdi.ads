@@ -376,6 +376,93 @@ package Atari.Vdi is
 
     procedure v_alpha_text(handle: VdiHdl; str: string);
 
+    function v_orient(
+                handle     : VdiHdl;
+                orientation: int16)
+               return int16;
+
+    function v_copies(
+                handle : VdiHdl;
+                count: int16)
+               return int16;
+
+    function v_tray(
+                handle    : VdiHdl;
+                input     : int16)
+               return boolean;
+
+    function v_trays(
+                handle    : VdiHdl;
+                input     : int16;
+                output    : int16;
+                set_input : out int16;
+                set_output: out int16)
+               return boolean;
+
+    function v_page_size(
+                handle : VdiHdl;
+                page_id: int16)
+               return int16;
+
+    function vs_palette(
+                handle : VdiHdl;
+                palette: int16)
+               return int16;
+
+    procedure v_sound(
+                handle  : VdiHdl;
+                freq    : int16;
+                duration: int16);
+
+    function vs_mute(
+                handle: VdiHdl;
+                action: int16)
+               return int16;
+
+    procedure vt_resolution(
+                handle: VdiHdl;
+                xres: int16;
+                yres: int16;
+                xset: out int16;
+                yset: out int16);
+
+	procedure vt_axis(
+	            handle: VdiHdl;
+	            xres: int16;
+	            yres: int16;
+	            xset: out int16;
+	            yset: out int16);
+
+    procedure vt_origin(
+                handle : VdiHdl;
+                xorigin: int16;
+                yorigin: int16);
+
+    procedure vq_tdimensions(
+                handle    : VdiHdl;
+                xdimension: out int16;
+                ydimension: out int16);
+
+    procedure vt_alignment(
+                handle: VdiHdl;
+                dx: int16;
+                dy: int16);
+
+	procedure vsp_film(
+	            handle   : VdiHdl;
+	            color_idx: int16;
+	            lightness: int16);
+
+    function vqp_filmname(
+                handle : VdiHdl;
+                index: int16;
+                name : out String)
+               return int16;
+
+    procedure vsc_expose(
+                handle : VdiHdl;
+                state: int16);
+
 	procedure v_circle(
                 handle: VdiHdl;
                 x     : int16;

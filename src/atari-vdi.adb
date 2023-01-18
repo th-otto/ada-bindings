@@ -2,6 +2,7 @@ pragma No_Strict_Aliasing;
 with System.Machine_Code;
 use System.Machine_Code;
 with Ada.Unchecked_Conversion;
+with Interfaces; use Interfaces;
 
 package body Atari.Vdi is
 
@@ -41,7 +42,7 @@ begin
 end;
 
 
-function string_to_vdi(src: String; offset: int16) return int16 is
+function string_to_vdi(src: in String; offset: int16) return int16 is
 	len: int16;
 	dst: Integer;
 begin
@@ -55,7 +56,7 @@ begin
 end;
 
 
-function string_to_vdi(src: String; offset: int16; maxlen: int16) return int16 is
+function string_to_vdi(src: in String; offset: int16; maxlen: int16) return int16 is
 	len: Integer;
 	dst: Integer;
 begin
@@ -69,7 +70,7 @@ begin
 end;
 
 
-function string_to_vdi(src: Wide_String; offset: int16) return int16 is
+function string_to_vdi(src: in Wide_String; offset: int16) return int16 is
 	len: int16;
 	dst: Integer;
 begin
@@ -83,7 +84,7 @@ begin
 end;
 
 
-function string_to_vdi(src: Wide_String; offset: int16; maxlen: int16) return int16 is
+function string_to_vdi(src: in Wide_String; offset: int16; maxlen: int16) return int16 is
 	len: Integer;
 	dst: Integer;
 begin
@@ -95,6 +96,20 @@ begin
   	end loop;
 	return int16(len);
 end;
+
+
+procedure vdi_to_string(dst: out String; maxlen: int16; offset: int16 := 0) is
+	src: Integer;
+	len: Integer;
+begin
+	src := Integer(offset);
+	len := Integer(maxlen);
+	for i in 0 .. len - 1 loop
+		dst(i) := Character'Val(vdi_intout(src));
+		src := src + 1;
+  	end loop;
+end;
+
 
 
 procedure v_opnwk(
@@ -360,7 +375,6 @@ procedure v_bit_image(
             h_align : int16;
             v_align : int16;
             pxy     : short_array) is
-	use Interfaces;
 	len: int16;
 begin
 	vdi_ptsin(0) := pxy(0);
@@ -400,6 +414,223 @@ begin
 	len := string_to_vdi(str, 0);
 	v_escape(handle, 25, len);
 end;
+
+
+function v_orient(
+            handle     : VdiHdl;
+            orientation: int16)
+           return int16 is
+begin
+	vdi_intin(0) := orientation;
+	vdi_control.num_intout := 0;
+	v_escape(handle, 27, 1);
+	if vdi_control.num_intout /= 0 then
+		return vdi_intout(0);
+	end if;
+	return 0;
+end;
+
+
+function v_copies(
+            handle : VdiHdl;
+            count: int16)
+           return int16 is
+begin
+	vdi_intin(0) := count;
+	vdi_control.num_intout := 0;
+	v_escape(handle, 28, 1);
+	if vdi_control.num_intout /= 0 then
+		return vdi_intout(0);
+	end if;
+	return 0;
+end;
+
+
+function v_tray(
+            handle    : VdiHdl;
+            input     : int16)
+           return boolean is
+begin
+	vdi_intin(0) := input;
+	vdi_control.num_intout := 0;
+	v_escape(handle, 29, 1);
+	if vdi_control.num_intout /= 0 then
+		return true;
+	end if;
+	return false;
+end;
+
+
+function v_trays(
+            handle    : VdiHdl;
+            input     : int16;
+            output    : int16;
+            set_input : out int16;
+            set_output: out int16)
+           return boolean is
+begin
+	vdi_intin(0) := input;
+	vdi_intin(1) := output;
+	vdi_control.num_intout := 0;
+	v_escape(handle, 29, 2);
+	if vdi_control.num_intout /= 0 then
+		set_input := vdi_intout(0);
+		set_output := vdi_intout(1);
+		return true;
+	end if;
+	set_input := 0;
+	set_output := 0;
+	return false;
+end;
+
+
+function v_page_size(
+            handle : VdiHdl;
+            page_id: int16)
+           return int16 is
+begin
+	vdi_intin(0) := page_id;
+	vdi_control.num_intout := 0;
+	v_escape(handle, 37, 1);
+	if vdi_control.num_intout /= 0 then
+		return vdi_intout(0);
+	end if;
+	return 0;
+end;
+
+
+function vs_palette(
+            handle : VdiHdl;
+            palette: int16)
+           return int16 is
+begin
+	vdi_intin(0) := palette;
+	v_escape(handle, 60, 1);
+	return vdi_intout(0);
+end;
+
+
+procedure v_sound(
+            handle  : VdiHdl;
+            freq    : int16;
+            duration: int16) is
+begin
+	vdi_intin(0) := freq;
+	vdi_intin(1) := duration;
+	v_escape(handle, 61, 2);
+end;
+
+
+function vs_mute(
+            handle: VdiHdl;
+            action: int16)
+           return int16 is
+begin
+	vdi_intin(0) := action;
+	v_escape(handle, 62, 1);
+	return vdi_intout(0);
+end;
+
+
+procedure vt_resolution(
+            handle: VdiHdl;
+            xres: int16;
+            yres: int16;
+            xset: out int16;
+            yset: out int16) is
+begin
+	vdi_intin(0) := xres;
+	vdi_intin(1) := yres;
+	v_escape(handle, 81, 2);
+	xset := vdi_intout(0);
+	yset := vdi_intout(1);
+end;
+
+
+procedure vt_axis(
+            handle: VdiHdl;
+            xres: int16;
+            yres: int16;
+            xset: out int16;
+            yset: out int16) is
+begin
+	vdi_intin(0) := xres;
+	vdi_intin(1) := yres;
+	v_escape(handle, 82, 2);
+	xset := vdi_intout(0);
+	yset := vdi_intout(1);
+end;
+
+
+procedure vt_origin(
+            handle : VdiHdl;
+            xorigin: int16;
+            yorigin: int16) is
+begin
+	vdi_intin(0) := xorigin;
+	vdi_intin(1) := yorigin;
+	v_escape(handle, 83, 2);
+end;
+
+
+procedure vq_tdimensions(
+            handle    : VdiHdl;
+            xdimension: out int16;
+            ydimension: out int16) is
+begin
+	v_escape(handle, 84);
+	xdimension := vdi_intout(0);
+	ydimension := vdi_intout(1);
+end;
+
+
+procedure vt_alignment(
+            handle: VdiHdl;
+            dx: int16;
+            dy: int16) is
+begin
+	vdi_intin(0) := dx;
+	vdi_intin(1) := dy;
+	v_escape(handle, 85, 2);
+end;
+
+
+procedure vsp_film(
+            handle   : VdiHdl;
+            color_idx: int16;
+            lightness: int16) is
+begin
+	vdi_intin(0) := color_idx;
+	vdi_intin(1) := lightness;
+	v_escape(handle, 91, 2);
+end;
+
+
+function vqp_filmname(
+            handle : VdiHdl;
+            index: int16;
+            name : out String)
+           return int16 is
+begin
+	vdi_intin(0) := index;
+	v_escape(handle, 92, 1);
+	vdi_to_string(name, vdi_control.num_intout);
+	return vdi_control.num_intout;
+end;
+
+
+procedure vsc_expose(
+            handle : VdiHdl;
+            state: int16) is
+begin
+	vdi_intin(0) := state;
+	v_escape(handle, 93, 1);
+end;
+
+
+
+
+
 
 
 
@@ -678,8 +909,8 @@ begin
     return v;
 end;
 
+
 function vq_gdos return boolean is
-	use Interfaces;
     use ASCII;
     v: Unsigned_32;
 begin
