@@ -989,6 +989,7 @@ package Atari.Aes is
 
     type OBJECT;
     type OBJECT_ptr is access all OBJECT;
+    type OBJECT_ptr_ptr is access all OBJECT_ptr;
 
     type MENU is
         record
@@ -2001,6 +2002,45 @@ package Atari.Aes is
                return int16;
 
     procedure wind_new;
+
+
+
+    function rsrc_load(
+                Name      : const_chars_ptr)
+               return int16;
+
+    function rsrc_load(
+                Name      : String)
+               return int16;
+
+    function rsrc_free return int16;
+
+    function rsrc_gaddr(
+                c_Type    : int16;
+                Index     : int16;
+                Addr      : out System.Address)
+               return int16;
+
+    function rsrc_gaddr_tree(
+                Index     : int16)
+               return OBJECT_ptr;
+
+    function rsrc_saddr(
+                c_Type    : int16;
+                Index     : int16;
+                Addr      : System.Address)
+               return int16;
+
+    function rsrc_obfix(
+                tree      : OBJECT_ptr;
+                Index     : int16)
+               return int16;
+
+    function rsrc_rcfix(
+                rc_header : System.Address)
+               return int16;
+
+
 
 
     function rc_intersect(

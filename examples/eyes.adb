@@ -187,9 +187,7 @@ procedure eyes is
                     events := MU_MESAG or MU_TIMER;
                 end if;
             when AC_CLOSE =>
-                if pipe(4) = menu_id then
-                    whandle := 0;
-                end if;
+                whandle := 0;
             when others =>
                 null;
         end case;

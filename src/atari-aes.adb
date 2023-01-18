@@ -2460,6 +2460,136 @@ end;
 
 
 
+
+function rsrc_load(
+            Name      : const_chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+begin
+	aes_control.opcode := 110;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+
+	aes_addrin(0) := to_address(Name);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function rsrc_load(
+            Name      : String)
+           return int16 is
+    c_str: String := Name & ASCII.NUL;
+    function to_address is new Ada.Unchecked_Conversion(System.Address, const_chars_ptr);
+begin
+	return rsrc_load(to_address(c_str'Address));
+end;
+
+
+function rsrc_free return int16 is
+begin
+	aes_control.opcode := 111;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function rsrc_gaddr(
+            c_Type    : int16;
+            Index     : int16;
+            Addr      : out System.Address)
+           return int16 is
+begin
+	aes_control.opcode := 112;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 1;
+	aes_intin(0) := c_Type;
+	aes_intin(1) := Index;
+	aes_trap;
+	addr := aes_addrout(0);
+	return aes_intout(0);
+end;
+
+
+function rsrc_gaddr_tree(
+            Index     : int16)
+           return OBJECT_ptr is
+    treeadr: System.Address;
+    treeptr: OBJECT_ptr_ptr;
+    function to_address is new Ada.Unchecked_Conversion(System.Address, OBJECT_ptr_ptr);
+begin
+	if rsrc_gaddr(R_TREE, Index, treeadr) = 0 then
+	   return null;
+	end if;
+	treeptr := to_address(treeadr);
+	return treeptr.all;
+end;
+
+
+function rsrc_saddr(
+            c_Type    : int16;
+            Index     : int16;
+            Addr      : System.Address)
+           return int16 is
+begin
+	aes_control.opcode := 113;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := c_Type;
+	aes_intin(1) := Index;
+	aes_addrin(0) := Addr;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function rsrc_obfix(
+            tree      : OBJECT_ptr;
+            Index     : int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+begin
+	aes_control.opcode := 114;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Index;
+	aes_addrin(0) := to_address(tree);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function rsrc_rcfix(
+            rc_header : System.Address)
+           return int16 is
+begin
+	aes_control.opcode := 115;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := rc_header;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+
+
+
 function max(a,b:int16) return int16 is
 begin
 	if a > b then
@@ -2468,6 +2598,8 @@ begin
 		return b;
 	end if;
 end;
+
+
 
 
 function min(a,b:int16) return int16 is
