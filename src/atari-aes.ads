@@ -457,12 +457,13 @@ package Atari.Aes is
 	    X_WF_VSPLIT,
 	    X_WF_SPLMIN,
 	    X_WF_HSLIDE2,
+	    X_WF_VSLIDE2,
 	    X_WF_HSLSIZE2,
 	    X_WF_VSLSIZE2,
 	    X_WF_DIALFLGS,
 	    X_WF_OBJHAND,
-	    X_WF_DCOLSTAT,
 	    X_WF_DIALEDIT,
+	    X_WF_DCOLSTAT,
 	    WF_WINX,
 	    WF_WINXCFG,
 	    WF_DDELAY,
@@ -524,22 +525,23 @@ package Atari.Aes is
 	    WF_OBFLAG            => 1001,                   -- *< get/set (doc: TODO) (FreeGEM) 
 	    WF_OBTYPE            => 1002,                   -- *< get     (doc: TODO) (FreeGEM) 
 	    WF_OBSPEC            => 1003,                   -- *< get/set (doc: TODO) (FreeGEM) 
-	    X_WF_MENU            => 4352,                   -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DIALOG          => 4608,                   -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DIALWID         => 4864,                   -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DIALHT          => 5120,                   -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DFLTDESK        => 5376,                   -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_MINMAX          => 5632,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_HSPLIT          => 5888,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_VSPLIT          => 6144,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_SPLMIN          => 6400,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_HSLIDE2         => 6656,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_HSLSIZE2        => 7168,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_VSLSIZE2        => 7424,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_DIALFLGS        => 7680,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_OBJHAND         => 7936,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_DCOLSTAT        => 8448,                   -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_DIALEDIT        => 9182,                   -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_MENU            => 16#1100#,               -- *<     set (doc: TODO) (Geneva)  
+	    X_WF_DIALOG          => 16#1200#,               -- *<     set (doc: TODO) (Geneva)  
+	    X_WF_DIALWID         => 16#1300#,               -- *<     set (doc: TODO) (Geneva)  
+	    X_WF_DIALHT          => 16#1400#,               -- *<     set (doc: TODO) (Geneva)  
+	    X_WF_DFLTDESK        => 16#1500#,               -- *<     set (doc: TODO) (Geneva)  
+	    X_WF_MINMAX          => 16#1600#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_HSPLIT          => 16#1700#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_VSPLIT          => 16#1800#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_SPLMIN          => 16#1900#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_HSLIDE2         => 16#1a00#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_VSLIDE2         => 16#1b00#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_HSLSIZE2        => 16#1c00#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_VSLSIZE2        => 16#1d00#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_DIALFLGS        => 16#1e00#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_OBJHAND         => 16#1f00#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_DIALEDIT        => 16#2000#,               -- *< get/set (doc: TODO) (Geneva)  
+	    X_WF_DCOLSTAT        => 16#2100#,               -- *< get/set (doc: TODO) (Geneva)  
 	    WF_WINX              => 22360,                  -- *<		 TODO 
 	    WF_WINXCFG           => 22361,                  -- *<		 TODO 
 	    WF_DDELAY            => 22362,                  -- *<		 TODO 
@@ -549,7 +551,6 @@ package Atari.Aes is
 	    WF_BOTTOMALL         => 22368,                  -- *<		 TODO (WINX 2.3) 
 	    WF_XAAES             => 16#5841#                -- *<		 TODO (XaAES) : 'XA' 
 	);
-	X_WF_VSLIDE2: constant wind_get_set_type := X_WF_VSPLIT; -- FIXME: maybe wrong in gem.h?
 
     --  wind_set(WF_BEVENT)
     BEVENT_WORK          : constant  := 16#1#;                  -- *< window not topped when click on the work area, see #WF_BEVENT 
@@ -2043,10 +2044,80 @@ package Atari.Aes is
 
 
 
+    function shel_read(
+                Command   : chars_ptr;
+                Tail      : chars_ptr)
+               return int16;
+
+    function shel_write(
+                c_Exit    : int16;
+                Graphic   : int16;
+                Aes       : int16;
+                Command   : System.Address;
+                Tail      : chars_ptr)
+               return int16;
+
+    function shel_get(
+                Buf       : chars_ptr;
+                Len       : int16)
+               return int16;
+
+    function shel_put(
+                Buf       : chars_ptr;
+                Len       : int16)
+               return int16;
+
+    function shel_find(
+                buf       : chars_ptr)
+               return int16;
+
+	function shel_envrn(
+	            result    : out chars_ptr;
+	            param     : chars_ptr)
+	           return int16;
+
+    procedure shel_rdef(
+                lpcmd     : chars_ptr;
+                lpdir     : chars_ptr);
+
+    procedure shel_wdef(
+                lpcmd     : chars_ptr;
+                lpdir     : chars_ptr);
+
+    function shel_help(
+                sh_hmode  : int16;
+                sh_hfile  : chars_ptr;
+                sh_hkey   : chars_ptr)
+               return int16;
+
+    function vq_aes return int16;
+    function vq_aes return boolean;
+
+
+
+
+
+    procedure rc_copy(
+                src: in GRECT;
+                dst: out GRECT);
+
+    function rc_equal(
+                r1: in GRECT;
+                r2: in GRECT)
+               return boolean;
+
     function rc_intersect(
                 src: in GRECT;
                 dst: in out GRECT)
                return boolean;
+
+    procedure array_to_grect(
+                c_array: short_array;
+                area   : out GRECT);
+
+    procedure grect_to_array(
+                area   : in GRECT;
+                c_array: out short_array);
 
 	function Is_Application return boolean;
 

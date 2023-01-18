@@ -2588,6 +2588,191 @@ end;
 
 
 
+function shel_read(
+            Command   : chars_ptr;
+            Tail      : chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 120;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(Command);
+	aes_addrin(1) := to_address(tail);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function shel_write(
+            c_Exit    : int16;
+            Graphic   : int16;
+            Aes       : int16;
+            Command   : System.Address;
+            Tail      : chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 121;
+	aes_control.num_intin := 3;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := c_Exit;
+	aes_intin(1) := Graphic;
+	aes_intin(2) := Aes;
+	aes_addrin(0) := Command;
+	aes_addrin(1) := to_address(tail);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function shel_get(
+            Buf       : chars_ptr;
+            Len       : int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 122;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Len;
+	aes_addrin(0) := to_address(Buf);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function shel_put(
+            Buf       : chars_ptr;
+            Len       : int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 123;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Len;
+	aes_addrin(0) := to_address(Buf);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function shel_find(
+            buf       : chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 124;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(buf);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function shel_envrn(
+            result    : out chars_ptr;
+            param     : chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    ptr: chars_ptr;
+begin
+	aes_control.opcode := 125;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := ptr'Address;
+	aes_addrin(1) := to_address(param);
+	aes_trap;
+	result := ptr;
+	return aes_intout(0);
+end;
+
+
+procedure shel_rdef(
+            lpcmd     : chars_ptr;
+            lpdir     : chars_ptr) is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 126;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(lpcmd);
+	aes_addrin(1) := to_address(lpdir);
+	aes_trap;
+end;
+
+
+procedure shel_wdef(
+            lpcmd     : chars_ptr;
+            lpdir     : chars_ptr) is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 127;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(lpcmd);
+	aes_addrin(1) := to_address(lpdir);
+	aes_trap;
+end;
+
+
+function shel_help(
+            sh_hmode  : int16;
+            sh_hfile  : chars_ptr;
+            sh_hkey   : chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 128;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := sh_hmode;
+	aes_addrin(0) := to_address(sh_hfile);
+	aes_addrin(1) := to_address(sh_hkey);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+
+function vq_aes return int16 is
+    ret: int16;
+begin
+	aes_global(0) := 0;
+	ret := appl_init;
+	if (aes_global(0) = 0) then
+	   ret := -1;
+	end if;
+	return ret;
+end;
+
+function vq_aes return boolean is
+begin
+	return vq_aes >= 0;
+end;
+
+
+
 
 
 function max(a,b:int16) return int16 is
@@ -2612,6 +2797,26 @@ begin
 end;
 
 
+procedure rc_copy(
+            src: in GRECT;
+            dst: out GRECT) is
+begin
+	dst := src;
+end;
+
+
+function rc_equal(
+            r1: in GRECT;
+            r2: in GRECT)
+           return boolean is
+begin
+	return r1.g_x = r2.g_x and then
+	       r1.g_y = r2.g_y and then
+	       r1.g_w = r2.g_w and then
+	       r1.g_h = r2.g_h;
+end;
+
+
 function rc_intersect(
             src: in GRECT;
             dst: in out GRECT)
@@ -2631,6 +2836,28 @@ begin
 	else
 		return false;
 	end if;
+end;
+
+
+procedure array_to_grect(
+            c_array: short_array;
+            area   : out GRECT) is
+begin
+	area.g_x := c_array(0);
+	area.g_y := c_array(1);
+	area.g_w := c_array(2);
+	area.g_h := c_array(3);
+end;
+
+
+procedure grect_to_array(
+            area   : in GRECT;
+            c_array: out short_array) is
+begin
+	c_array(0) := area.g_x;
+	c_array(1) := area.g_y;
+	c_array(2) := area.g_w;
+	c_array(3) := area.g_h;
 end;
 
 
