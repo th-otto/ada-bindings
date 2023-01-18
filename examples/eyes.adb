@@ -30,12 +30,12 @@ procedure eyes is
 
     procedure mouse_on is
     begin
-        dummy := graf_mouse(M_ON);
+        graf_mouse(M_ON);
     end;
 
     procedure mouse_off is
     begin
-        dummy := graf_mouse(M_OFF);
+        graf_mouse(M_OFF);
     end;
 
     function open_vwork return boolean is
@@ -237,7 +237,7 @@ begin
                 menu_id := menu_register(gl_apid, menu_name(0)'Unchecked_Access);
                 events := MU_MESAG;
             else
-                dummy := graf_mouse(ARROW);
+                graf_mouse(ARROW);
                 events := MU_MESAG or MU_TIMER;
                 open_window;
             end if;

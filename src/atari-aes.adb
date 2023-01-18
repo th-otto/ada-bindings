@@ -1685,10 +1685,10 @@ begin
 end;
 
 
-function graf_mouse(
+procedure graf_mouse(
             Form       : Mouse_Type;
             FormAddress: MFORM_const_ptr := null)
-           return int16 is
+           is
     function to_address is new Ada.Unchecked_Conversion(MFORM_const_ptr, System.Address);
 begin
 	aes_control.opcode := 78;
@@ -1699,7 +1699,6 @@ begin
 	aes_intin(0) := Form'Enum_Rep;
 	aes_addrin(0) := to_address(FormAddress);
 	aes_trap;
-	return aes_intout(0);
 end;
 
 
@@ -1869,11 +1868,6 @@ end;
 
 
 
-
-
-
-
-
 function wind_draw(
             WindowHandle: int16;
             startob     : int16)
@@ -1916,7 +1910,7 @@ end;
 
 function wind_create(
             Parts     : int16;
-            r         : GRECT_const_ptr)
+            r         : in GRECT)
            return int16 is
 begin
 	return wind_create(Parts, r.g_x, r.g_y, r.g_w, r.g_h);
@@ -1989,7 +1983,7 @@ end;
 
 function wind_open(
             WindowHandle: int16;
-            r           : GRECT_const_ptr)
+            r           : in GRECT)
            return int16 is
 begin
 	return wind_open(WindowHandle, r.g_x, r.g_y, r.g_w, r.g_h);

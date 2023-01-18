@@ -1786,10 +1786,9 @@ package Atari.Aes is
                 device    : out int16)
                return int16;
 
-    function graf_mouse(
+    procedure graf_mouse(
                 Form       : Mouse_Type;
-                FormAddress: MFORM_const_ptr := null)
-               return int16;
+                FormAddress: MFORM_const_ptr := null);
 
     procedure graf_mkstate(
                 Mx         : out int16;
@@ -1840,12 +1839,6 @@ package Atari.Aes is
 
 
 
-
-
-
-
-
-
     function wind_draw(
                 WindowHandle: int16;
                 startob     : int16)
@@ -1861,7 +1854,7 @@ package Atari.Aes is
 
     function wind_create(
                 Parts     : int16;
-                r         : GRECT_const_ptr)
+                r         : in GRECT)
                return int16;
 
     function wind_xcreate(
@@ -1892,7 +1885,7 @@ package Atari.Aes is
 
     function wind_open(
                 WindowHandle: int16;
-                r           : GRECT_const_ptr)
+                r           : in GRECT)
                return int16;
 
     function wind_close(
