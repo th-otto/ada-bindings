@@ -1140,6 +1140,7 @@ end;
 
 
 
+
 function form_do(
             tree      : OBJECT_ptr;
             StartObj  : int16)
@@ -1347,9 +1348,297 @@ end;
 
 
 
+procedure graf_rubberbox(
+            Ix        : int16;
+            Iy        : int16;
+            Iw        : int16;
+            Ih        : int16;
+            Fw        : out int16;
+            Fh        : out int16)
+           is
+begin
+	aes_control.opcode := 70;
+	aes_control.num_intin := 4;
+	aes_control.num_intout := 3;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Ix;
+	aes_intin(1) := Iy;
+	aes_intin(2) := Iw;
+	aes_intin(3) := Ih;
+	aes_trap;
+	Fw := aes_intout(1);
+	Fh := aes_intout(2);
+end;
 
 
+procedure graf_rubberbox(
+            r         : in GRECT;
+            Fw        : out int16;
+            Fh        : out int16)
+           is
+begin
+	aes_control.opcode := 70;
+	aes_control.num_intin := 4;
+	aes_control.num_intout := 3;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := r.g_x;
+	aes_intin(1) := r.g_y;
+	aes_intin(2) := r.g_w;
+	aes_intin(3) := r.g_h;
+	aes_trap;
+	Fw := aes_intout(1);
+	Fh := aes_intout(2);
+end;
 
+
+procedure graf_dragbox(
+            Sw        : int16;
+            Sh        : int16;
+            Sx        : int16;
+            Sy        : int16;
+            Bx        : int16;
+            By        : int16;
+            Bw        : int16;
+            Bh        : int16;
+            Fw        : out int16;
+            Fh        : out int16)
+           is
+begin
+	aes_control.opcode := 71;
+	aes_control.num_intin := 8;
+	aes_control.num_intout := 3;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Sx;
+	aes_intin(1) := Sy;
+	aes_intin(2) := Sw;
+	aes_intin(3) := Sh;
+	aes_intin(4) := Bx;
+	aes_intin(5) := By;
+	aes_intin(6) := Bw;
+	aes_intin(7) := Bh;
+	aes_trap;
+	Fw := aes_intout(1);
+	Fh := aes_intout(2);
+end;
+
+
+procedure graf_dragbox(
+            little    : in GRECT;
+            big       : in GRECT;
+            Fw        : out int16;
+            Fh        : out int16)
+           is
+begin
+	aes_control.opcode := 71;
+	aes_control.num_intin := 8;
+	aes_control.num_intout := 3;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := little.g_x;
+	aes_intin(1) := little.g_y;
+	aes_intin(2) := little.g_w;
+	aes_intin(3) := little.g_h;
+	aes_intin(4) := big.g_x;
+	aes_intin(5) := big.g_y;
+	aes_intin(6) := big.g_w;
+	aes_intin(7) := big.g_h;
+	aes_trap;
+	Fw := aes_intout(1);
+	Fh := aes_intout(2);
+end;
+
+
+procedure graf_movebox(
+            Sw        : int16;
+            Sh        : int16;
+            Sx        : int16;
+            Sy        : int16;
+            Dx        : int16;
+            Dy        : int16)
+           is
+begin
+	aes_control.opcode := 72;
+	aes_control.num_intin := 6;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Sx;
+	aes_intin(1) := Sy;
+	aes_intin(2) := Sw;
+	aes_intin(3) := Sh;
+	aes_intin(4) := Dx;
+	aes_intin(5) := Dy;
+	aes_trap;
+end;
+
+
+    procedure graf_movebox(
+                r         : in grect;
+                Dx        : int16;
+                Dy        : int16)
+               is
+begin
+	aes_control.opcode := 72;
+	aes_control.num_intin := 6;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := r.g_x;
+	aes_intin(1) := r.g_y;
+	aes_intin(2) := r.g_w;
+	aes_intin(3) := r.g_h;
+	aes_intin(4) := Dx;
+	aes_intin(5) := Dy;
+	aes_trap;
+end;
+
+
+procedure graf_growbox(
+            Sx        : int16;
+            Sy        : int16;
+            Sw        : int16;
+            Sh        : int16;
+            Fx        : int16;
+            Fy        : int16;
+            Fw        : int16;
+            Fh        : int16)
+           is
+begin
+	aes_control.opcode := 73;
+	aes_control.num_intin := 8;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Sx;
+	aes_intin(1) := Sy;
+	aes_intin(2) := Sw;
+	aes_intin(3) := Sh;
+	aes_intin(4) := Fx;
+	aes_intin(5) := Fy;
+	aes_intin(6) := Fw;
+	aes_intin(7) := Fh;
+	aes_trap;
+end;
+
+
+procedure graf_growbox(
+            little    : in GRECT;
+            big       : in GRECT)
+           is
+begin
+	aes_control.opcode := 73;
+	aes_control.num_intin := 8;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := little.g_x;
+	aes_intin(1) := little.g_y;
+	aes_intin(2) := little.g_w;
+	aes_intin(3) := little.g_h;
+	aes_intin(4) := big.g_x;
+	aes_intin(5) := big.g_y;
+	aes_intin(6) := big.g_w;
+	aes_intin(7) := big.g_h;
+	aes_trap;
+end;
+
+
+procedure graf_shrinkbox(
+            Fx        : int16;
+            Fy        : int16;
+            Fw        : int16;
+            Fh        : int16;
+            Sx        : int16;
+            Sy        : int16;
+            Sw        : int16;
+            Sh        : int16)
+           is
+begin
+	aes_control.opcode := 74;
+	aes_control.num_intin := 8;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Fx;
+	aes_intin(1) := Fy;
+	aes_intin(2) := Fw;
+	aes_intin(3) := Fh;
+	aes_intin(4) := Sx;
+	aes_intin(5) := Sy;
+	aes_intin(6) := Sw;
+	aes_intin(7) := Sh;
+	aes_trap;
+end;
+
+
+procedure graf_shrinkbox(
+            big       : in GRECT;
+            little    : in GRECT)
+           is
+begin
+	aes_control.opcode := 74;
+	aes_control.num_intin := 8;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := big.g_x;
+	aes_intin(1) := big.g_y;
+	aes_intin(2) := big.g_w;
+	aes_intin(3) := big.g_h;
+	aes_intin(4) := little.g_x;
+	aes_intin(5) := little.g_y;
+	aes_intin(6) := little.g_w;
+	aes_intin(7) := little.g_h;
+	aes_trap;
+end;
+
+
+function graf_watchbox(
+            tree      : OBJECT_ptr;
+            Obj       : int16;
+            InState   : int16;
+            OutState  : int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+begin
+	aes_control.opcode := 75;
+	aes_control.num_intin := 4;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := 0;
+	aes_intin(1) := Obj;
+	aes_intin(2) := InState;
+	aes_intin(3) := OutState;
+	aes_addrin(0) := to_address(tree);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function graf_slidebox(
+            tree      : OBJECT_ptr;
+            Parent    : int16;
+            Obj       : int16;
+            Direction : int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+begin
+	aes_control.opcode := 75;
+	aes_control.num_intin := 4;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Parent;
+	aes_intin(1) := Obj;
+	aes_intin(2) := Direction;
+	aes_addrin(0) := to_address(tree);
+	aes_trap;
+	return aes_intout(0);
+end;
 
 
 function graf_handle(
@@ -1395,6 +1684,7 @@ begin
 	return aes_intout(0);
 end;
 
+
 function graf_mouse(
             Form       : Mouse_Type;
             FormAddress: MFORM_const_ptr := null)
@@ -1430,6 +1720,36 @@ begin
 	ButtonState := aes_intout(1);
 	KeyState := aes_intout(1);
 end;
+
+
+function graf_multirubber(
+            bx        : int16;
+            by        : int16;
+            minw      : int16;
+            minh      : int16;
+            rec       : GRECT_ptr;
+            rw        : out int16;
+            rh        : out int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(GRECT_ptr, System.Address);
+begin
+	aes_control.opcode := 69;
+	aes_control.num_intin := 4;
+	aes_control.num_intout := 3;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := bx;
+	aes_intin(1) := by;
+	aes_intin(2) := minw;
+	aes_intin(3) := minh;
+	aes_addrin(0) := to_address(rec);
+	aes_trap;
+	rw := aes_intout(1);
+	rh := aes_intout(2);
+	return aes_intout(0);
+end;
+
+
 
 
 
@@ -1488,10 +1808,10 @@ function wind_xcreate(
             Wy        : int16;
             Ww        : int16;
             Wh        : int16;
-            OutX      : short_ptr;
-            OutY      : short_ptr;
-            OutW      : short_ptr;
-            OutH      : short_ptr)
+            OutX      : out int16;
+            OutY      : out int16;
+            OutW      : out int16;
+            OutH      : out int16)
            return int16 is
 begin
 	aes_control.opcode := 100;
@@ -1505,21 +1825,21 @@ begin
 	aes_intin(3) := Ww;
 	aes_intin(4) := Wh;
 	aes_trap;
-	OutX.all := aes_intout(1);
-	OutY.all := aes_intout(2);
-	OutW.all := aes_intout(3);
-	OutH.all := aes_intout(4);
+	OutX := aes_intout(1);
+	OutY := aes_intout(2);
+	OutW := aes_intout(3);
+	OutH := aes_intout(4);
 	return aes_intout(0);
 end;
 
 
 function wind_xcreate(
             Parts     : int16;
-            r         : GRECT_const_ptr;
-            ret       : GRECT_ptr)
+            r         : in GRECT;
+            ret       : out GRECT)
            return int16 is
 begin
-	return wind_xcreate(Parts, r.g_x, r.g_y, r.g_w, r.g_h, ret.g_x'Access, ret.g_y'Access, ret.g_w'Access, ret.g_h'Access);
+	return wind_xcreate(Parts, r.g_x, r.g_y, r.g_w, r.g_h, ret.g_x, ret.g_y, ret.g_w, ret.g_h);
 end;
 
 
@@ -1588,15 +1908,15 @@ end;
 function wind_get(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            W1          : short_ptr;
-            W2          : short_ptr;
-            W3          : short_ptr;
-            W4          : short_ptr)
+            W1          : out int16;
+            W2          : out int16;
+            W3          : out int16;
+            W4          : out int16)
            return int16 is
-    type short_ptr_ptr is access all short_ptr;
+    type short_ptr_ptr is access all System.Address;
     function to_address is new Ada.Unchecked_Conversion(System.Address, short_ptr_ptr);
     ptr: System.Address;
-    pptr: short_ptr_ptr;
+    pptr: aliased short_ptr_ptr;
 begin
 	aes_control.opcode := 104;
 	aes_control.num_intin := 2;
@@ -1607,13 +1927,16 @@ begin
 	aes_intin(1) := What'Enum_Rep;
 	case What is
 	   when WF_DCOLOR | WF_COLOR =>
-	      aes_intin(2) := W1.all;
 	      aes_control.num_intin := 3;
+Pragma Warnings(off);
+ 	      aes_intin(2) := W1;
+Pragma Warnings(on);
 	   when WF_INFO | WF_NAME =>
 	      aes_control.num_intin := 4;
 	      ptr := aes_intin(2)'Address;
 	      pptr := to_address(ptr);
-	      pptr.all := W1;
+	      pptr.all := W1'Address;
+ 	      raise Standard'Abort_Signal with "use wind_get(str) instead";
 	   when others =>
 	       null;
 	end case;
@@ -1627,10 +1950,53 @@ begin
 	       --  special case where W1 shall not be overwritten
 	       null;
 	   when others =>
-	       W1.all := aes_intout(1);
-	       W2.all := aes_intout(2);
-	       W3.all := aes_intout(3);
-	       W4.all := aes_intout(4);
+	       W1 := aes_intout(1);
+	       W2 := aes_intout(2);
+	       W3 := aes_intout(3);
+	       W4 := aes_intout(4);
+	end case;
+	return aes_intout(0);
+end;
+
+
+function wind_get(
+            WindowHandle: int16;
+            What        : wind_get_set_type;
+            W1          : chars_ptr)
+           return int16 is
+    type short_ptr_ptr is access all System.Address;
+    function to_address is new Ada.Unchecked_Conversion(System.Address, short_ptr_ptr);
+    function to_address2 is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    ptr: System.Address;
+    pptr: aliased short_ptr_ptr;
+begin
+	aes_control.opcode := 104;
+	aes_control.num_intin := 4;
+	aes_control.num_intout := 5;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := WindowHandle;
+	aes_intin(1) := What'Enum_Rep;
+	case What is
+	   when WF_INFO | WF_NAME =>
+	      aes_control.num_intin := 4;
+	      ptr := aes_intin(2)'Address;
+	      pptr := to_address(ptr);
+	      pptr.all := to_address2(W1);
+	   when others =>
+ 	      raise Standard'Abort_Signal with "use wind_get() instead";
+	end case;
+	aes_intout(3) := 0;
+	aes_intout(4) := 0;
+
+	aes_trap;
+
+	case What is
+	   when WF_INFO | WF_NAME =>
+	       --  special case where W1 shall not be overwritten
+	       null;
+	   when others =>
+	       null;
 	end case;
 	return aes_intout(0);
 end;
@@ -1692,11 +2058,13 @@ end;
 function wind_get(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            W1          : short_ptr)
+            W1          : out int16)
            return int16 is
-    dummy: aliased int16;
+    dummy: int16;
+    dummy2: int16;
+    dummy3: int16;
 begin
-	return wind_get(WindowHandle, what, W1, dummy'Unchecked_Access, dummy'Unchecked_Access, dummy'Unchecked_Access);
+	return wind_get(WindowHandle, what, W1, dummy, dummy2, dummy3);
 end;
 
 

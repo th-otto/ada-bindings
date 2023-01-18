@@ -155,6 +155,7 @@ procedure eyes is
     end;
 
     function handle_message(pipe: array_8_ptr) return boolean is
+        dummy2: int16;
     begin
         Text_IO.Put_Line("got message " & pipe(0)'image);
         case pipe(0) is
@@ -166,7 +167,7 @@ procedure eyes is
                 end if;
             when WM_CLOSED =>
                 if pipe(3) = whandle then
-                    dummy := wind_get(whandle, WF_WORKXYWH, wx'Unchecked_Access, wy'Unchecked_Access, dummy'Unchecked_Access, dummy'Unchecked_Access);
+                    dummy := wind_get(whandle, WF_WORKXYWH, wx, wy, dummy, dummy2);
                     dummy := wind_close(whandle);
                     dummy := wind_delete(whandle);
                     whandle := 0;

@@ -1665,6 +1665,109 @@ package Atari.Aes is
 
 
 
+    procedure graf_rubberbox(
+                Ix        : int16;
+                Iy        : int16;
+                Iw        : int16;
+                Ih        : int16;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_rubberbox(
+                r         : in GRECT;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_dragbox(
+                Sw        : int16;
+                Sh        : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Bx        : int16;
+                By        : int16;
+                Bw        : int16;
+                Bh        : int16;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_dragbox(
+                little    : in GRECT;
+                big       : in GRECT;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_movebox(
+                Sw        : int16;
+                Sh        : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Dx        : int16;
+                Dy        : int16);
+
+    procedure graf_movebox(
+                r         : in grect;
+                Dx        : int16;
+                Dy        : int16);
+
+    procedure graf_growbox(
+                Sx        : int16;
+                Sy        : int16;
+                Sw        : int16;
+                Sh        : int16;
+                Fx        : int16;
+                Fy        : int16;
+                Fw        : int16;
+                Fh        : int16);
+
+    procedure graf_growbox(
+                little    : in GRECT;
+                big       : in GRECT);
+
+    procedure graf_shrinkbox(
+                Fx        : int16;
+                Fy        : int16;
+                Fw        : int16;
+                Fh        : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Sw        : int16;
+                Sh        : int16);
+
+    procedure graf_shrinkbox(
+                big       : in GRECT;
+                little    : in GRECT);
+
+    function graf_watchbox(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                InState   : int16;
+                OutState  : int16)
+               return int16;
+
+    function graf_slidebox(
+                tree      : OBJECT_ptr;
+                Parent    : int16;
+                Obj       : int16;
+                Direction : int16)
+               return int16;
+
+    function graf_multirubber(
+                bx        : int16;
+                by        : int16;
+                minw      : int16;
+                minh      : int16;
+                rec       : GRECT_ptr;
+                rw        : out int16;
+                rh        : out int16)
+               return int16;
+
+
+
+
+
+
+
+
 
 
 
@@ -1726,16 +1829,16 @@ package Atari.Aes is
                 Wy        : int16;
                 Ww        : int16;
                 Wh        : int16;
-                OutX      : short_ptr;
-                OutY      : short_ptr;
-                OutW      : short_ptr;
-                OutH      : short_ptr)
+                OutX      : out int16;
+                OutY      : out int16;
+                OutW      : out int16;
+                OutH      : out int16)
                return int16;
 
     function wind_xcreate(
                 Parts     : int16;
-                r         : GRECT_const_ptr;
-                ret       : GRECT_ptr)
+                r         : in GRECT;
+                ret       : out GRECT)
                return int16;
 
     function wind_open(
@@ -1762,10 +1865,10 @@ package Atari.Aes is
     function wind_get(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                W1          : short_ptr;
-                W2          : short_ptr;
-                W3          : short_ptr;
-                W4          : short_ptr)
+                W1          : out int16;
+                W2          : out int16;
+                W3          : out int16;
+                W4          : out int16)
                return int16;
 
     function wind_get(
@@ -1784,7 +1887,13 @@ package Atari.Aes is
     function wind_get(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                W1          : short_ptr)
+                W1          : out int16)
+               return int16;
+
+    function wind_get(
+                WindowHandle: int16;
+                What        : wind_get_set_type;
+                W1          : chars_ptr)
                return int16;
 
     function wind_set(
@@ -1826,9 +1935,7 @@ package Atari.Aes is
                 What        : wind_get_set_type;
                 v           : System.Address;
                 W3          : int16 := 0)
-               return int16
-    with
- 	  Pre => What = WF_SCREEN or What = WF_NEWDESK or What = WF_USER_POINTER;
+               return int16;
 
     function wind_find(
                 X         : int16;
