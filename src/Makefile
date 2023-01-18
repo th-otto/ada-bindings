@@ -3,15 +3,6 @@ GNAT = $(CROSS)gnatmake -I../src -gnatwa
 AR = $(CROSS)ar
 GNATCFLAGS = -cargs -O2 -g
 
-DEPS = \
-	atari-aes.adb \
-	atari-aes.ads \
-	atari-vdi.adb \
-	atari-vdi.ads \
-	atari.adb \
-	atari.ads \
-	$(empty)
-
 .adb.o:
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
@@ -21,6 +12,7 @@ OBJS = \
 	atari.o \
 	atari-aes.o \
 	atari-vdi.o \
+	atari-vdi-nvdi.o \
 	$(empty)
 
 libgem.a: $(OBJS)
@@ -34,6 +26,9 @@ atari-aes.o: atari-aes.adb atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-vdi.o: atari-vdi.adb atari-vdi.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-vdi-nvdi.o: atari-vdi-nvdi.adb atari-vdi-nvdi.ads atari-vdi.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 clean::

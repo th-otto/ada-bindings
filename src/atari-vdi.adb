@@ -263,7 +263,7 @@ begin
 end;
 
 
-procedure v_curtext(handle: VdiHdl; str: String) is
+procedure v_curtext(handle: VdiHdl; str: in String) is
 	len : int16;
 begin
 	len := string_to_vdi(str, 0);
@@ -271,7 +271,7 @@ begin
 end;
 
 
-procedure v_curtext(handle: VdiHdl; str: String; maxlen: int16) is
+procedure v_curtext(handle: VdiHdl; str: in String; maxlen: int16) is
 	len : int16;
 begin
 	len := string_to_vdi(str, 0, maxlen);
@@ -279,7 +279,7 @@ begin
 end;
 
 
-procedure v_curtext(handle: VdiHdl; str: Wide_String) is
+procedure v_curtext(handle: VdiHdl; str: in Wide_String) is
 	len : int16;
 begin
 	len := string_to_vdi(str, 0);
@@ -287,7 +287,7 @@ begin
 end;
 
 
-procedure v_curtext(handle: VdiHdl; str: Wide_String; maxlen: int16) is
+procedure v_curtext(handle: VdiHdl; str: in Wide_String; maxlen: int16) is
 	len : int16;
 begin
 	len := string_to_vdi(str, 0, maxlen);
@@ -408,7 +408,7 @@ begin
 end;
 
 
-procedure v_alpha_text(handle: VdiHdl; str: string) is
+procedure v_alpha_text(handle: VdiHdl; str: in string) is
 	len: int16;
 begin
 	len := string_to_vdi(str, 0);
@@ -628,19 +628,360 @@ begin
 end;
 
 
+procedure v_meta_extents(
+            handle : VdiHdl;
+            min_x: int16;
+            min_y: int16;
+            max_x: int16;
+            max_y: int16) is
+begin
+	vdi_ptsin(0) := min_x;
+	vdi_ptsin(1) := min_y;
+	vdi_ptsin(2) := max_x;
+	vdi_ptsin(3) := max_y;
+	v_escape(handle, 98, 0, 2);
+end;
+
+
+procedure v_write_meta(
+            handle      : VdiHdl;
+            num_intin   : int16;
+            a_intin  : short_array;
+            num_ptsin   : int16;
+            a_ptsin     : short_array) is
+    pb: aliased VDIPB;
+    function to_intin is new Ada.Unchecked_Conversion(System.Address, VDIIntIn_ptr);
+    function to_ptsin is new Ada.Unchecked_Conversion(System.Address, VDIPtsIn_ptr);
+begin
+	vdi_control.opcode := 5;
+	vdi_control.num_ptsin := num_ptsin;
+	vdi_control.num_intin := num_intin;
+	vdi_control.subcode := 99;
+	vdi_control.handle := handle;
+	pb.control := vdi_control'Access;
+	pb.intin := to_intin(a_intin'Address);
+	pb.ptsin := to_ptsin(a_ptsin'Address);
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure vm_pagesize(
+            handle  : VdiHdl;
+            pgwidth : int16;
+            pgheight: int16) is
+begin
+	vdi_intin(0) := 0;
+	vdi_intin(1) := pgwidth;
+	vdi_intin(2) := pgheight;
+	v_escape(handle, 99, 3);
+end;
+
+
+procedure vm_coords(
+            handle: VdiHdl;
+            llx: int16;
+            lly: int16;
+            urx: int16;
+            ury: int16) is
+begin
+	vdi_intin(0) := 1;
+	vdi_intin(1) := llx;
+	vdi_intin(2) := lly;
+	vdi_intin(3) := urx;
+	vdi_intin(4) := ury;
+	v_escape(handle, 99, 5);
+end;
+
+
+function v_bez_qual(
+            handle: VdiHdl;
+            prcnt: int16) return int16 is
+begin
+	vdi_intin(0) := 32;
+	vdi_intin(1) := 1;
+	vdi_intin(2) := prcnt;
+	v_escape(handle, 99, 3);
+	return vdi_intout(0);
+end;
+
+
+procedure vm_filename(
+            handle  : VdiHdl;
+            filename: in string) is
+	len: int16;
+begin
+	len := string_to_vdi(filename, 0);
+	v_escape(handle, 100, len);
+end;
+
+
+procedure v_offset(
+            handle: VdiHdl;
+            offset: int16) is
+begin
+	vdi_intin(0) := offset;
+	v_escape(handle, 101, 1);
+end;
+
+
+procedure v_fontinit(
+            handle     : VdiHdl;
+            font_header: System.Address) is
+    type address_ptr is access all System.Address;
+    function to_address is new Ada.Unchecked_Conversion(System.Address, address_ptr);
+    ptr: System.Address;
+    pptr: aliased address_ptr;
+begin
+    ptr := vdi_intin(0)'Address;
+    pptr := to_address(ptr);
+    pptr.all := font_header;
+	v_escape(handle, 102, 2);
+end;
+
+
+procedure v_escape2000(
+            handle : VdiHdl;
+            times: int16) is
+begin
+    vdi_intin(0) := times;
+	v_escape(handle, 2000, 1);
+end;
+
+
+procedure v_pline(
+            handle: VdiHdl;
+            count : int16;
+            pxy:    short_array) is
+    pb: aliased VDIPB;
+    function to_ptsin is new Ada.Unchecked_Conversion(System.Address, VDIPtsIn_ptr);
+begin
+	vdi_control.opcode := 6;
+	vdi_control.num_ptsin := count;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	pb.control := vdi_control'Access;
+	pb.intin := vdi_intin'Access;
+	pb.ptsin := to_ptsin(pxy'Address);
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure v_bez(
+            handle: VdiHdl;
+            count : int16;
+            pxy:    short_array;
+            bezarr: System.Address;
+            extent: out short_array;
+            totpts: out int16;
+            totmoves: out int16) is
+    pb: aliased VDIPB;
+    function to_intin is new Ada.Unchecked_Conversion(System.Address, VDIIntIn_ptr);
+    function to_ptsin is new Ada.Unchecked_Conversion(System.Address, VDIPtsIn_ptr);
+begin
+	vdi_control.opcode := 6;
+	vdi_control.num_ptsin := count;
+	vdi_control.num_intin := int16(Shift_Right(Unsigned_16(count + 1), 1));
+	vdi_control.subcode := 13;
+	vdi_control.handle := handle;
+	pb.control := vdi_control'Access;
+	pb.intin := to_intin(bezarr);
+	pb.ptsin := to_ptsin(pxy'Address);
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+	totpts := vdi_intout(0);
+	totmoves := vdi_intout(1);
+	extent(0) := vdi_ptsout(0);
+	extent(1) := vdi_ptsout(1);
+	extent(2) := vdi_ptsout(2);
+	extent(3) := vdi_ptsout(3);
+end;
+
+
+procedure v_pmarker(
+            handle: VdiHdl;
+            count : int16;
+            pxy:    short_array) is
+    pb: aliased VDIPB;
+    function to_ptsin is new Ada.Unchecked_Conversion(System.Address, VDIPtsIn_ptr);
+begin
+	vdi_control.opcode := 7;
+	vdi_control.num_ptsin := count;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	pb.control := vdi_control'Access;
+	pb.intin := vdi_intin'Access;
+	pb.ptsin := to_ptsin(pxy'Address);
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure v_gtext(
+            handle: VdiHdl;
+            x  : int16;
+            y  : int16;
+            str: in String) is
+    len: int16;
+begin
+	len := string_to_vdi(str, 0);
+	vdi_control.opcode := 8;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := len;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_trap;
+end;
+
+
+procedure v_gtext(
+            handle: VdiHdl;
+            x  : int16;
+            y  : int16;
+            str: in Wide_String) is
+    len: int16;
+begin
+	len := string_to_vdi(str, 0);
+	vdi_control.opcode := 8;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := len;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_trap;
+end;
+
+
+procedure v_fillarea(
+            handle: VdiHdl;
+            count : int16;
+            pxy:    short_array) is
+    pb: aliased VDIPB;
+    function to_ptsin is new Ada.Unchecked_Conversion(System.Address, VDIPtsIn_ptr);
+begin
+	vdi_control.opcode := 9;
+	vdi_control.num_ptsin := count;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	pb.control := vdi_control'Access;
+	pb.intin := vdi_intin'Access;
+	pb.ptsin := to_ptsin(pxy'Address);
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+end;
 
 
 
+procedure v_bez_fill(
+            handle: VdiHdl;
+            count : int16;
+            pxy:    short_array;
+            bezarr: System.Address;
+            extent: out short_array;
+            totpts: out int16;
+            totmoves: out int16) is
+    pb: aliased VDIPB;
+    function to_intin is new Ada.Unchecked_Conversion(System.Address, VDIIntIn_ptr);
+    function to_ptsin is new Ada.Unchecked_Conversion(System.Address, VDIPtsIn_ptr);
+begin
+	vdi_control.opcode := 9;
+	vdi_control.num_ptsin := count;
+	vdi_control.num_intin := int16(Shift_Right(Unsigned_16(count + 1), 1));
+	vdi_control.subcode := 13;
+	vdi_control.handle := handle;
+	pb.control := vdi_control'Access;
+	pb.intin := to_intin(bezarr);
+	pb.ptsin := to_ptsin(pxy'Address);
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+	totpts := vdi_intout(0);
+	totmoves := vdi_intout(1);
+	extent(0) := vdi_ptsout(0);
+	extent(1) := vdi_ptsout(1);
+	extent(2) := vdi_ptsout(2);
+	extent(3) := vdi_ptsout(3);
+end;
 
 
+procedure v_gdp(handle: VdiHdl; subcode: int16; num_ptsin: int16; num_intin: int16 := 0) is
+begin
+	vdi_control.opcode := 11;
+	vdi_control.num_ptsin := num_ptsin;
+	vdi_control.num_intin := num_intin;
+	vdi_control.subcode := subcode;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
 
 
+procedure v_bar(
+            handle: VdiHdl;
+            pxy:    short_array) is
+begin
+	vdi_ptsin(0) := pxy(0);
+	vdi_ptsin(1) := pxy(1);
+	vdi_ptsin(2) := pxy(2);
+	vdi_ptsin(3) := pxy(3);
+	v_gdp(handle, 1, 2);
+end;
 
 
+procedure v_arc(
+            handle: VdiHdl;
+            x     : int16;
+            y     : int16;
+            radius: int16;
+            begang: int16;
+            endang: int16) is
+begin
+	vdi_intin(0) := begang;
+	vdi_intin(1) := endang;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_ptsin(2) := 0;
+	vdi_ptsin(3) := 0;
+	vdi_ptsin(4) := 0;
+	vdi_ptsin(5) := 0;
+	vdi_ptsin(6) := radius;
+	vdi_ptsin(7) := 0;
+	v_gdp(handle, 2, 4, 2);
+end;
 
 
-
-
+procedure v_pieslice(
+            handle: VdiHdl;
+            x     : int16;
+            y     : int16;
+            radius: int16;
+            begang: int16;
+            endang: int16) is
+begin
+	vdi_intin(0) := begang;
+	vdi_intin(1) := endang;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_ptsin(2) := 0;
+	vdi_ptsin(3) := 0;
+	vdi_ptsin(4) := 0;
+	vdi_ptsin(5) := 0;
+	vdi_ptsin(6) := radius;
+	vdi_ptsin(7) := 0;
+	v_gdp(handle, 3, 4, 2);
+end;
 
 
 procedure v_circle(
@@ -649,19 +990,13 @@ procedure v_circle(
             y     : int16;
             radius: int16) is
 begin
-	vdi_control.opcode := 11;
-	vdi_control.num_ptsin := 3;
-	vdi_control.num_intin := 0;
-	vdi_control.subcode := 4;
-	vdi_control.handle := handle;
-
 	vdi_ptsin(0) := x;
 	vdi_ptsin(1) := y;
 	vdi_ptsin(2) := 0;
 	vdi_ptsin(3) := 0;
 	vdi_ptsin(4) := radius;
 	vdi_ptsin(5) := 0;
-	vdi_trap;
+	v_gdp(handle, 4, 3);
 end;
 
 
@@ -672,18 +1007,252 @@ procedure v_ellipse(
             xradius: int16;
             yradius: int16) is
 begin
-	vdi_control.opcode := 11;
-	vdi_control.num_ptsin := 2;
-	vdi_control.num_intin := 0;
-	vdi_control.subcode := 5;
-	vdi_control.handle := handle;
-
 	vdi_ptsin(0) := x;
 	vdi_ptsin(1) := y;
 	vdi_ptsin(2) := xradius;
 	vdi_ptsin(3) := yradius;
+	v_gdp(handle, 5, 2);
+end;
+
+
+procedure v_ellarc(
+            handle: VdiHdl;
+            x     : int16;
+            y     : int16;
+            xradius  : int16;
+            yradius  : int16;
+            begang: int16;
+            endang: int16) is
+begin
+	vdi_intin(0) := begang;
+	vdi_intin(1) := endang;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_ptsin(2) := xradius;
+	vdi_ptsin(3) := yradius;
+	v_gdp(handle, 6, 2, 2);
+end;
+
+
+procedure v_ellpie(
+            handle: VdiHdl;
+            x     : int16;
+            y     : int16;
+            xradius  : int16;
+            yradius  : int16;
+            begang: int16;
+            endang: int16) is
+begin
+	vdi_intin(0) := begang;
+	vdi_intin(1) := endang;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_ptsin(2) := xradius;
+	vdi_ptsin(3) := yradius;
+	v_gdp(handle, 7, 2, 2);
+end;
+
+
+procedure v_rbox(
+            handle: VdiHdl;
+            pxy:    short_array) is
+begin
+	vdi_ptsin(0) := pxy(0);
+	vdi_ptsin(1) := pxy(1);
+	vdi_ptsin(2) := pxy(2);
+	vdi_ptsin(3) := pxy(3);
+	v_gdp(handle, 8, 2);
+end;
+
+
+procedure v_rfbox(
+            handle: VdiHdl;
+            pxy:    short_array) is
+begin
+	vdi_ptsin(0) := pxy(0);
+	vdi_ptsin(1) := pxy(1);
+	vdi_ptsin(2) := pxy(2);
+	vdi_ptsin(3) := pxy(3);
+	v_gdp(handle, 9, 2);
+end;
+
+
+procedure v_justified(
+            handle    : VdiHdl;
+            x         : int16;
+            y         : int16;
+            str       : in string;
+            width     : int16;
+            word_space: int16;
+            char_space: int16) is
+	len: int16;
+begin
+	--  TODO: handle char_space $8000/$8001 (returns interspace information)
+	vdi_intin(0) := word_space;
+	vdi_intin(1) := char_space;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_ptsin(2) := width;
+	vdi_ptsin(3) := 0;
+
+	len := string_to_vdi(str, 2);
+	v_gdp(handle, 11, 2, len + 2);
+end;
+
+
+procedure v_justified(
+            handle    : VdiHdl;
+            x         : int16;
+            y         : int16;
+            str       : in Wide_String;
+            width     : int16;
+            word_space: int16;
+            char_space: int16) is
+	len: int16;
+begin
+	--  TODO: handle char_space $8000/$8001 (returns interspace information)
+	vdi_intin(0) := word_space;
+	vdi_intin(1) := char_space;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_ptsin(2) := width;
+	vdi_ptsin(3) := 0;
+
+	len := string_to_vdi(str, 2);
+	v_gdp(handle, 11, 2, len + 2);
+end;
+
+
+function v_bez_on(handle: VdiHdl) return int16 is
+begin
+	vdi_control.opcode := 11;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 13;
+	vdi_control.handle := handle;
+	vdi_intout(0) := 0;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+procedure v_bez_off(handle: VdiHdl) is
+begin
+	vdi_control.opcode := 11;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 13;
+	vdi_control.handle := handle;
 	vdi_trap;
 end;
+
+
+procedure vst_height(
+            handle: VdiHdl;
+            height: int16;
+            charw : out int16;
+            charh : out int16;
+            cellw : out int16;
+            cellh : out int16) is
+begin
+	vdi_ptsin(0) := 0;
+	vdi_ptsin(1) := height;
+
+	vdi_control.opcode := 12;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	charw := vdi_ptsout(0);
+	charh := vdi_ptsout(1);
+	cellw := vdi_ptsout(2);
+	cellh := vdi_ptsout(3);
+end;
+
+
+function vst_rotation(
+            handle: VdiHdl;
+            angle: int16)
+           return int16 is
+begin
+	vdi_intin(0) := angle;
+
+	vdi_control.opcode := 13;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+procedure vs_color(
+            handle   : VdiHdl;
+            color_idx: int16;
+            rgb      : in short_array) is
+begin
+	vdi_intin(0) := color_idx;
+	vdi_intin(1) := rgb(0);
+	vdi_intin(2) := rgb(1);
+	vdi_intin(3) := rgb(2);
+
+	vdi_control.opcode := 14;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 4;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+function vsl_type(
+            handle : VdiHdl;
+            style: int16)
+           return int16 is
+begin
+	vdi_intin(0) := style;
+
+	vdi_control.opcode := 15;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+function vsl_width(
+            handle : VdiHdl;
+            width: int16)
+           return int16 is
+begin
+	vdi_ptsin(0) := width;
+	vdi_ptsin(1) := 0;
+
+	vdi_control.opcode := 16;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_ptsout(0);
+end;
+
+
 
 
 function vsf_interior(

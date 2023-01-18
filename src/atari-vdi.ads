@@ -326,13 +326,13 @@ package Atari.Vdi is
                 column: int16)
                renames v_curaddress;
 
-    procedure v_curtext(handle: VdiHdl; str: String);
+    procedure v_curtext(handle: VdiHdl; str: in String);
 
-    procedure v_curtext(handle: VdiHdl; str: String; maxlen: int16);
+    procedure v_curtext(handle: VdiHdl; str: in String; maxlen: int16);
 
-    procedure v_curtext(handle: VdiHdl; str: Wide_String);
+    procedure v_curtext(handle: VdiHdl; str: in Wide_String);
 
-    procedure v_curtext(handle: VdiHdl; str: Wide_String; maxlen: int16);
+    procedure v_curtext(handle: VdiHdl; str: in Wide_String; maxlen: int16);
 
     procedure v_rvon(handle: VdiHdl);
 
@@ -374,7 +374,7 @@ package Atari.Vdi is
                 a_page : out int16;
                 div_fac: out int16);
 
-    procedure v_alpha_text(handle: VdiHdl; str: string);
+    procedure v_alpha_text(handle: VdiHdl; str: in string);
 
     function v_orient(
                 handle     : VdiHdl;
@@ -463,6 +463,117 @@ package Atari.Vdi is
                 handle : VdiHdl;
                 state: int16);
 
+    procedure v_meta_extents(
+                handle : VdiHdl;
+                min_x: int16;
+                min_y: int16;
+                max_x: int16;
+                max_y: int16);
+
+    procedure v_write_meta(
+                handle      : VdiHdl;
+                num_intin   : int16;
+                a_intin     : short_array;
+                num_ptsin   : int16;
+                a_ptsin     : short_array);
+
+    procedure vm_pagesize(
+                handle  : VdiHdl;
+                pgwidth : int16;
+                pgheight: int16);
+
+    procedure vm_coords(
+                handle: VdiHdl;
+                llx: int16;
+                lly: int16;
+                urx: int16;
+                ury: int16);
+
+    function v_bez_qual(
+                handle: VdiHdl;
+                prcnt: int16) return int16;
+
+    procedure vm_filename(
+                handle  : VdiHdl;
+                filename: in string);
+
+    procedure v_offset(
+                handle: VdiHdl;
+                offset: int16);
+
+    procedure v_fontinit(
+                handle     : VdiHdl;
+                font_header: System.Address);
+
+    procedure v_escape2000(
+                handle : VdiHdl;
+                times: int16);
+
+    procedure v_pline(
+                handle: VdiHdl;
+                count : int16;
+                pxy:    short_array);
+
+    procedure v_bez(
+                handle: VdiHdl;
+                count : int16;
+                pxy:    short_array;
+                bezarr: System.Address;
+                extent: out short_array;
+                totpts: out int16;
+                totmoves: out int16);
+
+    procedure v_pmarker(
+                handle: VdiHdl;
+                count : int16;
+                pxy: short_array);
+
+    procedure v_gtext(
+                handle: VdiHdl;
+                x  : int16;
+                y  : int16;
+                str: in String);
+
+    procedure v_gtext(
+                handle: VdiHdl;
+                x  : int16;
+                y  : int16;
+                str: in Wide_String);
+
+    procedure v_fillarea(
+                handle: VdiHdl;
+                count : int16;
+                pxy:    short_array);
+
+    procedure v_bez_fill(
+                handle: VdiHdl;
+                count : int16;
+                pxy:    short_array;
+                bezarr: System.Address;
+                extent: out short_array;
+                totpts: out int16;
+                totmoves: out int16);
+
+    procedure v_bar(
+                handle: VdiHdl;
+                pxy:    short_array);
+
+    procedure v_arc(
+                handle: VdiHdl;
+                x     : int16;
+                y     : int16;
+                radius: int16;
+                begang: int16;
+                endang: int16);
+
+    procedure v_pieslice(
+                handle: VdiHdl;
+                x     : int16;
+                y     : int16;
+                radius: int16;
+                begang: int16;
+                endang: int16);
+
 	procedure v_circle(
                 handle: VdiHdl;
                 x     : int16;
@@ -475,6 +586,85 @@ package Atari.Vdi is
                 y   : int16;
                 xradius: int16;
                 yradius: int16);
+
+    procedure v_ellarc(
+                handle: VdiHdl;
+                x     : int16;
+                y     : int16;
+                xradius  : int16;
+                yradius  : int16;
+                begang: int16;
+                endang: int16);
+
+    procedure v_ellpie(
+                handle: VdiHdl;
+                x     : int16;
+                y     : int16;
+                xradius  : int16;
+                yradius  : int16;
+                begang: int16;
+                endang: int16);
+
+    procedure v_rbox(
+                handle: VdiHdl;
+                pxy:    short_array);
+
+    procedure v_rfbox(
+                handle: VdiHdl;
+                pxy:    short_array);
+
+    procedure v_justified(
+                handle    : VdiHdl;
+                x         : int16;
+                y         : int16;
+                str       : in string;
+                width     : int16;
+                word_space: int16;
+                char_space: int16);
+
+    procedure v_justified(
+                handle    : VdiHdl;
+                x         : int16;
+                y         : int16;
+                str       : in Wide_String;
+                width     : int16;
+                word_space: int16;
+                char_space: int16);
+
+    function v_bez_on(handle: VdiHdl) return int16;
+    procedure v_bez_off(handle: VdiHdl);
+
+    procedure vst_height(
+                handle: VdiHdl;
+                height: int16;
+                charw : out int16;
+                charh : out int16;
+                cellw : out int16;
+                cellh : out int16);
+
+	function vst_rotation(
+	            handle: VdiHdl;
+	            angle: int16)
+	           return int16;
+
+    procedure vs_color(
+                handle   : VdiHdl;
+                color_idx: int16;
+                rgb      : in short_array);
+
+    function vsl_type(
+                handle : VdiHdl;
+                style: int16)
+               return int16;
+
+    function vsl_width(
+                handle : VdiHdl;
+                width: int16)
+               return int16;
+
+
+
+
 
     function vsf_interior(
                 handle : VdiHdl;
