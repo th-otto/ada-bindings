@@ -1798,6 +1798,79 @@ end;
 
 
 
+function fsel_input(
+            path       : chars_ptr;
+            file       : chars_ptr;
+            exit_button: out int16)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+begin
+	aes_control.opcode := 90;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 2;
+	aes_control.num_addrin := 2;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(path);
+	aes_addrin(1) := to_address(file);
+	aes_trap;
+	exit_button := aes_intout(1);
+	return aes_intout(0);
+end;
+
+
+function fsel_exinput(
+            path       : chars_ptr;
+            file       : chars_ptr;
+            exit_button: out int16;
+            title      : const_chars_ptr)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+begin
+	aes_control.opcode := 91;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 2;
+	aes_control.num_addrin := 3;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(path);
+	aes_addrin(1) := to_address(file);
+	aes_addrin(2) := to_address2(title);
+	aes_trap;
+	exit_button := aes_intout(1);
+	return aes_intout(0);
+end;
+
+
+function fsel_boxinput(
+            path       : chars_ptr;
+            file       : chars_ptr;
+            exit_button: out int16;
+            title      : const_chars_ptr;
+            callback   : FSEL_CALLBACK)
+           return int16 is
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+    function to_address2 is new Ada.Unchecked_Conversion(FSEL_CALLBACK, System.Address);
+begin
+	aes_control.opcode := 91;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 2;
+	aes_control.num_addrin := 4;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(path);
+	aes_addrin(1) := to_address(file);
+	aes_addrin(2) := to_address2(title);
+	aes_addrin(3) := to_address2(callback);
+	aes_trap;
+	exit_button := aes_intout(1);
+	return aes_intout(0);
+end;
+
+
+
+
+
+
 
 
 

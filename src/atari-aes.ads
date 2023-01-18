@@ -1812,6 +1812,33 @@ package Atari.Aes is
 
 
 
+    function fsel_input(
+                path       : chars_ptr;
+                file       : chars_ptr;
+                exit_button: out int16)
+               return int16;
+
+    function fsel_exinput(
+                path       : chars_ptr;
+                file       : chars_ptr;
+                exit_button: out int16;
+                title      : const_chars_ptr)
+               return int16;
+
+    --  callback function used by BoxKite file selector. See fsel_boxinput()
+    type FSEL_CALLBACK is access procedure(msg: access int16);
+    pragma Convention(C, FSEL_CALLBACK);
+
+    function fsel_boxinput(
+                path       : chars_ptr;
+                file       : chars_ptr;
+                exit_button: out int16;
+                title      : const_chars_ptr;
+                callback   : FSEL_CALLBACK)
+               return int16;
+
+
+
 
 
 
