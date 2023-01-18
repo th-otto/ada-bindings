@@ -1800,6 +1800,20 @@ package Atari.Aes is
 
 
 
+    function scrp_read(
+                Scrappath : chars_ptr)
+               return int16;
+
+    function scrp_write(
+                Scrappath : const_chars_ptr)
+               return int16;
+
+    function scrp_clear return int16;
+
+
+
+
+
 
 
 
