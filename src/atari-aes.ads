@@ -698,6 +698,8 @@ package Atari.Aes is
     GDOS_BITM            : constant  := 2;                      -- *< TODO 
     IBM                  : constant  := 3;                      -- *< TODO 
     SMALL                : constant  := 5;                      -- *< TODO 
+
+    --  object types
     G_BOX                : constant  := 20;                     -- *< TODO 
     G_TEXT               : constant  := 21;                     -- *< TODO 
     G_BOXTEXT            : constant  := 22;                     -- *< TODO 
@@ -1151,7 +1153,7 @@ package Atari.Aes is
 
     type BITBLK is
         record
-            bi_pdata: aliased short_ptr;
+            bi_pdata: aliased short_array_ptr;
             bi_wb   : aliased int16;
             bi_hl   : aliased int16;
             bi_x    : aliased int16;
@@ -1163,8 +1165,8 @@ package Atari.Aes is
 
     type ICONBLK is
         record
-            ib_pmask: aliased short_ptr;
-            ib_pdata: aliased short_ptr;
+            ib_pmask: aliased short_array_ptr;
+            ib_pdata: aliased short_array_ptr;
             ib_ptext: aliased chars_ptr;
             ib_char : aliased int16;
             ib_xchar: aliased int16;
@@ -1186,10 +1188,10 @@ package Atari.Aes is
     type CICON is
         record
             num_planes: aliased int16;
-            col_data  : aliased short_ptr;
-            col_mask  : aliased short_ptr;
-            sel_data  : aliased short_ptr;
-            sel_mask  : aliased short_ptr;
+            col_data  : aliased short_array_ptr;
+            col_mask  : aliased short_array_ptr;
+            sel_data  : aliased short_array_ptr;
+            sel_mask  : aliased short_array_ptr;
             next_res  : aliased CICON_ptr;
         end record;
 

@@ -39,8 +39,8 @@ procedure eyes is
     end;
 
     function open_vwork return boolean is
-        workin: aliased vdi_workin_array;
-        workout: aliased vdi_workout_array;
+        workin: vdi_workin_array;
+        workout: vdi_workout_array;
     begin
         for i in workin'Range loop
            workin(i) := 1;
@@ -49,7 +49,7 @@ procedure eyes is
         handle := 0;
         phys_handle := graf_handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
         handle := phys_handle;
-        v_opnvwk(workin'Unchecked_Access, handle'Unchecked_Access, workout'Unchecked_Access);
+        v_opnvwk(workin, handle, workout);
         max_x := workout(0);
         max_y := workout(1);
         return handle > 0;
