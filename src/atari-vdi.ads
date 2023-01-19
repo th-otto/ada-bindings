@@ -74,8 +74,10 @@ package Atari.Vdi is
 
     CACHE_CHAR           : constant  := 0;                      -- *< TODO 
     CACHE_MISC           : constant  := 1;                      -- *< TODO 
+
     DEV_MISSING          : constant  := 0;                      -- *< TODO 
     DEV_INSTALLED        : constant  := 1;                      -- *< TODO 
+
     BITMAP_FONT          : constant  := 0;                      -- *< TODO 
 
 -- gsx styles
@@ -133,6 +135,7 @@ package Atari.Vdi is
     TA_LEFT              : constant  := 0;                      -- horizontal *< TODO 
     TA_CENTER            : constant  := 1;                      -- *< TODO 
     TA_RIGHT             : constant  := 2;                      -- *< TODO 
+
     TA_BASE              : constant  := 0;                      -- vertical *< TODO 
     TA_HALF              : constant  := 1;                      -- *< TODO 
     TA_ASCENT            : constant  := 2;                      -- *< TODO 
@@ -163,6 +166,7 @@ package Atari.Vdi is
 
     APP_ERROR            : constant  := 0;                      -- *< TODO 
     SCREEN_ERROR         : constant  := 1;                      -- *< TODO 
+
     NO_ERROR             : constant  := 0;                      -- *< TODO 
     CHAR_NOT_FOUND       : constant  := 1;                      -- *< TODO 
     FILE_READERR         : constant  := 8;                      -- *< TODO 

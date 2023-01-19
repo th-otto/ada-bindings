@@ -7,6 +7,9 @@ with Interfaces;   use Interfaces;
 
 package body Atari.Aes is
 
+pragma Suppress (Range_Check);
+pragma Suppress (Overflow_Check);
+
 aes_control: aliased AESContrl;
 aes_intin: aliased AESIntIn;
 aes_intout: aliased AESIntOut;
@@ -1252,6 +1255,25 @@ begin
 	return aes_intout(0);
 end;
 
+
+-- form_xerr
+function form_error(
+            ErrorCode : int32;
+            filename: String)
+           return int16 is
+    c_str: String := filename & ASCII.NUL;
+begin
+	aes_control.opcode := 53;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := int16(Shift_Right(uint32(ErrorCode), 16));
+	aes_intin(1) := int16(uint32(ErrorCode) and 16#ffff#);
+	aes_addrin(0) := c_str'Address;
+	aes_trap;
+	return aes_intout(0);
+end;
 
 function form_center(
             tree      : OBJECT_ptr;

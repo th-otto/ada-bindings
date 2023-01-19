@@ -2,10 +2,38 @@ with Interfaces.C;
 with Interfaces.C.Extensions;
 with System;
 
+--
+-- NOT YET IMPLEMENTED:
+-- appl_options
+-- objc_wchange
+-- objc_wdraw
+-- objc_wedit
+-- objc_xedit
+-- form_wkeybd
+-- form_wbutton
+-- form_popup
+-- form_xdial
+-- form_xdo
+-- xfrm_popup
+-- wind_xget
+-- wind_xset
+
+-- wdgl_*
+-- lbox_*
+-- fnts_*
+-- fslx_*
+-- pdlg_*
+-- edit_*
+
+-- Geneva functions
+
+
+
 package Atari.Aes is
 	--
 	-- AES
 	--
+
     subtype array_8 is short_array(0 .. 7);
     type array_8_ptr is access all array_8;
 
@@ -25,9 +53,11 @@ package Atari.Aes is
     APC_WIDGETS         : constant  := 16;                      -- *< Inquires or sets the 'default' 
     APC_APP_CONFIG      : constant  := 17;                      -- *< Change some way to manage application 
     APC_INFORM_MESAG    : constant  := 18;                      -- *< Request/Remove the sent an user 
+
     APCI_HIDDEN         : constant  := 16#1#;                   -- *< the application is hidden -- subopcode 
     APCI_HASMBAR        : constant  := 16#2#;                   -- *< the application has a menu bar 
     APCI_HASDESK        : constant  := 16#4#;                   -- *< the application has a own desk 
+
     AES_LARGEFONT       : constant  := 0;                       -- *< see  mt_appl_getinfo() 
     AES_SMALLFONT       : constant  := 1;                       -- *< see  mt_appl_getinfo() 
     AES_SYSTEM          : constant  := 2;                       -- *< see  mt_appl_getinfo() 
@@ -52,18 +82,22 @@ package Atari.Aes is
     AES_AOPTS           : constant  := 99;                      -- *< see  mt_appl_getinfo() 
     AES_APPL_OPTION     : constant  := 99;                      -- *< see  mt_appl_getinfo() 
     AES_WINX            : constant  := 22360;                   -- *< AES WINX information, see  mt_appl_getinfo()
+
     SYSTEM_FONT         : constant  := 0;                       -- *< see  mt_appl_getinfo() 
     OUTLINE_FONT        : constant  := 1;                       -- *< see  mt_appl_getinfo() 
+
     AESLANG_ENGLISH     : constant  := 0;                       -- *< see  mt_appl_getinfo() 
     AESLANG_GERMAN      : constant  := 1;                       -- *< see  mt_appl_getinfo() 
     AESLANG_FRENCH      : constant  := 2;                       -- *< see  mt_appl_getinfo() 
     AESLANG_SPANISH     : constant  := 4;                       -- *< see  mt_appl_getinfo() 
     AESLANG_ITALIAN     : constant  := 5;                       -- *< see  mt_appl_getinfo() 
     AESLANG_SWEDISH     : constant  := 6;                       -- *< see  mt_appl_getinfo() 
+
     AES_DEVSTATUS_ALPHA : constant  := 0;                       -- *< see  mt_appl_getinfo() 
     AES_DEVSTATUS_BETA  : constant  := 1;                       -- *< see  mt_appl_getinfo() 
     AES_DEVSTATUS_RELEASE: constant  := 2;                      -- *< see  mt_appl_getinfo() 
     AES_FDEVSTATUS_STABLE: constant  := 16#100#;                -- *< see  mt_appl_getinfo() 
+
     AES_ARCH_M68000      : constant  := 0;                      -- *< see  mt_appl_getinfo() 
     AES_ARCH_M68010      : constant  := 1;                      -- *< see  mt_appl_getinfo() 
     AES_ARCH_M68020      : constant  := 2;                      -- *< see  mt_appl_getinfo() 
@@ -72,8 +106,10 @@ package Atari.Aes is
     AES_ARCH_M68060      : constant  := 5;                      -- *< see  mt_appl_getinfo() 
     AES_ARCH_M6802060    : constant  := 6;                      -- *< see  mt_appl_getinfo() 
     AES_ARCH_COLDFIRE    : constant  := 7;                      -- *< see  mt_appl_getinfo() 
+
     AGI_WFORM            : constant  := 1;                      -- *< see  mt_appl_getinfo() 
     AGI_AOPTS            : constant  := 2;                      -- *< see  mt_appl_getinfo() 
+
     AO0_WF_SLIDE         : constant  := 1;                      -- *< see  mt_appl_options() 
     AO0_OBJC_EDIT        : constant  := 2;                      -- *< see  mt_appl_options() 
     
@@ -103,6 +139,7 @@ package Atari.Aes is
     APPEVNT_BUTTON       : constant  := 1;                      -- *< see struct pEvntrec 
     APPEVNT_MOUSE        : constant  := 2;                      -- *< see struct pEvntrec 
     APPEVNT_KEYBOARD     : constant  := 3;                      -- *< see struct pEvntrec 
+
     LEFT_BUTTON          : constant  := 16#1#;                  -- *< mask for left mouse button, see mt_evnt_button() 
     RIGHT_BUTTON         : constant  := 16#2#;                  -- *< mask for right mouse button, see mt_evnt_button() 
     MIDDLE_BUTTON        : constant  := 16#4#;                  -- *< mask for middle mouse button, see mt_evnt_button() 
@@ -223,6 +260,7 @@ package Atari.Aes is
     FERR_BADDRIVE        : constant  := 15;                     -- *< Invalid Drive Specification (GEMDOS error -46), see mt_form_error() 
     FERR_DELETEDIR       : constant  := 16;                     -- *< Attempt To Delete Working Directory (GEMDOS error -47), see mt_form_error() 
     FERR_NOFILES         : constant  := 18;                     -- *< No More Files (GEMDOS error -49), see mt_form_error() 
+
     FSEL_CANCEL          : constant  := 0;                      -- *< the fileselector has been closed by using the CANCEL button, see mt_fsel_exinput() 
     FSEL_OK              : constant  := 1;                      -- *< the fileselector has been closed by using the OK button, see mt_fsel_exinput()  
     
@@ -239,7 +277,6 @@ package Atari.Aes is
     MENU_INQUIRE         : constant  := -1;                     -- *< inquire the AES application ID of the process which own the displayed menu, see mt_menu_bar() 
     MENU_REMOVE          : constant  := 0;                      -- *< remove a menu bar, see mt_menu_bar() 
     MENU_INSTALL         : constant  := 1;                      -- *< install a menu bar, see mt_menu_bar() 
-    
     MENU_GETMODE         : constant  := 3;                      -- *< Get the menu bar mode, see mt_menu_bar() 
     MENU_SETMODE         : constant  := 4;                      -- *< Set the menu bar mode, see mt_menu_bar() 
     MENU_UPDATE          : constant  := 5;                      -- *< Update the system part of the menu bar, see mt_menu_bar() 
@@ -247,10 +284,13 @@ package Atari.Aes is
     MENU_HIDDEN          : constant  := 16#1#;                  -- *< menu bar only visible when needed, see #MENU_GETMODE or #MENU_SETMODE 
     MENU_PULLDOWN        : constant  := 16#2#;                  -- *< Pulldown-Menus, see #MENU_GETMODE or #MENU_SETMODE 
     MENU_SHADOWED        : constant  := 16#4#;                  -- *< menu bar with shadows, see #MENU_GETMODE or #MENU_SETMODE 
+
     UNCHECK              : constant  := 0;                      -- *< remove the check mark of a menu item, see mt_menu_icheck() 
     CHECK                : constant  := 1;                      -- *< set a check mark of a menu item, see mt_menu_icheck() 
+
     DISABLE              : constant  := 0;                      -- *< disable a menu item, see mt_menu_ienable() 
     ENABLE               : constant  := 1;                      -- *< enable a menu item, see mt_menu_ienable() 
+
     MIS_GETALIGN         : constant  := 0;                      -- *< get the alignment of a parent menu item with a sub-menu item, see mt_menu_istart() 
     MIS_SETALIGN         : constant  := 1;                      -- *< set the alignment of a parent menu item with a sub-menu item, see mt_menu_istart() 
     
@@ -258,11 +298,15 @@ package Atari.Aes is
     SCROLL_LISTBOX       : constant  := -1;                     -- *< display a drop-down list (with slider) instead of popup menu, see MENU::mn_scroll 
     
     REG_NEWNAME          : constant  := -1;                     -- *< register your application with a new name, see mt_menu_register() 
+
     MN_INQUIRE           : constant  := 0;                      -- *< inquire the current menu settings, see mt_menu_settings() 
     MN_CHANGE            : constant  := 1;                      -- *< set the menu settings, see mt_menu_settings() 
+
     HIGHLIGHT            : constant  := 0;                      -- *< display the title in reverse mode, see mt_menu_tnormal() 
     UNHIGHLIGHT          : constant  := 1;                      -- *< display the title in normal mode, see mt_menu_tnormal() 
+
     SHEL_BUFSIZE         : constant  := -1;                     -- *< return the size of AES shell buffer, see mt_shel_read() 
+
     SHP_HELP             : constant  := 0;                      -- *< see mt_shel_help() 
     
     --  shel_write modes for parameter "doex"
@@ -318,6 +362,7 @@ package Atari.Aes is
     
     NM_APTERM            : constant  := 16#1#;                  -- *< the application understands #AP_TERM messages, see mt_shel_write() and #SWM_NEWMSG 
     NM_INHIBIT_HIDE      : constant  := 16#2#;                  -- *< the application won't be hidden, see mt_shel_write() and #SWM_NEWMSG 
+
     AP_AESTERM           : constant  := 52;                     -- Mode 10: N.AES komplett terminieren. *< TODO 
     
     --  shel_write sh_wdoex parameter flags in MSB
@@ -811,6 +856,7 @@ package Atari.Aes is
     
     NO_DRAW              : constant  := 0;                      -- *< object will not be redrawn, see mt_objc_change() 
     REDRAW               : constant  := 1;                      -- *< object will be redrawn, see mt_objc_change() 
+
     OO_LAST              : constant  := -1;                     -- *< make object the last child, see mt_objc_order() 
     OO_FIRST             : constant  := 0;                      -- *< make object the first child, see mt_objc_order() 
     
@@ -1088,13 +1134,14 @@ package Atari.Aes is
     type BFOBSPEC is
         record
             character  : Interfaces.C.Extensions.Unsigned_8;
-            framesize  : Interfaces.C.Extensions.Unsigned_8;
+            framesize  : Interfaces.C.signed_char;
             framecol   : Interfaces.C.Extensions.Unsigned_4;
             textcol    : Interfaces.C.Extensions.Unsigned_4;
             textmode   : Interfaces.C.Extensions.Unsigned_1;
             fillpattern: Interfaces.C.Extensions.Unsigned_3;
             interiorcol: Interfaces.C.Extensions.Unsigned_4;
-        end record;
+        end record
+        with Pack => True, Alignment => 2;
 
 
     type PARMBLK is
@@ -1625,6 +1672,11 @@ package Atari.Aes is
 
     function form_error(
                 ErrorCode : int16)
+               return int16;
+
+    function form_error(
+                ErrorCode : int32;
+                filename: String)
                return int16;
 
     function form_center(
