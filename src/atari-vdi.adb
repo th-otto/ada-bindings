@@ -3,6 +3,7 @@ with System.Machine_Code;
 use System.Machine_Code;
 with Ada.Unchecked_Conversion;
 with Interfaces; use Interfaces;
+with System.Storage_Elements; use System.Storage_Elements;
 
 package body Atari.Vdi is
 
@@ -11,6 +12,8 @@ vdi_intin: aliased VDIIntIn;
 vdi_ptsin: aliased VDIPtsIn;
 vdi_intout: aliased VDIIntOut;
 vdi_ptsout: aliased VDIPtsOut;
+
+function to_int16 is new Ada.Unchecked_Conversion(uint16, int16);
 
 
 vdi_pb: aliased VDIPB := (
@@ -1253,6 +1256,119 @@ begin
 end;
 
 
+function vsl_color(
+            handle   : VdiHdl;
+            color_idx: int16)
+           return int16 is
+begin
+	vdi_intin(0) := color_idx;
+
+	vdi_control.opcode := 17;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+function vsm_type(
+            handle: VdiHdl;
+            symbol: int16)
+           return int16 is
+begin
+	vdi_intin(0) := symbol;
+
+	vdi_control.opcode := 18;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+function vsm_height(
+            handle: VdiHdl;
+            height: int16)
+           return int16 is
+begin
+	vdi_ptsin(0) := 0;
+	vdi_ptsin(1) := height;
+
+	vdi_control.opcode := 19;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_ptsout(1);
+end;
+
+
+function vsm_color(
+            handle   : VdiHdl;
+            color_idx: int16)
+           return int16 is
+begin
+	vdi_intin(0) := color_idx;
+
+	vdi_control.opcode := 20;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+function vst_font(
+            handle: VdiHdl;
+            font: int16)
+           return int16 is
+begin
+	vdi_intin(0) := font;
+
+	vdi_control.opcode := 21;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+function vst_color(
+            handle   : VdiHdl;
+            color_idx: int16)
+           return int16 is
+begin
+	vdi_intin(0) := color_idx;
+
+	vdi_control.opcode := 22;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
 
 
 function vsf_interior(
@@ -1309,6 +1425,218 @@ begin
 end;
 
 
+function vq_color(
+            handle   : VdiHdl;
+            color_idx: int16;
+            flag     : int16;
+            rgb      : out short_array)
+           return int16 is
+begin
+	vdi_intin(0) := color_idx;
+	vdi_intin(1) := flag;
+
+	vdi_control.opcode := 26;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 2;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	rgb(0) := vdi_intout(1);
+	rgb(1) := vdi_intout(2);
+	rgb(2) := vdi_intout(3);
+	return vdi_intout(0);
+end;
+
+
+procedure vrq_locator(
+            handle: VdiHdl;
+            x   : int16;
+            y   : int16;
+            xout: out int16;
+            yout: out int16;
+            term: out int16) is
+begin
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+
+	vdi_control.opcode := 28;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	xout := vdi_ptsout(0);
+	yout := vdi_ptsout(1);
+	term := vdi_intout(0);
+end;
+
+
+function vsm_locator(
+            handle: VdiHdl;
+            x   : int16;
+            y   : int16;
+            xout: out int16;
+            yout: out int16;
+            term: out int16)
+           return int16 is
+begin
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+
+	vdi_control.opcode := 28;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	xout := vdi_ptsout(0);
+	yout := vdi_ptsout(1);
+	term := vdi_intout(0);
+
+	return int16(Shift_Left(Unsigned_16(vdi_control.num_intout), 1)) or (vdi_control.num_ptsout);
+end;
+
+
+procedure vrq_valuator(
+            handle : VdiHdl;
+            c_in : int16;
+            c_out: out int16;
+            term : out int16) is
+begin
+	vdi_intin(0) := c_in;
+
+	vdi_control.opcode := 29;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	c_out := vdi_intout(0);
+	term := vdi_intout(1);
+end;
+
+
+
+procedure vsm_valuator(
+            handle: VdiHdl;
+            c_in  : int16;
+            c_out : out int16;
+            term  : out int16;
+            status: out int16) is
+begin
+	vdi_intin(0) := c_in;
+
+	vdi_control.opcode := 29;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	c_out := vdi_intout(0);
+	term := vdi_intout(1);
+	status := vdi_control.num_intout;
+end;
+
+
+procedure vrq_choice(
+            handle: VdiHdl;
+            ch_in : int16;
+            ch_out: out int16) is
+begin
+	vdi_intin(0) := ch_in;
+
+	vdi_control.opcode := 30;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	ch_out := vdi_intout(0);
+end;
+
+
+function vsm_choice(
+            handle: VdiHdl;
+            choice: out int16)
+           return int16 is
+begin
+	vdi_control.opcode := 30;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	choice := vdi_intout(0);
+	return vdi_control.num_intout;
+end;
+
+
+procedure vrq_string(
+            handle: VdiHdl;
+            len   : int16;
+            echo  : int16;
+            echoxy: in short_array;
+            str   : out String) is
+begin
+	vdi_intin(0) := len;
+	vdi_intin(1) := echo;
+	vdi_ptsin(0) := echoxy(0);
+	vdi_ptsin(1) := echoxy(1);
+
+	vdi_control.opcode := 31;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 2;
+	vdi_control.num_intout := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	vdi_to_string(str, vdi_control.num_intout);
+end;
+
+
+function vsm_string(
+            handle   : VdiHdl;
+            len      : int16;
+            echo     : int16;
+            echoxy   : in short_array;
+            str      : out String)
+           return int16 is
+begin
+	vdi_intin(0) := len;
+	vdi_intin(1) := echo;
+	vdi_ptsin(0) := echoxy(0);
+	vdi_ptsin(1) := echoxy(1);
+
+	vdi_control.opcode := 31;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 2;
+	vdi_control.num_intout := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	vdi_to_string(str, vdi_control.num_intout);
+	return vdi_control.num_intout;
+end;
+
+
 function vswr_mode(
             handle: VdiHdl;
             mode: int16)
@@ -1325,6 +1653,144 @@ begin
 	vdi_trap;
 	
 	return vdi_intout(0);
+end;
+
+
+
+function vsin_mode(
+            handle: VdiHdl;
+            dev_type: int16;
+            mode: int16)
+           return int16 is
+begin
+	vdi_intin(0) := mode;
+	vdi_intin(1) := dev_type;
+
+	vdi_control.opcode := 33;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 2;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+procedure vql_attributes(
+            handle  : VdiHdl;
+            attrib:  out short_array) is
+begin
+	vdi_control.opcode := 35;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	attrib(0) := vdi_intout(0);
+	attrib(1) := vdi_intout(1);
+	attrib(2) := vdi_intout(2);
+	attrib(3) := vdi_ptsout(0);
+	--  TOS/EmuTOS do not return the line end styles in intout(3/4)
+	if attrib'Length >= 6 then
+		if vdi_control.num_intout >= 5 then
+		    attrib(4) := vdi_intout(3);
+		    attrib(5) := vdi_intout(4);
+		else
+		    attrib(4) := 0;
+		    attrib(5) := 0;
+		end if;
+	end if;
+end;
+
+
+procedure vqm_attributes(
+            handle  : VdiHdl;
+            attrib  : out short_array) is
+begin
+	vdi_control.opcode := 36;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	attrib(0) := vdi_intout(0);
+	attrib(1) := vdi_intout(1);
+	attrib(2) := vdi_intout(2);
+	attrib(3) := vdi_ptsout(0);
+end;
+
+
+procedure vqf_attributes(
+            handle : VdiHdl;
+            attrib : out short_array) is
+begin
+	vdi_control.opcode := 37;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	attrib(0) := vdi_intout(0);
+	attrib(1) := vdi_intout(1);
+	attrib(2) := vdi_intout(2);
+	attrib(3) := vdi_intout(3);
+	attrib(4) := vdi_intout(4);
+end;
+
+
+procedure vqt_attributes(
+            handle  : VdiHdl;
+            attrib  : out short_array) is
+begin
+	vdi_control.opcode := 38;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	attrib(0) := vdi_intout(0);
+	attrib(1) := vdi_intout(1);
+	attrib(2) := vdi_intout(2);
+	attrib(3) := vdi_intout(3);
+	attrib(4) := vdi_intout(4);
+	attrib(5) := vdi_intout(5);
+	attrib(6) := vdi_ptsout(0);
+	attrib(7) := vdi_ptsout(1);
+	attrib(8) := vdi_ptsout(2);
+	attrib(9) := vdi_ptsout(3);
+end;
+
+
+procedure vst_alignment(
+            handle: VdiHdl;
+            hin : int16;
+            vin : int16;
+            hout: out int16;
+            vout: out int16) is
+begin
+	vdi_intin(0) := hin;
+	vdi_intin(1) := vin;
+
+	vdi_control.opcode := 39;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 2;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	hout := vdi_intout(0);
+	vout := vdi_intout(1);
 end;
 
 
@@ -1360,6 +1826,69 @@ begin
 	vdi_control.opcode := 101;
 	vdi_control.num_ptsin := 0;
 	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure vq_extnd(
+            handle     : VdiHdl;
+            flag       : int16;
+            work_out:  out vdi_workout_array) is
+    pb: aliased VDIPB;
+    function to_intout is new Ada.Unchecked_Conversion(System.Address, VDIIntOut_ptr);
+    function to_ptsout is new Ada.Unchecked_Conversion(System.Address, VDIPtsOut_ptr);
+begin
+	vdi_control.opcode := 102;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_intin(0) := flag;
+	pb.control := vdi_control'Access;
+	pb.intin := vdi_intin'Access;
+	pb.ptsin := vdi_ptsin'Access;
+	pb.intout := to_intout(work_out(0)'Address);
+	pb.ptsout := to_ptsout(work_out(45)'Address);
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure vq_scrninfo(
+            handle  : int16;
+            work_out: out short_array) is
+    pb: aliased VDIPB;
+    function to_intout is new Ada.Unchecked_Conversion(System.Address, VDIIntOut_ptr);
+begin
+	vdi_control.opcode := 102;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 1;
+	vdi_control.handle := handle;
+	vdi_intin(0) := 2;
+	pb.control := vdi_control'Access;
+	pb.intin := vdi_intin'Access;
+	pb.ptsin := vdi_ptsin'Access;
+	pb.intout := to_intout(work_out(0)'Address);
+	pb.ptsout := vdi_ptsout'Access;
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure v_contourfill(
+            handle   : VdiHdl;
+            x        : int16;
+            y        : int16;
+            color_idx: int16) is
+begin
+	vdi_intin(0) := color_idx;
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_control.opcode := 103;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 1;
 	vdi_control.subcode := 0;
 	vdi_control.handle := handle;
 
@@ -1405,6 +1934,196 @@ begin
 end;
 
 
+procedure v_get_pixel(
+            handle   : VdiHdl;
+            x        : int16;
+            y        : int16;
+            pel      : out int16;
+            color_idx: out int16) is
+begin
+	vdi_ptsin(0) := x;
+	vdi_ptsin(1) := y;
+	vdi_control.opcode := 105;
+	vdi_control.num_ptsin := 1;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	pel := vdi_intout(0);
+	color_idx := vdi_intout(1);
+end;
+
+
+function vst_effects(
+            handle : VdiHdl;
+            effects: int16)
+           return int16 is
+begin
+	vdi_intin(0) := effects;
+	vdi_control.opcode := 106;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+function vst_point(
+            handle : VdiHdl;
+            point: int16;
+            charw: out int16;
+            charh: out int16;
+            cellw: out int16;
+            cellh: out int16)
+           return int16 is
+begin
+	vdi_intin(0) := point;
+	vdi_control.opcode := 107;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	charw := vdi_ptsout(0);
+	charh := vdi_ptsout(1);
+	cellw := vdi_ptsout(2);
+	cellh := vdi_ptsout(3);
+
+	return vdi_intout(0);
+end;
+
+
+procedure vsl_ends(
+            handle  : VdiHdl;
+            begstyle: int16;
+            endstyle: int16) is
+begin
+	vdi_intin(0) := begstyle;
+	vdi_intin(1) := endstyle;
+	vdi_control.opcode := 108;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 2;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure vro_cpyfm(
+            handle : VdiHdl;
+            mode   : int16;
+            pxy    : short_array;
+            src    : in MFDB;
+            dst    : in MFDB) is
+begin
+	vdi_intin(0) := mode;
+	vdi_ptsin(0) := pxy(0);
+	vdi_ptsin(1) := pxy(1);
+	vdi_ptsin(2) := pxy(2);
+	vdi_ptsin(3) := pxy(3);
+	vdi_ptsin(4) := pxy(4);
+	vdi_ptsin(5) := pxy(5);
+	vdi_ptsin(6) := pxy(6);
+	vdi_ptsin(7) := pxy(7);
+
+	vdi_control.ptr1 := src'Address;
+	vdi_control.ptr2 := dst'Address;
+
+	vdi_control.opcode := 109;
+	vdi_control.num_ptsin := 4;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure vr_trnfm(
+            handle: VdiHdl;
+            src: in MFDB;
+            dst: in MFDB) is
+begin
+	vdi_control.ptr1 := src'Address;
+	vdi_control.ptr2 := dst'Address;
+
+	vdi_control.opcode := 110;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure vsc_form(
+            handle: VdiHdl;
+            form: MFORM_const_ptr) is
+    pb: aliased VDIPB;
+    function to_address is new Ada.Unchecked_Conversion(MFORM_const_ptr, VDIIntIn_ptr);
+begin
+	-- TODO: NVDI also returns current form in intout
+	pb.control := vdi_control'Access;
+	pb.intin := to_address(form);
+	pb.ptsin := vdi_ptsin'Access;
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi_control.opcode := 111;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 37;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure vsf_udpat(
+            handle: VdiHdl;
+            pat   : in short_array;
+            planes: int16) is
+    pb: aliased VDIPB;
+    function to_address is new Ada.Unchecked_Conversion(System.Address, VDIIntIn_ptr);
+begin
+	-- TODO: NVDI also returns current form in intout
+	pb.control := vdi_control'Access;
+	pb.intin := to_address(pat'Address);
+	pb.ptsin := vdi_ptsin'Access;
+	pb.intout := vdi_intout'Access;
+	pb.ptsout := vdi_ptsout'Access;
+	vdi_control.opcode := 112;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := planes * 16;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi(pb'Unchecked_Access);
+end;
+
+
+procedure vsl_udsty(
+            handle: VdiHdl;
+            pattern: int16) is
+begin
+	vdi_intin(0) := pattern;
+	vdi_control.opcode := 113;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
 procedure vr_recfl(
             handle : VdiHdl;
             pxy    : short_array) is
@@ -1420,6 +2139,304 @@ begin
 	vdi_ptsin(2) := pxy(2);
 	vdi_ptsin(3) := pxy(3);
 	vdi_trap;
+end;
+
+
+procedure vqin_mode(
+            handle: VdiHdl;
+            dev_type : int16;
+            input_mode: out int16) is
+begin
+	vdi_intin(0) := dev_type;
+	vdi_control.opcode := 115;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	input_mode := vdi_intout(0);
+end;
+
+
+procedure vqt_extent(
+            handle: VdiHdl;
+            str   : in String;
+            extent: out short_array) is
+	len: int16;
+begin
+	len := string_to_vdi(str, 0);
+	vdi_control.opcode := 116;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := len;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	extent(0) := vdi_ptsout(0);
+	extent(1) := vdi_ptsout(1);
+	extent(2) := vdi_ptsout(2);
+	extent(3) := vdi_ptsout(3);
+	extent(4) := vdi_ptsout(4);
+	extent(5) := vdi_ptsout(5);
+	extent(6) := vdi_ptsout(6);
+	extent(7) := vdi_ptsout(7);
+end;
+
+
+procedure vqt_extent(
+            handle: VdiHdl;
+            str   : in Wide_String;
+            extent: out short_array) is
+	len: int16;
+begin
+	len := string_to_vdi(str, 0);
+	vdi_control.opcode := 116;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := len;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	extent(0) := vdi_ptsout(0);
+	extent(1) := vdi_ptsout(1);
+	extent(2) := vdi_ptsout(2);
+	extent(3) := vdi_ptsout(3);
+	extent(4) := vdi_ptsout(4);
+	extent(5) := vdi_ptsout(5);
+	extent(6) := vdi_ptsout(6);
+	extent(7) := vdi_ptsout(7);
+end;
+
+
+function vqt_width(
+            handle: VdiHdl;
+            chr   : int16;
+            cell_width    : out int16;
+            left_delta: out int16;
+            right_delta: out int16)
+           return int16 is
+begin
+	vdi_intin(0) := chr;
+	vdi_control.opcode := 117;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	cell_width := vdi_ptsout(0);
+	left_delta := vdi_ptsout(2);
+	right_delta := vdi_ptsout(4);
+	return vdi_intout(0);
+end;
+
+
+procedure vex_timv(
+            handle    : VdiHdl;
+            time_addr : System.Address;
+            otime_addr: out System.Address;
+            time_conv : out int16) is
+begin
+	vdi_control.opcode := 118;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_control.ptr1 := time_addr;
+
+	vdi_trap;
+
+	otime_addr := vdi_control.ptr2;
+	time_conv := vdi_intout(0);
+end;
+
+
+function vst_load_fonts(
+            handle: VdiHdl;
+            reserved_select: int16)
+           return int16 is
+begin
+	vdi_intin(0) := reserved_select;
+
+	vdi_control.opcode := 119;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	return vdi_intout(0);
+end;
+
+
+procedure vst_unload_fonts(
+            handle: VdiHdl;
+            reserved_select: int16) is
+begin
+	vdi_intin(0) := reserved_select;
+
+	vdi_control.opcode := 120;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure vrt_cpyfm(
+            handle  : VdiHdl;
+            mode    : int16;
+            pxy     : short_array;
+            src     : in MFDB;
+            dst     : in MFDB;
+            color   : in short_array) is
+begin
+	vdi_intin(0) := mode;
+	vdi_intin(1) := color(0);
+	vdi_intin(2) := color(1);
+	vdi_ptsin(0) := pxy(0);
+	vdi_ptsin(1) := pxy(1);
+	vdi_ptsin(2) := pxy(2);
+	vdi_ptsin(3) := pxy(3);
+	vdi_ptsin(4) := pxy(4);
+	vdi_ptsin(5) := pxy(5);
+	vdi_ptsin(6) := pxy(6);
+	vdi_ptsin(7) := pxy(7);
+
+	vdi_control.ptr1 := src'Address;
+	vdi_control.ptr2 := dst'Address;
+
+	vdi_control.opcode := 121;
+	vdi_control.num_ptsin := 4;
+	vdi_control.num_intin := 3;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure v_show_c(handle : VdiHdl; reset: int16) is
+begin
+	vdi_intin(0) := reset;
+
+	vdi_control.opcode := 122;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure v_hide_c(handle: VdiHdl) is
+begin
+	vdi_control.opcode := 123;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+end;
+
+
+procedure vq_mouse(
+            handle : VdiHdl;
+            pstatus: out int16;
+            x      : out int16;
+            y      : out int16) is
+begin
+	vdi_control.opcode := 124;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	pstatus := vdi_intout(0);
+	x := vdi_ptsout(0);
+	y := vdi_ptsout(1);
+end;
+
+
+procedure vex_butv(
+            handle  : VdiHdl;
+            pusrcode: System.Address;
+            psavcode: out System.Address) is
+begin
+	vdi_control.opcode := 125;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_control.ptr1 := pusrcode;
+
+	vdi_trap;
+
+	psavcode := vdi_control.ptr2;
+end;
+
+
+procedure vex_motv(
+            handle  : VdiHdl;
+            pusrcode: System.Address;
+            psavcode: out System.Address) is
+begin
+	vdi_control.opcode := 126;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_control.ptr1 := pusrcode;
+
+	vdi_trap;
+
+	psavcode := vdi_control.ptr2;
+end;
+
+
+procedure vex_curv(
+            handle  : VdiHdl;
+            pusrcode: System.Address;
+            psavcode: out System.Address) is
+begin
+	vdi_control.opcode := 127;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_control.ptr1 := pusrcode;
+
+	vdi_trap;
+
+	psavcode := vdi_control.ptr2;
+end;
+
+
+procedure vq_key_s(
+            handle : VdiHdl;
+            state: out int16) is
+begin
+	vdi_control.opcode := 128;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	state := vdi_intout(0);
 end;
 
 
@@ -1461,6 +2478,135 @@ begin
 	vdi_ptsin(3) := pxy(1).p_y;
 	vdi_trap;
 end;
+
+
+function vqt_name(
+            handle : VdiHdl;
+            element: int16;
+            name   : out String)
+           return int16 is
+begin
+	vdi_intin(0) := element;
+
+	vdi_control.opcode := 130;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 1;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	vdi_to_string(name, vdi_control.num_intout - 1, 1);
+
+	return vdi_intout(0);
+end;
+
+
+procedure vqt_fontinfo(
+            handle   : VdiHdl;
+            minade   : out int16;
+            maxade   : out int16;
+            distances: out short_array;
+            maxwidth : out int16;
+            effects  : out short_array) is
+begin
+	vdi_control.opcode := 131;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+
+	vdi_trap;
+
+	minade := vdi_intout(0);
+	maxade := vdi_intout(1);
+	maxwidth := vdi_ptsout(0);
+	distances(0) := vdi_ptsout(1);
+	distances(1) := vdi_ptsout(3);
+	distances(2) := vdi_ptsout(5);
+	distances(3) := vdi_ptsout(7);
+	distances(4) := vdi_ptsout(9);
+	effects(0) := vdi_ptsout(2);
+	effects(1) := vdi_ptsout(4);
+	effects(2) := vdi_ptsout(6);
+end;
+
+
+procedure vex_wheelv(
+            handle  : VdiHdl;
+            pusrcode: System.Address;
+            psavcode: out System.Address) is
+begin
+	vdi_control.opcode := 134;
+	vdi_control.num_ptsin := 0;
+	vdi_control.num_intin := 0;
+	vdi_control.subcode := 0;
+	vdi_control.handle := handle;
+	vdi_control.ptr1 := pusrcode;
+
+	vdi_trap;
+
+	psavcode := vdi_control.ptr2;
+end;
+
+
+function To_chars_ptr is
+  new Ada.Unchecked_Conversion (System.Address, chars_ptr);
+
+function To_Address is
+  new Ada.Unchecked_Conversion (chars_ptr, System.Address);
+
+   function "+" (Left : chars_ptr; Right : Integer) return chars_ptr is
+   pragma Inline ("+");
+   begin
+      return To_chars_ptr (To_Address (Left) + Storage_Offset(Right));
+   end "+";
+
+procedure vdi_array2str(
+            src: in short_array;
+            dst: chars_ptr;
+            maxlen: int16) is
+	len: Integer;
+    ptr: chars_ptr;
+begin
+	ptr := dst;
+	len := Integer(maxlen);
+	for i in 0 .. len - 1 loop
+		ptr.all := Character'Val(src(i));
+		ptr := ptr + 1;
+  	end loop;
+  	ptr.all := Character'Val(0);
+end;
+
+
+function vdi_str2array(
+            src: chars_ptr;
+            dst: out short_array)
+           return int16 is
+	len: Integer;
+	c: int16;
+    ptr: chars_ptr;
+begin
+	len := 0;
+	ptr := src;
+	loop
+		c := Character'Pos(ptr.all);
+		exit when c = 0;
+		dst(len) := c;
+		len := len + 1;
+		ptr := ptr + 1;
+	end loop;
+	-- dst'Length := len;
+	return int16(len);
+end;
+
+
+function vdi_wstrlen(wstr: in Wide_String) return int16 is
+begin
+	return to_int16(wstr'Length);
+end;
+
+
 
 
 

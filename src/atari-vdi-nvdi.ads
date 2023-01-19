@@ -1,5 +1,3 @@
-with System;
-
 package Atari.Vdi.Nvdi is
 
 	subtype fix31 is int32;

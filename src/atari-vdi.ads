@@ -1,4 +1,5 @@
 with System;
+with Atari.Aes;
 
 package Atari.Vdi is
     --
@@ -254,6 +255,7 @@ package Atari.Vdi is
         handle: int16;          -- [6]
         ptr1: System.Address;   -- [7/8]
         ptr2: System.Address;   -- [9/10]
+        unused: short_array(11..15);
     end record;
 
     subtype VDIIntIn is short_array(0..1023);
@@ -662,9 +664,35 @@ package Atari.Vdi is
                 width: int16)
                return int16;
 
+    function vsl_color(
+                handle   : VdiHdl;
+                color_idx: int16)
+               return int16;
 
+    function vsm_type(
+                handle: VdiHdl;
+                symbol: int16)
+               return int16;
 
+    function vsm_height(
+                handle: VdiHdl;
+                height: int16)
+               return int16;
 
+    function vsm_color(
+                handle   : VdiHdl;
+                color_idx: int16)
+               return int16;
+
+	function vst_font(
+	            handle: VdiHdl;
+	            font: int16)
+	           return int16;
+
+    function vst_color(
+                handle   : VdiHdl;
+                color_idx: int16)
+               return int16;
 
     function vsf_interior(
                 handle : VdiHdl;
@@ -681,10 +709,101 @@ package Atari.Vdi is
 	            color_idx: int16)
 	           return int16;
 
+    function vq_color(
+                handle   : VdiHdl;
+                color_idx: int16;
+                flag     : int16;
+                rgb      : out short_array)
+               return int16;
+
+    procedure vrq_locator(
+                handle: VdiHdl;
+                x   : int16;
+                y   : int16;
+                xout: out int16;
+                yout: out int16;
+                term: out int16);
+
+    function vsm_locator(
+                handle: VdiHdl;
+                x   : int16;
+                y   : int16;
+                xout: out int16;
+                yout: out int16;
+                term: out int16)
+               return int16;
+
+    procedure vrq_valuator(
+                handle : VdiHdl;
+                c_in : int16;
+                c_out: out int16;
+                term : out int16);
+
+    procedure vsm_valuator(
+                handle: VdiHdl;
+                c_in  : int16;
+                c_out : out int16;
+                term  : out int16;
+                status: out int16);
+
+    procedure vrq_choice(
+                handle: VdiHdl;
+                ch_in : int16;
+                ch_out: out int16);
+
+    function vsm_choice(
+                handle: VdiHdl;
+                choice: out int16)
+               return int16;
+
+    procedure vrq_string(
+                handle: VdiHdl;
+                len   : int16;
+                echo  : int16;
+                echoxy: in short_array;
+                str   : out String);
+
+    function vsm_string(
+                handle   : VdiHdl;
+                len      : int16;
+                echo     : int16;
+                echoxy   : in short_array;
+                str      : out String)
+               return int16;
+
     function vswr_mode(
                 handle: VdiHdl;
                 mode: int16)
                return int16;
+
+    function vsin_mode(
+                handle: VdiHdl;
+                dev_type: int16;
+                mode: int16)
+               return int16;
+
+    procedure vql_attributes(
+                handle  : VdiHdl;
+                attrib  :  out short_array);
+
+    procedure vqm_attributes(
+                handle  : VdiHdl;
+                attrib  : out short_array);
+
+    procedure vqf_attributes(
+                handle : VdiHdl;
+                attrib : out short_array);
+
+    procedure vqt_attributes(
+                handle  : VdiHdl;
+                attrib  : out short_array);
+
+    procedure vst_alignment(
+                handle: VdiHdl;
+                hin : int16;
+                vin : int16;
+                hout: out int16;
+                vout: out int16);
 
     procedure v_opnvwk(
                 work_in : vdi_workin_array;
@@ -692,6 +811,21 @@ package Atari.Vdi is
                 work_out: out vdi_workout_array);
 
     procedure v_clsvwk(handle: VdiHdl);
+
+	procedure vq_extnd(
+	            handle     : VdiHdl;
+	            flag       : int16;
+	            work_out:  out vdi_workout_array);
+
+	procedure vq_scrninfo(
+	            handle  : int16;
+	            work_out: out short_array);
+
+    procedure v_contourfill(
+                handle   : VdiHdl;
+                x        : int16;
+                y        : int16;
+                color_idx: int16);
 
     function vsf_perimeter(
                 handle: VdiHdl;
@@ -704,9 +838,136 @@ package Atari.Vdi is
                 style: int16)
                return int16;
 
+    procedure v_get_pixel(
+                handle   : VdiHdl;
+                x        : int16;
+                y        : int16;
+                pel      : out int16;
+                color_idx: out int16);
+
+    function vst_effects(
+                handle : VdiHdl;
+                effects: int16)
+               return int16;
+
+    function vst_point(
+                handle : VdiHdl;
+                point: int16;
+                charw: out int16;
+                charh: out int16;
+                cellw: out int16;
+                cellh: out int16)
+               return int16;
+
+    procedure vsl_ends(
+                handle  : VdiHdl;
+                begstyle: int16;
+                endstyle: int16);
+
+    procedure vro_cpyfm(
+                handle : VdiHdl;
+                mode   : int16;
+                pxy    : short_array;
+                src    : in MFDB;
+                dst    : in MFDB);
+
+    procedure vr_trnfm(
+                handle: VdiHdl;
+                src: in MFDB;
+                dst: in MFDB);
+
+    subtype MFORM_const_ptr is Atari.Aes.MFORM_const_ptr;
+    procedure vsc_form(
+                handle: VdiHdl;
+                form: MFORM_const_ptr);
+
+    procedure vsf_udpat(
+                handle: VdiHdl;
+                pat   : in short_array;
+                planes: int16);
+
+    procedure vsl_udsty(
+                handle: VdiHdl;
+                pattern: int16);
+
     procedure vr_recfl(
                 handle : VdiHdl;
                 pxy    : short_array);
+
+    procedure vqin_mode(
+                handle: VdiHdl;
+                dev_type : int16;
+                input_mode: out int16);
+
+    procedure vqt_extent(
+                handle: VdiHdl;
+                str   : in String;
+                extent: out short_array);
+
+    procedure vqt_extent(
+                handle: VdiHdl;
+                str   : in Wide_String;
+                extent: out short_array);
+
+    function vqt_width(
+                handle: VdiHdl;
+                chr   : int16;
+                cell_width    : out int16;
+                left_delta: out int16;
+                right_delta: out int16)
+               return int16;
+
+    procedure vex_timv(
+                handle    : VdiHdl;
+                time_addr : System.Address;
+                otime_addr: out System.Address;
+                time_conv : out int16);
+
+    function vst_load_fonts(
+                handle: VdiHdl;
+                reserved_select: int16)
+               return int16;
+
+    procedure vst_unload_fonts(
+                handle: VdiHdl;
+                reserved_select: int16);
+
+    procedure vrt_cpyfm(
+                handle  : VdiHdl;
+                mode    : int16;
+                pxy     : short_array;
+                src     : in MFDB;
+                dst     : in MFDB;
+                color   : in short_array);
+
+    procedure v_show_c(handle : VdiHdl; reset: int16);
+
+    procedure v_hide_c(handle: VdiHdl);
+
+    procedure vq_mouse(
+                handle : VdiHdl;
+                pstatus: out int16;
+                x      : out int16;
+                y      : out int16);
+
+    procedure vex_butv(
+                handle  : VdiHdl;
+                pusrcode: System.Address;
+                psavcode: out System.Address);
+
+    procedure vex_motv(
+                handle  : VdiHdl;
+                pusrcode: System.Address;
+                psavcode: out System.Address);
+
+    procedure vex_curv(
+                handle  : VdiHdl;
+                pusrcode: System.Address;
+                psavcode: out System.Address);
+
+	procedure vq_key_s(
+	            handle : VdiHdl;
+	            state: out int16);
 
     procedure vs_clip(
                 handle   : VdiHdl;
@@ -717,6 +978,44 @@ package Atari.Vdi is
                 handle   : VdiHdl;
                 clip_flag: int16;
                 pxy      : PXY_array);
+
+    function vqt_name(
+                handle : VdiHdl;
+                element: int16;
+                name   : out String)
+               return int16;
+
+    procedure vqt_fontinfo(
+                handle   : VdiHdl;
+                minade   : out int16;
+                maxade   : out int16;
+                distances: out short_array;
+                maxwidth : out int16;
+                effects  : out short_array);
+
+    procedure vex_wheelv(
+                handle  : VdiHdl;
+                pusrcode: System.Address;
+                psavcode: out System.Address);
+
+
+
+
+    procedure vdi_array2str(
+                src: in short_array;
+                dst: chars_ptr;
+                maxlen: int16);
+
+    function vdi_str2array(
+                src: chars_ptr;
+                dst: out short_array)
+               return int16;
+
+    function vdi_wstrlen(wstr: in Wide_String) return int16;
+
+
+
+
 
     function vq_vgdos return uint32;
 

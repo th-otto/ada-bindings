@@ -6,17 +6,8 @@ package Atari.Aes is
 	--
 	-- AES
 	--
-	type chars_ptr is access all Character;
-	for chars_ptr'Size use Standard'Address_Size;
-	pragma No_Strict_Aliasing (chars_ptr);
-
     subtype array_8 is short_array(0 .. 7);
     type array_8_ptr is access all array_8;
-
-    type const_chars_ptr is access constant Character;
-	for const_chars_ptr'Size use Standard'Address_Size;
-	pragma No_Strict_Aliasing (const_chars_ptr);
-    type chars_ptr_array is array (integer range <>) of aliased chars_ptr;
 
     NIL                 : constant  := -1;                      -- *< Value for no more object in object 
     DESKTOP_HANDLE      : constant  := 0;                       -- *< TODO 
