@@ -4,20 +4,6 @@ with System;
 
 --
 -- NOT YET IMPLEMENTED:
--- appl_options
--- objc_wchange
--- objc_wdraw
--- objc_wedit
--- objc_xedit
--- form_wkeybd
--- form_wbutton
--- form_popup
--- form_xdial
--- form_xdo
--- xfrm_popup
--- wind_xget
--- wind_xset
-
 -- wdgl_*
 -- lbox_*
 -- fnts_*
@@ -1331,7 +1317,15 @@ package Atari.Aes is
     gl_apid: int16;
     for gl_apid'Address use aes_global(2)'Address;
 
+	-- FIXME: how to make private to sub-packages?
+	aes_control: aliased AESContrl;
+	aes_intin: aliased AESIntIn;
+	aes_intout: aliased AESIntOut;
+	aes_addrin: aliased AESAddrIn;
+	aes_addrout: aliased AESAddrOut;
+
     procedure aes(pb: AESPB_ptr);
+	procedure aes_trap;
 
     function appl_init return int16;
     procedure appl_exit;
@@ -2165,5 +2159,8 @@ package Atari.Aes is
                 c_array: out short_array);
 
 	function Is_Application return boolean;
+
+private
+   pragma Inline (aes_trap);
 
 end Atari.Aes;

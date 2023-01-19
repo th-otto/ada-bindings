@@ -10,11 +10,6 @@ package body Atari.Aes is
 pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
 
-aes_control: aliased AESContrl;
-aes_intin: aliased AESIntIn;
-aes_intout: aliased AESIntOut;
-aes_addrin: aliased AESAddrIn;
-aes_addrout: aliased AESAddrOut;
 has_agi: int16 := -1;
 
 
@@ -2163,6 +2158,7 @@ begin
 end;
 
 
+-- wind_xget
 function wind_get(
             WindowHandle: int16;
             What        : wind_get_set_type;
@@ -2257,6 +2253,7 @@ begin
 end;
 
 
+-- wind_xset
 function wind_set(
             WindowHandle: int16;
             What        : wind_get_set_type;
