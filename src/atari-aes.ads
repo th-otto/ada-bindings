@@ -16,9 +16,9 @@ with System;
 
 
 package Atari.Aes is
-	--
-	-- AES
-	--
+    --
+    -- AES
+    --
 
     subtype array_8 is short_array(0 .. 7);
     type array_8_ptr is access all array_8;
@@ -203,9 +203,9 @@ package Atari.Aes is
     SMC_FREEZE           : constant  := 3;                      -- MagiC 2  *< TODO 
     SMC_UNFREEZE         : constant  := 4;                      -- MagiC 2  *< TODO 
     SMC_RES5             : constant  := 5;                      -- MagiC 2  *< TODO 
-    SMC_UNHIDEALL        : constant  := 6;                      -- MagiC 3.1	*< TODO 
-    SMC_HIDEOTHERS       : constant  := 7;                      -- MagiC 3.1	*< TODO 
-    SMC_HIDEACT          : constant  := 8;                      -- MagiC 3.1	*< TODO 
+    SMC_UNHIDEALL        : constant  := 6;                      -- MagiC 3.1    *< TODO 
+    SMC_HIDEOTHERS       : constant  := 7;                      -- MagiC 3.1    *< TODO 
+    SMC_HIDEACT          : constant  := 8;                      -- MagiC 3.1    *< TODO 
 
     --  evnt_mouse modes
     MO_ENTER             : constant  := 0;                      -- *< Wait for mouse to enter rectangle, see mt_evnt_mouse() 
@@ -418,161 +418,161 @@ package Atari.Aes is
 
     --  window flags as used by wind_set()/wind_get()
     type wind_get_set_type is (
-	    WF_KIND,
-	    WF_NAME,
-	    WF_INFO,
-	    WF_WORKXYWH,
-	    WF_CURRXYWH,
-	    WF_PREVXYWH,
-	    WF_FULLXYWH,
-	    WF_HSLIDE,
-	    WF_VSLIDE,
-	    WF_TOP,
-	    WF_FIRSTXYWH,
-	    WF_NEXTXYWH,
-	    WF_FIRSTAREAXYWH,
-	    WF_NEWDESK,
-	    WF_HSLSIZE,
-	    WF_VSLSIZE,
-	    WF_SCREEN,
-	    WF_COLOR,
-	    WF_DCOLOR,
-	    WF_OWNER,
-	    WF_BEVENT,
-	    WF_BOTTOM,
-	    WF_ICONIFY,
-	    WF_UNICONIFY,
-	    WF_UNICONIFYXYWH,
-	    WF_TOOLBAR,
-	    WF_FTOOLBAR,
-	    WF_NTOOLBAR,
-	    WF_MENU,
-	    WF_WHEEL,
-	    WF_OPTS,
-	    WF_CALCF2W,
-	    WF_CALCW2F,
-	    WF_CALCF2U,
-	    WF_CALCU2F,
-	    WF_MAXWORKXYWH,
-	    WF_M_BACKDROP,
-	    WF_M_OWNER,
-	    WF_M_WINDLIST,
-	    WF_MINXYWH,
-	    WF_INFOXYWH,
-	    WF_WIDGETS,
-	    WF_USER_POINTER,
-	    WF_WIND_ATTACH,
-	    WF_TOPMOST,
-	    WF_BITMAP,
-	    WF_OPTIONS,
-	    WF_FULLSCREEN,
-	    WF_OBFLAG,
-	    WF_OBTYPE,
-	    WF_OBSPEC,
-	    X_WF_MENU,
-	    X_WF_DIALOG,
-	    X_WF_DIALWID,
-	    X_WF_DIALHT,
-	    X_WF_DFLTDESK,
-	    X_WF_MINMAX,
-	    X_WF_HSPLIT,
-	    X_WF_VSPLIT,
-	    X_WF_SPLMIN,
-	    X_WF_HSLIDE2,
-	    X_WF_VSLIDE2,
-	    X_WF_HSLSIZE2,
-	    X_WF_VSLSIZE2,
-	    X_WF_DIALFLGS,
-	    X_WF_OBJHAND,
-	    X_WF_DIALEDIT,
-	    X_WF_DCOLSTAT,
-	    WF_WINX,
-	    WF_WINXCFG,
-	    WF_DDELAY,
-	    WF_SHADE,
-	    WF_STACK,
-	    WF_TOPALL,
-	    WF_BOTTOMALL,
-	    WF_XAAES
-	);
-	for wind_get_set_type use (
-	    WF_KIND              => 1,                      -- *< get     the actual window attributes, see mt_wind_get()
-	    WF_NAME              => 2,                      -- *< get/set title name of the window, see mt_wind_get() and mt_wind_set()
-	    WF_INFO              => 3,                      -- *< get/set info line of the window, see mt_wind_get() and mt_wind_set() 
-	    WF_WORKXYWH          => 4,                      -- *< get     the work area coordinates of the work area, see mt_wind_get() 
-	    WF_CURRXYWH          => 5,                      -- *< get/set current coordinates of the window (external area), see mt_wind_get() and mt_wind_set()  
-	    WF_PREVXYWH          => 6,                      -- *< get     the previous coordinates of the window (external area), see mt_wind_get() 
-	    WF_FULLXYWH          => 7,                      -- *< get     the coordinates of the window when "fulled" the screen, see mt_wind_get() 
-	    WF_HSLIDE            => 8,                      -- *< get/set position of the horizontal slider, see mt_wind_get() and mt_wind_set() 
-	    WF_VSLIDE            => 9,                      -- *< get/set position of the vertical slider, see mt_wind_get() and mt_wind_set() 
-	    WF_TOP               => 10,                     -- *< get/set top window, see mt_wind_get() and mt_wind_set() 
-	    WF_FIRSTXYWH         => 11,                     -- *< get     the first rectangle in the list of rectangles for this window, see mt_wind_get() 
-	    WF_NEXTXYWH          => 12,                     -- *< get     the next rectangle in the list of rectangles for this window, see mt_wind_get() 
-	    WF_FIRSTAREAXYWH     => 13,                     -- *< get     the first rectangle in the list of rectangles for this window, see mt_wind_xget()
-	    WF_NEWDESK           => 14,                     -- *< get/set OBJECT tree installed as desktop, see mt_wind_get() and mt_wind_set() 
-	    WF_HSLSIZE           => 15,                     -- *< get/set size of the horizontal slider, see mt_wind_get() and mt_wind_set() 
-	    WF_VSLSIZE           => 16,                     -- *< get/set size of the vertical slider, see mt_wind_get() and mt_wind_set() 
-	    WF_SCREEN            => 17,                     -- *< get     current AES menu/alert buffer and its size, see mt_wind_get() 
-	    WF_COLOR             => 18,                     -- *< get/set current color of widget, see mt_wind_get() and mt_wind_set() 
-	    WF_DCOLOR            => 19,                     -- *< get/set default color of widget, see mt_wind_get() and mt_wind_set() 
-	    WF_OWNER             => 20,                     -- *< get     the owner of the window, see mt_wind_get() 
-	    WF_BEVENT            => 24,                     -- *< get/set window feature on mouse button event, see mt_wind_get() and mt_wind_set() 
-	    WF_BOTTOM            => 25,                     -- *< get/set bottom window, see mt_wind_get() and mt_wind_set() 
-	    WF_ICONIFY           => 26,                     -- *< get/set iconification of the window, see mt_wind_get() and mt_wind_set() 
-	    WF_UNICONIFY         => 27,                     -- *< get/set un-iconification of the window, see mt_wind_get() and mt_wind_set() 
-	    WF_UNICONIFYXYWH     => 28,                     -- *<     set window coordinates when uniconified , see mt_wind_set() 
-	    WF_TOOLBAR           => 30,                     -- *< get/set tool bar attached to a window, see mt_wind_get() and mt_wind_set() 
-	    WF_FTOOLBAR          => 31,                     -- *< get     the first rectangle of the toolbar area, see mt_wind_get() 
-	    WF_NTOOLBAR          => 32,                     -- *< get     the next rectangle of the toolbar area, see mt_wind_get() 
-	    WF_MENU              => 33,                     -- *<         TODO (XaAES) 
-	    WF_WHEEL             => 40,                     -- *<     set window feature on mouse wheel event, see mt_wind_set() 
-	    WF_OPTS              => 41,                     -- *< get/set window options. See mt_wind_set() and mt_wind_get() for details. 
-	    WF_CALCF2W           => 42,                     -- *< Convert FULL coordinates to WORK coordinates 
-	    WF_CALCW2F           => 43,                     -- *< Convert WORK coordinates to FULL coordinates 
-	    WF_CALCF2U           => 44,                     -- *< Convert FULL coordinates to USER coordinates 
-	    WF_CALCU2F           => 45,                     -- *< Convert USER coordinates to FULL coordinates 
-	    WF_MAXWORKXYWH       => 46,                     -- *< Get MAX coordinates for this window - WCOWORK mode only
-	    WF_M_BACKDROP        => 100,                    -- *<		 TODO (KAOS 1.4) 
-	    WF_M_OWNER           => 101,                    -- *<		 TODO (KAOS 1.4) 
-	    WF_M_WINDLIST        => 102,                    -- *<		 TODO (KAOS 1.4) 
-	    WF_MINXYWH           => 103,                    -- *<		 TODO (MagiC 6) 
-	    WF_INFOXYWH          => 104,                    -- *<		 TODO (MagiC 6.10) 
-	    WF_WIDGETS           => 200,                    -- *< get/set actual positions of the slider widgets, see mt_wind_get() and mt_wind_set() 
-	    WF_USER_POINTER      => 230,                    -- *< MyAES - attach a 32 bit value to window see  mt_wind_set() see mt_wind_get() 
-	    WF_WIND_ATTACH       => 231,                    -- *< MyAES - attach a window to another, see mt_wind_set() 
-	    WF_TOPMOST           => 232,                    -- *< MyAES    set actual window at TOPMOST level, see mt_wind_set() 
-	    WF_BITMAP            => 233,                    -- *< MyAES 0.96	get bitmap of the window, see  mt_wind_get() 
-	    WF_OPTIONS           => 234,                    -- *< MyAES 0.96 at this time use only to request automaticaly close if application lost focus and appear when focus is back, see mt_wind_set() 
-	    WF_FULLSCREEN        => 235,                    -- *< MyAES 0.96 set window in fullscreen without widget, see mt_wind_set() 
-	    WF_OBFLAG            => 1001,                   -- *< get/set (doc: TODO) (FreeGEM) 
-	    WF_OBTYPE            => 1002,                   -- *< get     (doc: TODO) (FreeGEM) 
-	    WF_OBSPEC            => 1003,                   -- *< get/set (doc: TODO) (FreeGEM) 
-	    X_WF_MENU            => 16#1100#,               -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DIALOG          => 16#1200#,               -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DIALWID         => 16#1300#,               -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DIALHT          => 16#1400#,               -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_DFLTDESK        => 16#1500#,               -- *<     set (doc: TODO) (Geneva)  
-	    X_WF_MINMAX          => 16#1600#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_HSPLIT          => 16#1700#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_VSPLIT          => 16#1800#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_SPLMIN          => 16#1900#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_HSLIDE2         => 16#1a00#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_VSLIDE2         => 16#1b00#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_HSLSIZE2        => 16#1c00#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_VSLSIZE2        => 16#1d00#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_DIALFLGS        => 16#1e00#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_OBJHAND         => 16#1f00#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_DIALEDIT        => 16#2000#,               -- *< get/set (doc: TODO) (Geneva)  
-	    X_WF_DCOLSTAT        => 16#2100#,               -- *< get/set (doc: TODO) (Geneva)  
-	    WF_WINX              => 22360,                  -- *<		 TODO 
-	    WF_WINXCFG           => 22361,                  -- *<		 TODO 
-	    WF_DDELAY            => 22362,                  -- *<		 TODO 
-	    WF_SHADE             => 22365,                  -- *<		 TODO (WINX 2.3) 
-	    WF_STACK             => 22366,                  -- *<		 TODO (WINX 2.3) 
-	    WF_TOPALL            => 22367,                  -- *<		 TODO (WINX 2.3) 
-	    WF_BOTTOMALL         => 22368,                  -- *<		 TODO (WINX 2.3) 
-	    WF_XAAES             => 16#5841#                -- *<		 TODO (XaAES) : 'XA' 
-	);
+        WF_KIND,
+        WF_NAME,
+        WF_INFO,
+        WF_WORKXYWH,
+        WF_CURRXYWH,
+        WF_PREVXYWH,
+        WF_FULLXYWH,
+        WF_HSLIDE,
+        WF_VSLIDE,
+        WF_TOP,
+        WF_FIRSTXYWH,
+        WF_NEXTXYWH,
+        WF_FIRSTAREAXYWH,
+        WF_NEWDESK,
+        WF_HSLSIZE,
+        WF_VSLSIZE,
+        WF_SCREEN,
+        WF_COLOR,
+        WF_DCOLOR,
+        WF_OWNER,
+        WF_BEVENT,
+        WF_BOTTOM,
+        WF_ICONIFY,
+        WF_UNICONIFY,
+        WF_UNICONIFYXYWH,
+        WF_TOOLBAR,
+        WF_FTOOLBAR,
+        WF_NTOOLBAR,
+        WF_MENU,
+        WF_WHEEL,
+        WF_OPTS,
+        WF_CALCF2W,
+        WF_CALCW2F,
+        WF_CALCF2U,
+        WF_CALCU2F,
+        WF_MAXWORKXYWH,
+        WF_M_BACKDROP,
+        WF_M_OWNER,
+        WF_M_WINDLIST,
+        WF_MINXYWH,
+        WF_INFOXYWH,
+        WF_WIDGETS,
+        WF_USER_POINTER,
+        WF_WIND_ATTACH,
+        WF_TOPMOST,
+        WF_BITMAP,
+        WF_OPTIONS,
+        WF_FULLSCREEN,
+        WF_OBFLAG,
+        WF_OBTYPE,
+        WF_OBSPEC,
+        X_WF_MENU,
+        X_WF_DIALOG,
+        X_WF_DIALWID,
+        X_WF_DIALHT,
+        X_WF_DFLTDESK,
+        X_WF_MINMAX,
+        X_WF_HSPLIT,
+        X_WF_VSPLIT,
+        X_WF_SPLMIN,
+        X_WF_HSLIDE2,
+        X_WF_VSLIDE2,
+        X_WF_HSLSIZE2,
+        X_WF_VSLSIZE2,
+        X_WF_DIALFLGS,
+        X_WF_OBJHAND,
+        X_WF_DIALEDIT,
+        X_WF_DCOLSTAT,
+        WF_WINX,
+        WF_WINXCFG,
+        WF_DDELAY,
+        WF_SHADE,
+        WF_STACK,
+        WF_TOPALL,
+        WF_BOTTOMALL,
+        WF_XAAES
+    );
+    for wind_get_set_type use (
+        WF_KIND              => 1,                      -- *< get     the actual window attributes, see mt_wind_get()
+        WF_NAME              => 2,                      -- *< get/set title name of the window, see mt_wind_get() and mt_wind_set()
+        WF_INFO              => 3,                      -- *< get/set info line of the window, see mt_wind_get() and mt_wind_set() 
+        WF_WORKXYWH          => 4,                      -- *< get     the work area coordinates of the work area, see mt_wind_get() 
+        WF_CURRXYWH          => 5,                      -- *< get/set current coordinates of the window (external area), see mt_wind_get() and mt_wind_set()  
+        WF_PREVXYWH          => 6,                      -- *< get     the previous coordinates of the window (external area), see mt_wind_get() 
+        WF_FULLXYWH          => 7,                      -- *< get     the coordinates of the window when "fulled" the screen, see mt_wind_get() 
+        WF_HSLIDE            => 8,                      -- *< get/set position of the horizontal slider, see mt_wind_get() and mt_wind_set() 
+        WF_VSLIDE            => 9,                      -- *< get/set position of the vertical slider, see mt_wind_get() and mt_wind_set() 
+        WF_TOP               => 10,                     -- *< get/set top window, see mt_wind_get() and mt_wind_set() 
+        WF_FIRSTXYWH         => 11,                     -- *< get     the first rectangle in the list of rectangles for this window, see mt_wind_get() 
+        WF_NEXTXYWH          => 12,                     -- *< get     the next rectangle in the list of rectangles for this window, see mt_wind_get() 
+        WF_FIRSTAREAXYWH     => 13,                     -- *< get     the first rectangle in the list of rectangles for this window, see mt_wind_xget()
+        WF_NEWDESK           => 14,                     -- *< get/set OBJECT tree installed as desktop, see mt_wind_get() and mt_wind_set() 
+        WF_HSLSIZE           => 15,                     -- *< get/set size of the horizontal slider, see mt_wind_get() and mt_wind_set() 
+        WF_VSLSIZE           => 16,                     -- *< get/set size of the vertical slider, see mt_wind_get() and mt_wind_set() 
+        WF_SCREEN            => 17,                     -- *< get     current AES menu/alert buffer and its size, see mt_wind_get() 
+        WF_COLOR             => 18,                     -- *< get/set current color of widget, see mt_wind_get() and mt_wind_set() 
+        WF_DCOLOR            => 19,                     -- *< get/set default color of widget, see mt_wind_get() and mt_wind_set() 
+        WF_OWNER             => 20,                     -- *< get     the owner of the window, see mt_wind_get() 
+        WF_BEVENT            => 24,                     -- *< get/set window feature on mouse button event, see mt_wind_get() and mt_wind_set() 
+        WF_BOTTOM            => 25,                     -- *< get/set bottom window, see mt_wind_get() and mt_wind_set() 
+        WF_ICONIFY           => 26,                     -- *< get/set iconification of the window, see mt_wind_get() and mt_wind_set() 
+        WF_UNICONIFY         => 27,                     -- *< get/set un-iconification of the window, see mt_wind_get() and mt_wind_set() 
+        WF_UNICONIFYXYWH     => 28,                     -- *<     set window coordinates when uniconified , see mt_wind_set() 
+        WF_TOOLBAR           => 30,                     -- *< get/set tool bar attached to a window, see mt_wind_get() and mt_wind_set() 
+        WF_FTOOLBAR          => 31,                     -- *< get     the first rectangle of the toolbar area, see mt_wind_get() 
+        WF_NTOOLBAR          => 32,                     -- *< get     the next rectangle of the toolbar area, see mt_wind_get() 
+        WF_MENU              => 33,                     -- *<         TODO (XaAES) 
+        WF_WHEEL             => 40,                     -- *<     set window feature on mouse wheel event, see mt_wind_set() 
+        WF_OPTS              => 41,                     -- *< get/set window options. See mt_wind_set() and mt_wind_get() for details. 
+        WF_CALCF2W           => 42,                     -- *< Convert FULL coordinates to WORK coordinates 
+        WF_CALCW2F           => 43,                     -- *< Convert WORK coordinates to FULL coordinates 
+        WF_CALCF2U           => 44,                     -- *< Convert FULL coordinates to USER coordinates 
+        WF_CALCU2F           => 45,                     -- *< Convert USER coordinates to FULL coordinates 
+        WF_MAXWORKXYWH       => 46,                     -- *< Get MAX coordinates for this window - WCOWORK mode only
+        WF_M_BACKDROP        => 100,                    -- *<        TODO (KAOS 1.4) 
+        WF_M_OWNER           => 101,                    -- *<        TODO (KAOS 1.4) 
+        WF_M_WINDLIST        => 102,                    -- *<        TODO (KAOS 1.4) 
+        WF_MINXYWH           => 103,                    -- *<        TODO (MagiC 6) 
+        WF_INFOXYWH          => 104,                    -- *<        TODO (MagiC 6.10) 
+        WF_WIDGETS           => 200,                    -- *< get/set actual positions of the slider widgets, see mt_wind_get() and mt_wind_set() 
+        WF_USER_POINTER      => 230,                    -- *< MyAES - attach a 32 bit value to window see  mt_wind_set() see mt_wind_get() 
+        WF_WIND_ATTACH       => 231,                    -- *< MyAES - attach a window to another, see mt_wind_set() 
+        WF_TOPMOST           => 232,                    -- *< MyAES    set actual window at TOPMOST level, see mt_wind_set() 
+        WF_BITMAP            => 233,                    -- *< MyAES 0.96    get bitmap of the window, see  mt_wind_get() 
+        WF_OPTIONS           => 234,                    -- *< MyAES 0.96 at this time use only to request automaticaly close if application lost focus and appear when focus is back, see mt_wind_set() 
+        WF_FULLSCREEN        => 235,                    -- *< MyAES 0.96 set window in fullscreen without widget, see mt_wind_set() 
+        WF_OBFLAG            => 1001,                   -- *< get/set (doc: TODO) (FreeGEM) 
+        WF_OBTYPE            => 1002,                   -- *< get     (doc: TODO) (FreeGEM) 
+        WF_OBSPEC            => 1003,                   -- *< get/set (doc: TODO) (FreeGEM) 
+        X_WF_MENU            => 16#1100#,               -- *<     set (doc: TODO) (Geneva)  
+        X_WF_DIALOG          => 16#1200#,               -- *<     set (doc: TODO) (Geneva)  
+        X_WF_DIALWID         => 16#1300#,               -- *<     set (doc: TODO) (Geneva)  
+        X_WF_DIALHT          => 16#1400#,               -- *<     set (doc: TODO) (Geneva)  
+        X_WF_DFLTDESK        => 16#1500#,               -- *<     set (doc: TODO) (Geneva)  
+        X_WF_MINMAX          => 16#1600#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_HSPLIT          => 16#1700#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_VSPLIT          => 16#1800#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_SPLMIN          => 16#1900#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_HSLIDE2         => 16#1a00#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_VSLIDE2         => 16#1b00#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_HSLSIZE2        => 16#1c00#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_VSLSIZE2        => 16#1d00#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_DIALFLGS        => 16#1e00#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_OBJHAND         => 16#1f00#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_DIALEDIT        => 16#2000#,               -- *< get/set (doc: TODO) (Geneva)  
+        X_WF_DCOLSTAT        => 16#2100#,               -- *< get/set (doc: TODO) (Geneva)  
+        WF_WINX              => 22360,                  -- *<        TODO 
+        WF_WINXCFG           => 22361,                  -- *<        TODO 
+        WF_DDELAY            => 22362,                  -- *<        TODO 
+        WF_SHADE             => 22365,                  -- *<        TODO (WINX 2.3) 
+        WF_STACK             => 22366,                  -- *<        TODO (WINX 2.3) 
+        WF_TOPALL            => 22367,                  -- *<        TODO (WINX 2.3) 
+        WF_BOTTOMALL         => 22368,                  -- *<        TODO (WINX 2.3) 
+        WF_XAAES             => 16#5841#                -- *<        TODO (XaAES) : 'XA' 
+    );
 
     --  wind_set(WF_BEVENT)
     BEVENT_WORK          : constant  := 16#1#;                  -- *< window not topped when click on the work area, see #WF_BEVENT 
@@ -641,51 +641,51 @@ package Atari.Aes is
 
     --  AES mouse cursor number
     type Mouse_Type is (
-	    ARROW,
-	    TEXT_CRSR,
-	    BUSYBEE,
-	    POINT_HAND,
-	    FLAT_HAND,
-	    THIN_CROSS,
-	    THICK_CROSS,
-	    OUTLN_CROSS,
-	    X_LFTRT,
-	    X_UPDOWN,
-	    USER_DEF,
-	    M_OFF,
-	    M_ON,
-	    M_SAVE,
-	    M_RESTORE,
-	    M_LAST,
-	    XACRS_BUBBLE_DISC,
-	    XACRS_RESIZER,
-	    XACRS_NE_SIZER,
-	    XACRS_MOVER,
-	    XACRS_VERTSIZER,
-	    XACRS_HORSIZER,
-	    XACRS_POINTSLIDE,
-	    X_MRESET,
-	    X_MGET,
-	    X_MSET_SHAPE,
-	    M_FORCE
+        ARROW,
+        TEXT_CRSR,
+        BUSYBEE,
+        POINT_HAND,
+        FLAT_HAND,
+        THIN_CROSS,
+        THICK_CROSS,
+        OUTLN_CROSS,
+        X_LFTRT,
+        X_UPDOWN,
+        USER_DEF,
+        M_OFF,
+        M_ON,
+        M_SAVE,
+        M_RESTORE,
+        M_LAST,
+        XACRS_BUBBLE_DISC,
+        XACRS_RESIZER,
+        XACRS_NE_SIZER,
+        XACRS_MOVER,
+        XACRS_VERTSIZER,
+        XACRS_HORSIZER,
+        XACRS_POINTSLIDE,
+        X_MRESET,
+        X_MGET,
+        X_MSET_SHAPE,
+        M_FORCE
     );
     for Mouse_Type use (
-	    ARROW                => 0,                      -- *< see mt_graf_mouse() 
-	    TEXT_CRSR            => 1,                      -- *< see mt_graf_mouse() 
-	    BUSYBEE              => 2,                      -- *< see mt_graf_mouse() 
-	    POINT_HAND           => 3,                      -- *< see mt_graf_mouse() 
-	    FLAT_HAND            => 4,                      -- *< see mt_graf_mouse() 
-	    THIN_CROSS           => 5,                      -- *< see mt_graf_mouse() 
-	    THICK_CROSS          => 6,                      -- *< see mt_graf_mouse() 
-	    OUTLN_CROSS          => 7,                      -- *< see mt_graf_mouse() 
+        ARROW                => 0,                      -- *< see mt_graf_mouse() 
+        TEXT_CRSR            => 1,                      -- *< see mt_graf_mouse() 
+        BUSYBEE              => 2,                      -- *< see mt_graf_mouse() 
+        POINT_HAND           => 3,                      -- *< see mt_graf_mouse() 
+        FLAT_HAND            => 4,                      -- *< see mt_graf_mouse() 
+        THIN_CROSS           => 5,                      -- *< see mt_graf_mouse() 
+        THICK_CROSS          => 6,                      -- *< see mt_graf_mouse() 
+        OUTLN_CROSS          => 7,                      -- *< see mt_graf_mouse() 
         X_LFTRT              => 8,                      -- Geneva, N.AES
         X_UPDOWN             => 9,                      -- Geneva, N.AES
-	    USER_DEF             => 255,                    -- *< see mt_graf_mouse() 
-	    M_OFF                => 256,                    -- *< see mt_graf_mouse() 
-	    M_ON                 => 257,                    -- *< see mt_graf_mouse() 
-	    M_SAVE               => 258,                    -- *< see mt_graf_mouse() 
-	    M_RESTORE            => 259,                    -- *< see mt_graf_mouse() 
-	    M_LAST               => 260,                    -- *< see mt_graf_mouse() 
+        USER_DEF             => 255,                    -- *< see mt_graf_mouse() 
+        M_OFF                => 256,                    -- *< see mt_graf_mouse() 
+        M_ON                 => 257,                    -- *< see mt_graf_mouse() 
+        M_SAVE               => 258,                    -- *< see mt_graf_mouse() 
+        M_RESTORE            => 259,                    -- *< see mt_graf_mouse() 
+        M_LAST               => 260,                    -- *< see mt_graf_mouse() 
         XACRS_BUBBLE_DISC    => 270,                    -- XaAES
         XACRS_RESIZER        => 271,                    -- XaAES
         XACRS_NE_SIZER       => 272,                    -- XaAES
@@ -693,16 +693,16 @@ package Atari.Aes is
         XACRS_VERTSIZER      => 274,                    -- XaAES
         XACRS_HORSIZER       => 275,                    -- XaAES
         XACRS_POINTSLIDE     => 276,                    -- XaAES
-	    X_MRESET             => 1000,                   -- geneva 
-	    X_MGET               => 1001,                   -- geneva 
-	    X_MSET_SHAPE         => 1100,                   -- geneva 
-	    M_FORCE              => 16#8000#                -- *< see mt_graf_mouse() 
+        X_MRESET             => 1000,                   -- geneva 
+        X_MGET               => 1001,                   -- geneva 
+        X_MSET_SHAPE         => 1100,                   -- geneva 
+        M_FORCE              => 16#8000#                -- *< see mt_graf_mouse() 
     );
     for Mouse_Type'Size use int16'Size;
     BEE: constant Mouse_Type := BUSYBEE;
     BUSY_BEE: constant Mouse_Type := BUSYBEE;
     HOURGLASS: constant Mouse_Type := BUSYBEE;
-	M_PREVIOUS: constant Mouse_Type := M_LAST;
+    M_PREVIOUS: constant Mouse_Type := M_LAST;
     
     --  inside patterns
     IP_HOLLOW            : constant  := 0;                      -- *< TODO 
@@ -860,7 +860,7 @@ package Atari.Aes is
     MX_ENABLE3D          : constant  := 10;                     -- *< enable or disable the 3D look (MagiC 3), see mt_objc_sysvar() 
     MENUCOL              : constant  := 11;                     -- *< TO BE COMPLETED (MagiC 6), see mt_objc_sysvar() 
 
-	-- AP_DRAGDROP return codes
+    -- AP_DRAGDROP return codes
     DD_OK        : constant  := 0;
     DD_NAK       : constant  := 1;
     DD_EXT       : constant  := 2;
@@ -894,8 +894,8 @@ package Atari.Aes is
     type AESAddrIn is array(0..7) of System.Address;
     type AESAddrOut is array(0..1) of System.Address;
 
-	type AESContrl_ptr is access AESContrl;
-	type AESGlobal_ptr is access AESGlobal;
+    type AESContrl_ptr is access AESContrl;
+    type AESGlobal_ptr is access AESGlobal;
 
     type AESPB is record
         control: access AESContrl;
@@ -905,7 +905,7 @@ package Atari.Aes is
         addrin: access AESAddrIn;
         addrout: access AESAddrOut;
     end record;
-	type AESPB_ptr is access all AESPB;
+    type AESPB_ptr is access all AESPB;
 
     --  AES/VDI mouse form structure
 
@@ -953,7 +953,7 @@ package Atari.Aes is
             g_y: aliased int16;
             g_w: aliased int16;
             g_h: aliased int16;
-		end record;
+        end record;
     type GRECT_ptr is access all GRECT;
     type GRECT_const_ptr is access constant GRECT;
 
@@ -1094,7 +1094,7 @@ package Atari.Aes is
             flags  : aliased int32;
         end record;
 
-	--  extended appl_write structure
+    --  extended appl_write structure
     type XAESMSG is record
         dst_apid: int16;
         unique_flg: int16;
@@ -1317,15 +1317,15 @@ package Atari.Aes is
     gl_apid: int16;
     for gl_apid'Address use aes_global(2)'Address;
 
-	-- FIXME: how to make private to sub-packages?
-	aes_control: aliased AESContrl;
-	aes_intin: aliased AESIntIn;
-	aes_intout: aliased AESIntOut;
-	aes_addrin: aliased AESAddrIn;
-	aes_addrout: aliased AESAddrOut;
+    -- FIXME: how to make private to sub-packages?
+    aes_control: aliased AESContrl;
+    aes_intin: aliased AESIntIn;
+    aes_intout: aliased AESIntOut;
+    aes_addrin: aliased AESAddrIn;
+    aes_addrout: aliased AESAddrOut;
 
     procedure aes(pb: AESPB_ptr);
-	procedure aes_trap;
+    procedure aes_trap;
 
     function appl_init return int16;
     procedure appl_exit;
@@ -1627,13 +1627,13 @@ package Atari.Aes is
                 out2      : out int16)
                return int16;
 
-	function objc_xfind(
-	            tree      : OBJECT_ptr;
-	            Start     : int16;
-	            Depth     : int16;
-	            Mx        : int16;
-	            My        : int16)
-	           return int16;
+    function objc_xfind(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Mx        : int16;
+                My        : int16)
+               return int16;
 
 
 
@@ -1885,13 +1885,13 @@ package Atari.Aes is
                 startob     : int16)
                return int16;
 
-	function wind_create(
-	            Parts     : int16;
-	            Wx        : int16;
-	            Wy        : int16;
-	            Ww        : int16;
-	            Wh        : int16)
-	           return int16;
+    function wind_create(
+                Parts     : int16;
+                Wx        : int16;
+                Wy        : int16;
+                Ww        : int16;
+                Wh        : int16)
+               return int16;
 
     function wind_create(
                 Parts     : int16;
@@ -1993,11 +1993,11 @@ package Atari.Aes is
                 r           : out GRECT)
                return int16;
 
-	function wind_set(
-	            WindowHandle: int16;
-	            What        : wind_get_set_type;
-	            str         : const_chars_ptr)
-	           return int16;
+    function wind_set(
+                WindowHandle: int16;
+                What        : wind_get_set_type;
+                str         : const_chars_ptr)
+               return int16;
 
     function wind_set(
                 WindowHandle: int16;
@@ -2110,10 +2110,10 @@ package Atari.Aes is
                 buf       : chars_ptr)
                return int16;
 
-	function shel_envrn(
-	            result    : out chars_ptr;
-	            param     : chars_ptr)
-	           return int16;
+    function shel_envrn(
+                result    : out chars_ptr;
+                param     : chars_ptr)
+               return int16;
 
     procedure shel_rdef(
                 lpcmd     : chars_ptr;
@@ -2158,7 +2158,7 @@ package Atari.Aes is
                 area   : in GRECT;
                 c_array: out short_array);
 
-	function Is_Application return boolean;
+    function Is_Application return boolean;
 
 private
    pragma Inline (aes_trap);

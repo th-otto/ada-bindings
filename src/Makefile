@@ -1,16 +1,14 @@
-CROSS = m68k-atari-mint-
-GNAT = $(CROSS)gnatmake -I../src -gnatwa
-AR = $(CROSS)ar
-GNATCFLAGS = -cargs -O2 -g
-
-.adb.o:
-	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+top_srcdir = ..
+include $(top_srcdir)/config.mak
 
 all:: libgem.a
 
 OBJS = \
 	atari.o \
 	atari-aes.o \
+	atari-aes-form.ali \
+	atari-aes-appl.ali \
+	atari-aes-event.ali \
 	atari-aes-extensions.o \
 	atari-aes-wdialog.o \
 	atari-aes-fslx.o \
@@ -26,6 +24,15 @@ atari.o: atari.adb atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes.o: atari-aes.adb atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-form.ali: atari-aes-form.ads atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-appl.ali: atari-aes-appl.ads atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-event.ali: atari-aes-event.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-extensions.o: atari-aes-extensions.adb atari-aes-extensions.ads atari-aes.ads atari.ads

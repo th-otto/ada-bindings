@@ -1,5 +1,5 @@
-GNAT = m68k-atari-mint-gnatmake -I../src -gnatwa
-GNATCFLAGS = -cargs -O2 -g
+top_srcdir = ..
+include $(top_srcdir)/config.mak
 
 all:: hello hellogem eyes
 
