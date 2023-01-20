@@ -12,7 +12,7 @@ procedure eyes is
     use ASCII;
     type draw_what is (DRAW_ALL, EYES);
     PARTS: constant int16 := NAME or CLOSER or MOVER;
-    
+
     phys_handle: VdiHdl;
     whandle: int16;
     handle: aliased VdiHdl;
@@ -20,8 +20,8 @@ procedure eyes is
     gl_wbox, gl_hbox: int16;
     max_x, max_y: int16;
     menu_id: int16;
-    title: constant array(0..10) of aliased character := " ADA Eyes " & ASCII.NUL;
-    menu_name: constant array(0..19) of aliased character := "  Pure Pascal Eyes " & ASCII.NUL;
+    title: constant char_array(0..10) := " ADA Eyes " & ASCII.NUL;
+    menu_name: constant char_array(0..19) := "  Pure Pascal Eyes " & ASCII.NUL;
     events: int16;
     oldx, oldy: int16;
     wx, wy: aliased int16;

@@ -12,6 +12,7 @@ package Atari is
     subtype intptr is Interfaces.Integer_32;
     type short_ptr is access all int16;
     type const_short_ptr is access constant int16;
+    type uint8_ptr is access all uint8;
 
     type char_array is array(Integer range <>) of aliased Character;
 
@@ -21,6 +22,8 @@ package Atari is
 	type chars_ptr is access all Character;
 	for chars_ptr'Size use Standard'Address_Size;
 	pragma No_Strict_Aliasing (chars_ptr);
+
+    type long_array is array(Integer range <>) of aliased int32;
 
     type const_chars_ptr is access constant Character;
 	for const_chars_ptr'Size use Standard'Address_Size;

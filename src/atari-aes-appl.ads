@@ -27,7 +27,7 @@ package Atari.Aes.Appl is
                 mem       : System.Address;
                 count     : int16)
                return int16 renames appl_trecord;
-    function Bvset(
+    function Bitvector_Set(
                 bvdisk    : int16;
                 bvhard    : int16)
                return int16 renames appl_bvset;

@@ -725,10 +725,10 @@ end;
 
 
 function menu_popup(
-            me_menu : in MENU;
+            me_menu : in AMENU;
             me_xpos : int16;
             me_ypos : int16;
-            me_mdata: out MENU)
+            me_mdata: out AMENU)
            return int16 is
 begin
 	aes_control.opcode := 36;
@@ -749,9 +749,9 @@ function menu_attach(
             me_flag : int16;
             me_tree : in AEStree;
             me_item : int16;
-            me_mdata: MENU_ptr)
+            me_mdata: AMENU_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(MENU_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(AMENU_ptr, System.Address);
 begin
 	aes_control.opcode := 37;
 	aes_control.num_intin := 2;
@@ -1934,7 +1934,8 @@ begin
 end;
 
 
-function wind_xcreate(
+-- wind_xcreate
+function wind_create(
             Parts     : int16;
             Wx        : int16;
             Wy        : int16;
@@ -1965,13 +1966,14 @@ begin
 end;
 
 
-function wind_xcreate(
+-- wind_xcreate
+function wind_create(
             Parts     : int16;
             r         : in GRECT;
             ret       : out GRECT)
            return int16 is
 begin
-	return wind_xcreate(Parts, r.g_x, r.g_y, r.g_w, r.g_h, ret.g_x, ret.g_y, ret.g_w, ret.g_h);
+	return wind_create(Parts, r.g_x, r.g_y, r.g_w, r.g_h, ret.g_x, ret.g_y, ret.g_w, ret.g_h);
 end;
 
 
@@ -2539,7 +2541,7 @@ begin
 end;
 
 
-function rsrc_gaddr_tree(
+function rsrc_gaddr(
             Index     : int16)
            return OBJECT_ptr is
     treeadr: System.Address;
@@ -2552,6 +2554,23 @@ begin
 	treeptr := to_address(treeadr);
 	return treeptr.all;
 end;
+
+
+function rsrc_gaddr(
+            Index     : int16)
+           return const_chars_ptr is
+    type const_chars_ptr_ptr is access const_chars_ptr;
+    stradr: System.Address;
+    strptr: const_chars_ptr_ptr;
+    function to_address is new Ada.Unchecked_Conversion(System.Address, const_chars_ptr_ptr);
+begin
+	if rsrc_gaddr(R_STRING, Index, stradr) = 0 then
+	   return null;
+	end if;
+	strptr := to_address(stradr);
+	return strptr.all;
+end;
+
 
 
 function rsrc_saddr(

@@ -1,8 +1,5 @@
 package Atari.Aes.Extensions is
 
-pragma Elaborate_Body;
-
-
     FNTS_BTMP                : constant  := 1;                  -- *< Display bitmap fonts
     FNTS_OUTL                : constant  := 2;                  -- *< Display vector fonts
     FNTS_MONO                : constant  := 4;                  -- *< Display mono-spaced fonts

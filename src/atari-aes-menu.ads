@@ -36,20 +36,20 @@ package Atari.Aes.Menu is
 
     function Unregister(
                 id    : int16)
-               return int16 returns menu_unregister;
+               return int16 renames menu_unregister;
 
     function Popup(
-                me_menu : in MENU;
+                me_menu : in AMENU;
                 me_xpos : int16;
                 me_ypos : int16;
-                me_mdata: out MENU)
+                me_mdata: out AMENU)
                return int16 renames menu_popup;
 
     function Attach(
                 me_flag : int16;
                 me_tree : in AEStree;
                 me_item : int16;
-                me_mdata: MENU_ptr)
+                me_mdata: AMENU_ptr)
                return int16 renames menu_attach;
 
     function Click(
@@ -69,4 +69,4 @@ package Atari.Aes.Menu is
                 me_values: in MN_SET)
                return int16 renames menu_settings;
 
-end package Atari.Aes.Menu;
+end Atari.Aes.Menu;
