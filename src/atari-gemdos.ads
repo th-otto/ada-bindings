@@ -143,22 +143,23 @@ package Atari.gemdos is
             b_total : aliased uint32;
             b_secsiz: aliased uint32;
             b_clsiz : aliased uint32;
-        end record;
-
+        end record
+       with Convention => C;
 
     type DOSTIME is
         record
             time: aliased uint16;
             date: aliased uint16;
-        end record;
-
+        end record
+       with Convention => C;
 
     type CCONLINE is
         record
             maxlen   : aliased uint8;
             actuallen: aliased uint8;
             buffer   : aliased char_array(0..254);
-        end record;
+        end record
+       with Convention => C;
 
     type DTA is
         record
@@ -168,7 +169,9 @@ package Atari.gemdos is
             dta_date     : aliased uint16;
             dta_size     : aliased int32;
             dta_name     : aliased char_array(0..13);
-        end record;
+        end record
+       with Convention => C;
+    type DTA_ptr is access all DTA;
 
     type DATETIME is
         record
@@ -178,7 +181,8 @@ package Atari.gemdos is
             year  : Interfaces.C.Extensions.Unsigned_7;
             month : Interfaces.C.Extensions.Unsigned_4;
             day   : Interfaces.C.Extensions.Unsigned_5;
-        end record;
+        end record
+       with Convention => C;
 
     type BASEPAGE;
     type BASEPAGE_ptr is access all BASEPAGE;
@@ -199,7 +203,8 @@ package Atari.gemdos is
             p_junk    : aliased char_array(0..7);
             p_undef   : aliased long_array(0..17);
             p_cmdlin  : aliased char_array(0..127);
-        end record;
+        end record
+       with Convention => C;
 
     type PRGHDR is
         record
@@ -211,12 +216,319 @@ package Atari.gemdos is
             p_reserved1: aliased uint32;
             p_reserved2: aliased uint32;
             p_reserved3: aliased uint16;
-        end record;
+        end record
+       with Convention => C;
 
     base: aliased BASEPAGE_ptr;
 
     procedure Pterm0
       with Inline;
+
+    function Cconin return int32
+      with Inline;
+
+    procedure Cconout(c: int16)
+      with Inline;
+
+    function Cauxin return int16
+      with Inline;
+
+    procedure Cauxout(c: int16)
+      with Inline;
+
+    function Cprnout(c: int16) return int16
+      with Inline;
+
+    function Crawio(c: int16) return int32
+      with Inline;
+
+    function Crawcin return int32
+      with Inline;
+
+    function Cnecin return int32
+      with Inline;
+
+    function Cconws(buf: const_chars_ptr) return int32
+      with Inline;
+
+    function Cconws(buf: String) return int32
+      with Inline;
+
+    procedure Cconws(buf: String)
+      with Inline;
+
+    function Cconrs(buf: out CCONLINE) return int32
+      with Inline;
+
+    function Cconis return boolean
+      with Inline;
+
+    function Dsetdrv(drv: int16) return int32
+      with Inline;
+
+    function Cconos return boolean
+      with Inline;
+
+    function Cprnos return boolean
+      with Inline;
+
+    function Cauxis return boolean
+      with Inline;
+
+    function Cauxos return boolean
+      with Inline;
+
+    function Maddalt(start: System.Address; size: int32) return int32
+      with Inline;
+
+    function Srealloc(len: int32) return int32
+      with Inline;
+
+    type SLB_EXEC is new System.Address;
+
+    type struct_slb_handle is null record;
+    type SLB_HANDLE is access all struct_slb_handle;
+    type SHARED_LIB is access all struct_slb_handle;
+
+    type SLB is
+        record
+            handle: aliased SLB_HANDLE;
+            exec  : aliased SLB_EXEC;
+        end record;
+
+    function Slbopen(
+                fname: const_chars_ptr;
+                path : const_chars_ptr;
+                ver  : int32;
+                hnd  : out SLB_HANDLE;
+                exec : out SLB_EXEC)
+               return int32
+      with Inline;
+
+    function Slbopen(
+                fname: const_chars_ptr;
+                path : const_chars_ptr;
+                ver  : int32;
+                shlb : out SLB)
+               return int32
+      with Inline;
+
+    function Slbclose(hnd: SLB_HANDLE) return int32
+      with Inline;
+
+    function Dgetdrv return int16
+      with Inline;
+
+    procedure Fsetdta(buf: DTA_ptr)
+      with Inline;
+
+	function Super(stack: System.Address) return System.Address
+      with Inline;
+
+	procedure SuperToUser(stack: System.Address)
+      with Inline;
+
+    function Tgetdate return uint16
+      with Inline;
+
+    procedure Tsetdate(date: uint16)
+      with Inline;
+
+    function Tgettime return uint16
+      with Inline;
+
+    procedure Tsettime(time: uint16)
+      with Inline;
+
+    function Fgetdta return DTA_ptr
+      with Inline;
+
+    function Sversion return uint16
+      with Inline;
+
+    procedure Ptermres(keepcnt: int32; retcode: int16)
+      with Inline;
+
+	function Sconfig(mode: int16; flags: int32) return int32
+      with Inline;
+
+    function Dfree(buf: out DISKINFO; driveno: int16) return int16
+      with Inline;
+
+    function Dcreate(path: const_chars_ptr) return int16
+      with Inline;
+
+    function Dcreate(path: String) return int16
+      with Inline;
+
+    function Ddelete(path: const_chars_ptr) return int16
+      with Inline;
+
+    function Ddelete(path: String) return int16
+      with Inline;
+
+    function Dsetpath(path: const_chars_ptr) return int16
+      with Inline;
+
+    function Dsetpath(path: String) return int16
+      with Inline;
+
+    function Fcreate(filename: const_chars_ptr; attr: uint16) return int32
+      with Inline;
+
+    function Fcreate(filename: String; attr: uint16) return int32
+      with Inline;
+
+    function Fopen(filename: const_chars_ptr; mode: int16) return int32
+      with Inline;
+
+    function Fopen(filename: String; mode: int16) return int32
+      with Inline;
+
+    function Fclose(handle: int16) return int16
+      with Inline;
+
+    function Fread(handle: int16; count: int32; buf: System.Address) return int32
+      with Inline;
+
+    function Fwrite(handle: int16; count: int32; buf: System.Address) return int32
+      with Inline;
+
+    function Fdelete(filename: const_chars_ptr) return int16
+      with Inline;
+
+    function Fdelete(filename: String) return int16
+      with Inline;
+
+    function Fseek(offset: int32; handle: int16; seekmode: int16) return int32
+      with Inline;
+
+    function Fattrib(filename: const_chars_ptr; wflag: boolean; attrib: uint16) return int16
+      with Inline;
+
+    function Fattrib(filename: String; wflag: boolean; attrib: uint16) return int16
+      with Inline;
+
+    function Mxalloc(number: int32; mode: int16) return System.Address
+      with Inline;
+
+	-- Mxalloc(-1, mode)
+    function Mxalloc(mode: int16) return int32
+      with Inline;
+
+    function Fdup(handle: int16) return int32
+      with Inline;
+
+    function Fforce(stdh: int16; nonstdh: int16) return int32
+      with Inline;
+
+    function Dgetpath(path: chars_ptr; driveno: int16) return int16
+      with Inline;
+
+    function Dgetpath(path: out String; driveno: int16) return int16
+      with Inline;
+
+    function Malloc(number: int32) return System.Address
+      with Inline;
+
+	-- Malloc(-1)
+    function Malloc return int32
+      with Inline;
+
+    function Mfree(block: System.Address) return int16
+      with Inline;
+
+    function Mshrink(ptr: System.Address; size: int32) return int16
+      with Inline;
+
+    function Pexec(
+                mode: int16;
+                ptr1: const_chars_ptr;
+                ptr2: System.Address;
+                ptr3: System.Address)
+               return int32
+      with Inline;
+
+    function Pexec(
+                mode: int16;
+                ptr1: String;
+                ptr2: System.Address;
+                ptr3: System.Address)
+               return int32
+      with Inline;
+
+    procedure Pterm(retcode: int16)
+      with Inline;
+
+    function Fsfirst(filename: const_chars_ptr; attr: uint16) return int16
+      with Inline;
+
+    function Fsfirst(filename: String; attr: uint16) return int16
+      with Inline;
+
+    function Fsnext return int16
+      with Inline;
+
+    function Frename(oldname: const_chars_ptr; newname: const_chars_ptr) return int16
+      with Inline;
+
+    function Frename(oldname: String; newname: String) return int16
+      with Inline;
+
+    function Fdatime(
+                timeptr: in out DOSTIME;
+                handle : int16;
+                rwflag : boolean)
+               return int16
+      with Inline;
+
+    function Flock(handle: int16; mode: int16; start: int32; length: int32) return int32
+      with Inline;
+
+    function Nversion return int32
+      with Inline;
+
+    function Frlock(handle: int16; start: int32; count: int32) return int32
+      with Inline;
+
+    function Frunlock(handle: int16; start: int32) return int32
+      with Inline;
+
+    function F_lock(handle: int16; count: int32) return int32
+      with Inline;
+
+    function Funlock(handle: int16) return int32
+      with Inline;
+
+    function Fflush(handle: int16) return int32
+      with Inline;
+
+    -- function Nenable return int16;
+
+    -- procedure Ndisable;
+
+    -- function Nremote(nn: int16) return int16;
+
+    -- function Nmsg(rw: int16; buf: chars_ptr; id: chars_ptr; node: int16; leng: int16) return int16;
+
+    -- function Nrecord( handle: int16; mm: int16; offset: int32; leng: int32) return int16;
+
+    -- procedure Nreset;
+
+    -- function Nprinter(nn: int16; kopf: int16; dd: int16) return int32;
+
+    -- function Nlocked return int32;
+
+    -- function Nunlock(path: const_chars_ptr) return int32;
+
+    -- function Nlock(file: const_chars_ptr) return int32;
+
+    -- function Nlogged(nn: int16) return int16;
+
+    -- function Nnodeid return int16;
+
+    -- function Nactive return int16;
+
 
 private
 
