@@ -39,7 +39,7 @@ Package Atari.Xbios is
     FLOPPY_DSHD           : constant  := 1;
     FLOPPY_DSED           : constant  := 2;
 
--- Dbmsg() messages 
+-- Dbmsg() messages
     DB_NULLSTRING         : constant  := 16#f000#;
     DB_COMMAND            : constant  := 16#f100#;
 
@@ -125,7 +125,7 @@ Package Atari.Xbios is
 -- Keytbl() param
     -- KT_NOCHANGE           : constant const_chars_ptr := -1;
 
--- Protobt() params 
+-- Protobt() params
     SERIAL_NOCHANGE       : constant  := -1;
     SERIAL_RANDOM         : constant  := 16#1000001#;
 
@@ -279,7 +279,7 @@ Package Atari.Xbios is
 
 
 -- Structure returned by Iorec()
-    type IOREC is
+    type IO_REC is
         record
             ibuf   : aliased chars_ptr;
             ibufsiz: aliased int16;
@@ -288,7 +288,7 @@ Package Atari.Xbios is
             ibuflow: aliased int16;
             ibufhi : aliased int16;
         end record;
-    type IOREC_ptr is access all IOREC;
+    type IO_REC_ptr is access all IO_REC;
 
 
     type Bconstat_func is access function(p1: int16) return int16;
@@ -321,13 +321,13 @@ Package Atari.Xbios is
             Bcostat : aliased Bcostat_func;
             Bconout : aliased Bconout_proc;
             Rsconf  : aliased Rsconf_func;
-            iorec   : aliased IOREC_ptr;
+            iorec   : aliased IO_REC_ptr;
         end record;
     type MAPTAB_ptr is access all MAPTAB;
 
 
 -- Structure used by Bconmap()
-    type BCONMAP is
+    type BCON_MAP is
         record
             maptab    : aliased MAPTAB_ptr;
             maptabsize: aliased int16;
@@ -387,6 +387,7 @@ Package Atari.Xbios is
             ikbdsys : aliased ikbdsys_func;
             kbstate : aliased uint8;
         end record;
+    type KBDVECS_ptr is access all KBDVECS;
 
 
 -- Structure returned by Keytbl()
@@ -400,6 +401,7 @@ Package Atari.Xbios is
             altcaps : aliased uint8_ptr;
             altgr   : aliased uint8_ptr;
         end record;
+    type KEYTAB_ptr is access all KEYTAB;
 
 
 -- Structure used by Prtblk()
@@ -440,6 +442,259 @@ Package Atari.Xbios is
     subtype METAINFO is META_INFO_1;
 
 
-	function Physbase return System.Address;
+    procedure Initmouse(
+                c_type  : int16;
+                par     : in PARAM;
+                mousevec: System.Address)
+      with Inline;
+
+    function Ssbrk(count: int16) return System.Address
+      with Inline;
+
+    function Physbase return System.Address
+      with Inline;
+
+    function Logbase return System.Address
+      with Inline;
+
+    function Getrez return int16
+      with Inline;
+
+    function Setscreen(
+                laddr: System.Address;
+                paddr: System.Address;
+                rez  : int16)
+               return int16
+      with Inline;
+
+    procedure Setpalette(pallptr: System.Address)
+      with Inline;
+
+    function Setcolor(colornum: int16; color: int16) return int16
+      with Inline;
+
+    function Floprd(
+                buf    : System.Address;
+                devno  : int16;
+                sectno : int16;
+                trackno: int16;
+                sideno : int16;
+                count  : int16)
+               return int16
+      with Inline;
+
+    function Flopwr(
+                buf    : System.Address;
+                devno  : int16;
+                sectno : int16;
+                trackno: int16;
+                sideno : int16;
+                count  : int16)
+               return int16
+      with Inline;
+
+    function Flopfmt(
+                buf      : System.Address;
+                devno    : int16;
+                spt      : int16;
+                trackno  : int16;
+                sideno   : int16;
+                shorterlv: int16;
+                magic    : int32;
+                virgin   : int16)
+               return int16
+      with Inline;
+
+    procedure Dbmsg(
+                rsrvd  : int16;
+                msg_num: int16;
+                msg_arg: int32)
+      with Inline;
+
+    procedure Midiws(cnt: int16; ptr: System.Address)
+      with Inline;
+
+    procedure Mfpint(erno: int16; vector: System.Address)
+      with Inline;
+
+    function Iorec(dev: int16) return IO_REC_ptr
+      with Inline;
+
+    function Rsconf(
+                baud: int16;
+                ctr : int16;
+                ucr : int16;
+                rsr : int16;
+                tsr : int16;
+                scr : int16)
+               return int32
+      with Inline;
+
+    function Keytbl(
+                unshift: System.Address;
+                shift  : System.Address;
+                caps   : System.Address)
+               return KEYTAB_ptr
+      with Inline;
+
+    function Random return int32
+      with Inline;
+
+    procedure Protobt(
+                buf     : System.Address;
+                serialno: int32;
+                disktype: int16;
+                execflag: int16)
+      with Inline;
+
+    function Flopver(
+                buf    : System.Address;
+                devno  : int16;
+                sectno : int16;
+                trackno: int16;
+                sideno : int16;
+                count  : int16)
+               return int16
+      with Inline;
+
+    procedure Scrdmp
+      with Inline;
+
+    function Cursconf(func: int16; rate: int16) return int16
+      with Inline;
+
+    procedure Settime(time: uint32)
+      with Inline;
+
+    function Gettime return uint32
+      with Inline;
+
+    procedure Bioskeys
+      with Inline;
+
+    procedure Ikbdws(count: int16; ptr: System.Address)
+      with Inline;
+
+    procedure Jdisint(number: int16)
+      with Inline;
+
+    procedure Jenabint(number: int16)
+      with Inline;
+
+    function Giaccess(data: uint8; regno: int16) return uint8
+      with Inline;
+
+    procedure Offgibit(bitno: int16)
+      with Inline;
+
+    procedure Ongibit(bitno: int16)
+      with Inline;
+
+    procedure Xbtimer(
+                timer  : int16;
+                control: int16;
+                data   : int16;
+                vector : System.Address)
+      with Inline;
+
+    function Dosound(buf: System.Address) return System.Address
+      with Inline;
+
+    function Setprt(config: int16) return int16
+      with Inline;
+
+    function Kbdvbase return KBDVECS_ptr
+      with Inline;
+
+    function Kbrate(initial: int16; speed: int16) return int16
+      with Inline;
+
+    procedure Prtblk(par: in PBDEF)
+      with Inline;
+
+    procedure Vsync
+      with Inline;
+
+    type supexec_func is access function return int32;
+    function Supexec(func: supexec_func) return int32
+      with Inline;
+
+    procedure Puntaes
+      with Inline;
+
+    function Floprate(devno: int16; newrate: int16) return int16
+      with Inline;
+
+    function Blitmode(mode: int16) return int16
+      with Inline;
+
+--
+-- extensions for TT TOS
+--
+
+    function DMAread(
+                sector: int32;
+                count : int16;
+                buffer: System.Address;
+                devno : int16)
+               return int16
+      with Inline;
+
+    function DMAwrite(
+                sector: int32;
+                count : int16;
+                buffer: System.Address;
+                devno : int16)
+               return int16
+      with Inline;
+
+    function Bconmap(devno: int16) return int32
+      with Inline;
+
+    function NVMaccess(
+                opcode: int16;
+                start : int16;
+                count : int16;
+                buffer: System.Address)
+               return int16
+      with Inline;
+
+    procedure Waketime(date: uint16; time: uint16)
+      with Inline;
+
+
+    function EsetShift(shftMode: int16) return int16
+      with Inline;
+
+    function EgetShift return int16
+      with Inline;
+
+    function EsetBank(bankNum: int16) return int16
+      with Inline;
+
+    function EsetColor(colorNum: int16; color: int16) return int16
+      with Inline;
+
+    procedure EsetPalette(colorNum: int16; count: int16; palettePtr: System.Address)
+      with Inline;
+
+    procedure EgetPalette(colorNum: int16; count: int16; palettePtr: System.Address)
+      with Inline;
+
+    function EsetGray(swtch: int16) return int16
+      with Inline;
+
+    function EsetSmear(swtch: int16) return int16
+      with Inline;
+
+    function CacheCtrl(opcode: int16; param: int16) return int32
+      with Inline;
+
+    function WdgCtrl(opcode: int16) return int32
+      with Inline;
+
+    function ExtRsConf(command: int16; device: int16; param: int32) return int32
+      with Inline;
+
 
 end Atari.Xbios;
