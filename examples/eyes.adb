@@ -157,7 +157,7 @@ procedure eyes is
     function handle_message(pipe: array_8_ptr) return boolean is
         dummy2: int16;
     begin
-        Text_IO.Put_Line("got message " & pipe(0)'image);
+        -- Text_IO.Put_Line("got message " & pipe(0)'image);
         case pipe(0) is
             when WM_REDRAW =>
                 redrawwindow(DRAW_ALL, -1, -1);
