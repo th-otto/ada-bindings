@@ -1,5 +1,5 @@
 CROSS = m68k-atari-mint-
-GNAT = $(CROSS)gnatmake -I$(top_srcdir)/src -gnatwa
+GNAT = $(CROSS)gnatmake -I$(top_srcdir)/src -gnatwa -gnatn1
 AR = $(CROSS)ar
 GNATCFLAGS = -cargs -O2
 ifeq ($(CROSS),m68k-atari-mintelf-)

@@ -5,6 +5,7 @@ package body Atari is
 
     pragma Suppress (Range_Check);
     pragma Suppress (Overflow_Check);
+	pragma Suppress (Access_Check);
 
     function "not"(i: int16) return int16 is
     begin

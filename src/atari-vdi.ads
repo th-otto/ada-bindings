@@ -286,7 +286,19 @@ package Atari.Vdi is
     subtype vdi_workout_array is short_array(0..56);
     type vdi_workout_array_ptr is not null access all vdi_workout_array;
     
-    procedure vdi(pb: VDIPB_ptr);
+
+	vdi_control: aliased VDIContrl;
+	vdi_intin: aliased VDIIntIn;
+	vdi_ptsin: aliased VDIPtsIn;
+	vdi_intout: aliased VDIIntOut;
+	vdi_ptsout: aliased VDIPtsOut;
+
+
+    procedure vdi(pb: VDIPB_ptr)
+      with Inline;
+	procedure vdi_trap
+	  with Inline;
+
 
     procedure v_opnwk(
                 work_in : short_array;
@@ -1876,5 +1888,8 @@ package Atari.Vdi is
 
     function udef_vq_vgdos return uint32
                renames vq_vgdos;
+
+	procedure vdi_to_string(dst: out String; maxlen: int16; offset: int16 := 0);
+	function string_to_vdi(src: in String; offset: int16) return int16;
 
 end Atari.Vdi;

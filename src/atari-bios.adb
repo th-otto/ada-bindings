@@ -7,6 +7,7 @@ Package body Atari.Bios is
 
 pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
+pragma Suppress (Access_Check);
 
 -- function to_pointer is new Ada.Unchecked_Conversion(int32, System.Address);
 function to_address is new Ada.Unchecked_Conversion(System.Address, int32);

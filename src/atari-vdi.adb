@@ -9,13 +9,7 @@ package body Atari.Vdi is
 
 pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
-
-
-vdi_control: aliased VDIContrl;
-vdi_intin: aliased VDIIntIn;
-vdi_ptsin: aliased VDIPtsIn;
-vdi_intout: aliased VDIIntOut;
-vdi_ptsout: aliased VDIPtsOut;
+pragma Suppress (Access_Check);
 
 
 vdi_pb: aliased VDIPB := (
