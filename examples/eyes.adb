@@ -7,6 +7,8 @@ with Ada.Numerics; use Ada.Numerics;
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Text_IO;
 
+Pragma Unreferenced(Text_IO);
+
 
 procedure eyes is
     use ASCII;
