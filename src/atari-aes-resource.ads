@@ -18,7 +18,7 @@ package Atari.Aes.Resource is
 
     function Get_Addr(
                 Index     : int16)
-               return OBJECT_ptr renames rsrc_gaddr;
+               return AEStree_ptr renames rsrc_gaddr;
 
     function Get_Addr(
                 Index     : int16)

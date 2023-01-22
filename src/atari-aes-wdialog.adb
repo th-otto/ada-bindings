@@ -1,5 +1,6 @@
+pragma No_Strict_Aliasing;
 with Ada.Unchecked_Conversion;
-with Interfaces;   use Interfaces;
+with Interfaces; use Interfaces;
 
 package body Atari.Aes.Wdialog is
 
@@ -7,20 +8,26 @@ pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
-function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
-function to_address is new Ada.Unchecked_Conversion(DIALOG_ptr, System.Address);
-function to_address is new Ada.Unchecked_Conversion(HNDL_OBJ, System.Address);
-function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
-function to_address is new Ada.Unchecked_Conversion(EVNT_ptr, System.Address);
-function to_pointer is new Ada.Unchecked_Conversion(System.Address, DIALOG_ptr);
+-- function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
+function to_address is new Ada.Unchecked_Conversion(DIALOG_ptr, void_ptr);
+function to_address is new Ada.Unchecked_Conversion(HNDL_OBJ, void_ptr);
+function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
+function to_address is new Ada.Unchecked_Conversion(EVNT_ptr, void_ptr);
+function to_pointer is new Ada.Unchecked_Conversion(void_ptr, DIALOG_ptr);
+
+
+function to_address(tree: AEStree_ptr) return void_ptr is
+begin
+	return tree.all'Address;
+end;
 
 
 function wdlg_create(
             handle_exit: HNDL_OBJ;
-            tree       : OBJECT_ptr;
-            user_data  : System.Address;
+            tree       : AEStree_ptr;
+            user_data  : void_ptr;
             code       : int16;
-            data       : System.Address;
+            data       : void_ptr;
             flags      : int16)
            return DIALOG_ptr is
 begin
@@ -47,7 +54,7 @@ function wdlg_open(
             x     : int16;
             y     : int16;
             code  : int16;
-            data  : System.Address)
+            data  : void_ptr)
            return int16 is
     c_str: String := title & ASCII.NUL;
 begin
@@ -89,6 +96,20 @@ begin
 end;
 
 
+function wdlg_close(dialog: DIALOG_ptr) return int16 is
+begin
+	aes_control.opcode := 162;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 3;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := to_address(dialog);
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+
 function wdlg_delete(dialog: DIALOG_ptr) return int16 is
 begin
 	aes_control.opcode := 163;
@@ -105,8 +126,8 @@ end;
 function wdlg_get_tree(
             dialog: DIALOG_ptr;
             r     : out GRECT)
-           return OBJECT_ptr is
-    tree: OBJECT_ptr;
+           return AEStree_ptr is
+    tree: AEStree_ptr;
 begin
 	aes_control.opcode := 164;
 	aes_control.num_intin := 1;
@@ -140,7 +161,7 @@ begin
 end;
 
 
-function wdlg_get_udata(dialog: DIALOG_ptr) return System.Address is
+function wdlg_get_udata(dialog: DIALOG_ptr) return void_ptr is
 begin
 	aes_control.opcode := 164;
 	aes_control.num_intin := 1;
@@ -188,7 +209,7 @@ end;
 
 function wdlg_set_tree(
             dialog: DIALOG_ptr;
-            tree  : OBJECT_ptr)
+            tree  : AEStree_ptr)
            return int16 is
 begin
 	aes_control.opcode := 165;
@@ -226,7 +247,7 @@ function wdlg_set_iconify(
             dialog: DIALOG_ptr;
             g     : in GRECT;
             title : const_chars_ptr;
-            tree  : OBJECT_ptr;
+            tree  : AEStree_ptr;
             obj   : int16)
            return int16 is
 begin
@@ -250,7 +271,7 @@ function wdlg_set_iconify(
             dialog: DIALOG_ptr;
             g     : in GRECT;
             title : in String;
-            tree  : OBJECT_ptr;
+            tree  : AEStree_ptr;
             obj   : int16)
            return int16 is
     c_str: String := title & ASCII.NUL;
@@ -275,7 +296,7 @@ function wdlg_set_uniconify(
             dialog: DIALOG_ptr;
             g     : in GRECT;
             title : const_chars_ptr;
-            tree  : OBJECT_ptr)
+            tree  : AEStree_ptr)
            return int16 is
 begin
 	aes_control.opcode := 165;
@@ -297,7 +318,7 @@ function wdlg_set_uniconify(
             dialog: DIALOG_ptr;
             g     : in GRECT;
             title : in String;
-            tree  : OBJECT_ptr)
+            tree  : AEStree_ptr)
            return int16 is
     c_str: String := title & ASCII.NUL;
 begin

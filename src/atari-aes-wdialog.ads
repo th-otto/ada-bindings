@@ -1,9 +1,43 @@
-with Atari.Aes.Extensions;
-
 package Atari.Aes.Wdialog is
 
-	subtype DIALOG_ptr is Atari.Aes.Extensions.DIALOG_ptr;
-	subtype EVNT_ptr is Atari.Aes.Extensions.EVNT_ptr;
+    type DIALOG is record null; end record;
+    type DIALOG_ptr is access all DIALOG;
+
+    WDLG_BKGD                : constant  := 1;                  -- *< Permit background operation
+
+    HNDL_INIT                : constant  := -1;                 -- *< Initialise dialog
+    HNDL_MESG                : constant  := -2;                 -- *< Handle message
+    HNDL_CLSD                : constant  := -3;                 -- *< Dialog window was closed
+    HNDL_OPEN                : constant  := -5;                 -- *< End of dialog initialisation (second  call at end of wdlg_init)
+    HNDL_EDIT                : constant  := -6;                 -- *< Test characters for an edit-field
+    HNDL_EDDN                : constant  := -7;                 -- *< Character was entered in edit-field
+    HNDL_EDCH                : constant  := -8;                 -- *< Edit-field was changed
+    HNDL_MOVE                : constant  := -9;                 -- *< Dialog was moved
+    HNDL_TOPW                : constant  := -10;                -- *< Dialog-window has been topped
+    HNDL_UNTP                : constant  := -11;                -- *< Dialog-window is not active
+
+    SORTBYNAME               : constant  := 0;
+    SORTBYDATE               : constant  := 1;
+    SORTBYSIZE               : constant  := 2;
+    SORTBYTYPE               : constant  := 3;
+    SORTBYNONE               : constant  := 4;
+    SORTDEFAULT              : constant  := -1;
+
+    type EVNT is
+        record
+            mwhich  : aliased int16;
+            mx      : aliased int16;
+            my      : aliased int16;
+            mbutton : aliased int16;
+            kstate  : aliased int16;
+            key     : aliased int16;
+            mclicks : aliased int16;
+            reserved: aliased short_array(0..8);
+            msg     : aliased array_8;
+            unused  : aliased short_array(0..7);
+        end record;
+    type EVNT_ptr is access all EVNT;
+
 
     type HNDL_OBJ_args is
         record
@@ -11,20 +45,20 @@ package Atari.Aes.Wdialog is
             events: aliased EVNT_ptr;
             obj   : aliased int16;
             clicks: aliased int16;
-            data  : aliased System.Address;
+            data  : aliased void_ptr;
         end record;
     pragma Convention(C_Pass_By_Copy, HNDL_OBJ_args);
 
-    type HNDL_OBJ is access function(p1: HNDL_OBJ_args) return int16;
-    pragma Convention(C, HNDL_OBJ);
+    type HNDL_OBJ is access function(p1: HNDL_OBJ_args) return int16
+    	with Convention => C;
 
 
     function wdlg_create(
                 handle_exit: HNDL_OBJ;
-                tree       : OBJECT_ptr;
-                user_data  : System.Address;
+                tree       : AEStree_ptr;
+                user_data  : void_ptr;
                 code       : int16;
-                data       : System.Address;
+                data       : void_ptr;
                 flags      : int16)
                return DIALOG_ptr;
 
@@ -35,7 +69,7 @@ package Atari.Aes.Wdialog is
                 x     : int16;
                 y     : int16;
                 code  : int16;
-                data  : System.Address)
+                data  : void_ptr)
                return int16;
 
     function wdlg_close(
@@ -44,19 +78,21 @@ package Atari.Aes.Wdialog is
                 y     : out int16)
                return int16;
 
+    function wdlg_close(dialog: DIALOG_ptr) return int16;
+
     function wdlg_delete(dialog: DIALOG_ptr) return int16;
 
     function wdlg_get_tree(
                 dialog: DIALOG_ptr;
                 r     : out GRECT)
-               return OBJECT_ptr;
+               return AEStree_ptr;
 
     function wdlg_get_edit(
                 dialog: DIALOG_ptr;
                 cursor: out int16)
                return int16;
 
-    function wdlg_get_udata(dialog: DIALOG_ptr) return System.Address;
+    function wdlg_get_udata(dialog: DIALOG_ptr) return void_ptr;
 
     function wdlg_get_handle(dialog: DIALOG_ptr) return int16;
 
@@ -67,7 +103,7 @@ package Atari.Aes.Wdialog is
 
     function wdlg_set_tree(
                 dialog: DIALOG_ptr;
-                tree  : OBJECT_ptr)
+                tree  : AEStree_ptr)
                return int16;
 
     function wdlg_set_size(
@@ -79,7 +115,7 @@ package Atari.Aes.Wdialog is
 	            dialog: DIALOG_ptr;
 	            g     : in GRECT;
 	            title : const_chars_ptr;
-	            tree  : OBJECT_ptr;
+	            tree  : AEStree_ptr;
 	            obj   : int16)
 	           return int16;
 
@@ -87,7 +123,7 @@ package Atari.Aes.Wdialog is
 	            dialog: DIALOG_ptr;
 	            g     : in GRECT;
 	            title : in String;
-	            tree  : OBJECT_ptr;
+	            tree  : AEStree_ptr;
 	            obj   : int16)
 	           return int16;
 
@@ -95,14 +131,14 @@ package Atari.Aes.Wdialog is
                 dialog: DIALOG_ptr;
                 g     : in GRECT;
                 title : const_chars_ptr;
-                tree  : OBJECT_ptr)
+                tree  : AEStree_ptr)
                return int16;
 
     function wdlg_set_uniconify(
                 dialog: DIALOG_ptr;
                 g     : in GRECT;
                 title : in String;
-                tree  : OBJECT_ptr)
+                tree  : AEStree_ptr)
                return int16;
 
     function wdlg_evnt(

@@ -23,7 +23,7 @@ procedure eyes is
     max_x, max_y: int16;
     menu_id: int16;
     title: constant char_array(0..10) := " ADA Eyes " & ASCII.NUL;
-    menu_name: constant char_array(0..19) := "  Pure Pascal Eyes " & ASCII.NUL;
+    menu_name: constant char_array(0..10) := "  ADA Eyes" & ASCII.NUL;
     events: int16;
     oldx, oldy: int16;
     wx, wy: aliased int16;
@@ -143,7 +143,7 @@ procedure eyes is
             dummy := wind_set(whandle, WF_NAME, title(0)'Unchecked_Access);
             mouse_off;
             if wx = -1 then
-                dummy := wind_calc(WC_BORDER, PARTS, 100, 100, 100, 100,
+                wind_calc(WC_BORDER, PARTS, 100, 100, 100, 100,
                     calc.g_x, calc.g_y, calc.g_w, calc.g_h);
                 wx := (max_x - calc.g_w) / 2;
                 wy := 16 + (max_y - calc.g_h) / 2;

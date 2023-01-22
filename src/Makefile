@@ -20,6 +20,9 @@ OBJS = \
 	atari-aes-extensions.o \
 	atari-aes-wdialog.o \
 	atari-aes-fslx.o \
+	atari-aes-fontsel.o \
+	atari-aes-listbox.o \
+	atari-aes-pdlg.o \
 	atari-vdi.o \
 	atari-vdi-nvdi.o \
 	atari-gemdos.o \
@@ -77,6 +80,15 @@ atari-aes-wdialog.o: atari-aes-wdialog.adb atari-aes-wdialog.ads atari-aes.ads a
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-fslx.o: atari-aes-fslx.adb atari-aes-fslx.ads atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-fontsel.o: atari-aes-fontsel.adb atari-aes-fontsel.ads atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-listbox.o: atari-aes-listbox.adb atari-aes-listbox.ads atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-pdlg.o: atari-aes-pdlg.adb atari-aes-pdlg.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-vdi.o: atari-vdi.adb atari-vdi.ads atari.ads

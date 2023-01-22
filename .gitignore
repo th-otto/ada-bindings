@@ -1,7 +1,3 @@
 *.o
 *.ali
 *.prg
-
-examples/eyes
-examples/hello
-examples/hellogem

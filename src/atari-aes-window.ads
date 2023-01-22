@@ -135,7 +135,7 @@ package Atari.Aes.Window is
                 Code      : int16)
                return int16 renames wind_update;
 
-    function Calc(
+    procedure Calc(
                 c_Type    : int16;
                 Parts     : int16;
                 InX       : int16;
@@ -146,14 +146,14 @@ package Atari.Aes.Window is
                 OutY      : out int16;
                 OutW      : out int16;
                 OutH      : out int16)
-               return int16 renames wind_calc;
+               renames wind_calc;
 
-    function Calc(
+    procedure Calc(
                 c_Type    : int16;
                 Parts     : int16;
                 c_In      : in GRECT;
                 c_Out     : out GRECT)
-               return int16 renames wind_calc;
+               renames wind_calc;
 
     -- procedure New renames wind_new;
 

@@ -14,6 +14,9 @@ package Atari is
     type const_short_ptr is access constant int16;
     type uint8_ptr is access all uint8;
 
+    type null_type is record null; end record;
+    subtype void_ptr is System.Address;
+
     type char_array is array(Integer range <>) of aliased Character;
 
     type short_array is array(Integer range <>) of aliased int16;

@@ -1,30 +1,30 @@
 package Atari.Aes.Menu is
 
     function Bar(
-                me_tree: in AEStree;
+                me_tree: in AEStree_ptr;
                 me_mode: int16)
                return int16 renames menu_bar;
 
     function Icheck(
-                me_tree : in AEStree;
+                me_tree : in AEStree_ptr;
                 me_item : int16;
                 me_check: int16)
                return int16 renames menu_icheck;
 
     function Ienable(
-                me_tree  : in AEStree;
+                me_tree  : in AEStree_ptr;
                 me_item  : int16;
                 me_enable: int16)
                return int16 renames menu_ienable;
 
     function Tnormal(
-                me_tree  : in AEStree;
+                me_tree  : in AEStree_ptr;
                 me_item  : int16;
                 me_normal: int16)
                return int16 renames menu_tnormal;
 
     function Text(
-                me_tree: in AEStree;
+                me_tree: in AEStree_ptr;
                 me_item: int16;
                 me_text: const_chars_ptr)
                return int16 renames menu_text;
@@ -47,7 +47,7 @@ package Atari.Aes.Menu is
 
     function Attach(
                 me_flag : int16;
-                me_tree : in AEStree;
+                me_tree : in AEStree_ptr;
                 me_item : int16;
                 me_mdata: AMENU_ptr)
                return int16 renames menu_attach;
@@ -59,7 +59,7 @@ package Atari.Aes.Menu is
 
     function Istart(
                 me_flag : int16;
-                me_tree : in AEStree;
+                me_tree : in AEStree_ptr;
                 me_imenu: int16;
                 me_item : int16)
                return int16 renames menu_istart;

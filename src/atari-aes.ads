@@ -1,6 +1,5 @@
 with Interfaces.C;
 with Interfaces.C.Extensions;
-with System;
 
 --
 -- NOT YET IMPLEMENTED:
@@ -891,8 +890,8 @@ package Atari.Aes is
     subtype AESGlobal is short_array(0..14);
     subtype AESIntIn is short_array(0..15);
     subtype AESIntOut is short_array(0..15);
-    type AESAddrIn is array(0..7) of System.Address;
-    type AESAddrOut is array(0..1) of System.Address;
+    type AESAddrIn is array(0..7) of void_ptr;
+    type AESAddrOut is array(0..1) of void_ptr;
 
     type AESContrl_ptr is access AESContrl;
     type AESGlobal_ptr is access AESGlobal;
@@ -1098,19 +1097,19 @@ package Atari.Aes is
     type XAESMSG is record
         dst_apid: int16;
         unique_flg: int16;
-        attached_mem: System.Address;
+        attached_mem: void_ptr;
         msgbuf: short_ptr;
     end record;
 
     type proc_func_ptr is access function(
-                par: System.Address)
+                par: void_ptr)
                return int32;
     pragma Convention(C, proc_func_ptr);
 
     type THREADINFO is
         record
             proc      : aliased proc_func_ptr;
-            user_stack: aliased System.Address;
+            user_stack: aliased void_ptr;
             stacksize : aliased uint32;
             mode      : aliased int16;
             res1      : aliased int32;
@@ -1269,9 +1268,12 @@ package Atari.Aes is
             ob_y     : aliased int16;
             ob_width : aliased int16;
             ob_height: aliased int16;
-        end record;
-    type AEStree is array(int16 range <>) of OBJECT;
+        end record
+        with Convention => C;
+    type OBJECT_array is array(int16 range <>) of aliased OBJECT;
+    subtype AEStree is OBJECT_array(0..2339);
     type AEStree_ptr is access all AEStree;
+    type AEStree_ptr_ptr is access all AEStree_ptr;
 
 
     type aes_msg_simple is
@@ -1332,12 +1334,12 @@ package Atari.Aes is
     function appl_read(
                 ap_id     : int16;
                 length    : int16;
-                ap_pbuff  : System.Address)
+                ap_pbuff  : void_ptr)
                return int16;
     function appl_write(
                 ap_id     : int16;
                 length    : int16;
-                ap_pbuff  : System.Address)
+                ap_pbuff  : void_ptr)
                return int16;
     function appl_write(
                 ap_id     : int16;
@@ -1347,11 +1349,11 @@ package Atari.Aes is
     function appl_find(name: chars_ptr) return int16;
     function appl_find(name: String) return int16;
     procedure appl_tplay(
-                mem       : System.Address;
+                mem       : void_ptr;
                 num       : int16;
                 scale     : int16);
     function appl_trecord(
-                mem       : System.Address;
+                mem       : void_ptr;
                 count     : int16)
                return int16;
     function appl_bvset(
@@ -1374,7 +1376,7 @@ package Atari.Aes is
     function appl_control(
                 ap_cid    : int16;
                 ap_cwhat  : int16;
-                ap_cout   : System.Address)
+                ap_cout   : void_ptr)
                return int16;
     function appl_getinfo(
                 c_type    : int16;
@@ -1467,30 +1469,30 @@ package Atari.Aes is
 
 
     function menu_bar(
-                me_tree: in AEStree;
+                me_tree: in AEStree_ptr;
                 me_mode: int16)
                return int16;
 
     function menu_icheck(
-                me_tree : in AEStree;
+                me_tree : in AEStree_ptr;
                 me_item : int16;
                 me_check: int16)
                return int16;
 
     function menu_ienable(
-                me_tree  : in AEStree;
+                me_tree  : in AEStree_ptr;
                 me_item  : int16;
                 me_enable: int16)
                return int16;
 
     function menu_tnormal(
-                me_tree  : in AEStree;
+                me_tree  : in AEStree_ptr;
                 me_item  : int16;
                 me_normal: int16)
                return int16;
 
     function menu_text(
-                me_tree: in AEStree;
+                me_tree: in AEStree_ptr;
                 me_item: int16;
                 me_text: const_chars_ptr)
                return int16;
@@ -1513,7 +1515,7 @@ package Atari.Aes is
 
     function menu_attach(
                 me_flag : int16;
-                me_tree : in AEStree;
+                me_tree : in AEStree_ptr;
                 me_item : int16;
                 me_mdata: AMENU_ptr)
                return int16;
@@ -1525,7 +1527,7 @@ package Atari.Aes is
 
     function menu_istart(
                 me_flag : int16;
-                me_tree : in AEStree;
+                me_tree : in AEStree_ptr;
                 me_imenu: int16;
                 me_item : int16)
                return int16;
@@ -2000,7 +2002,7 @@ package Atari.Aes is
     function wind_set(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                v           : System.Address;
+                v           : void_ptr;
                 W3          : int16 := 0)
                return int16;
 
@@ -2013,7 +2015,7 @@ package Atari.Aes is
                 Code      : int16)
                return int16;
 
-    function wind_calc(
+    procedure wind_calc(
                 c_Type    : int16;
                 Parts     : int16;
                 InX       : int16;
@@ -2023,15 +2025,13 @@ package Atari.Aes is
                 OutX      : out int16;
                 OutY      : out int16;
                 OutW      : out int16;
-                OutH      : out int16)
-               return int16;
+                OutH      : out int16);
 
-    function wind_calc(
+    procedure wind_calc(
                 c_Type    : int16;
                 Parts     : int16;
                 c_In      : in GRECT;
-                c_Out     : out GRECT)
-               return int16;
+                c_Out     : out GRECT);
 
     procedure wind_new;
 
@@ -2050,12 +2050,12 @@ package Atari.Aes is
     function rsrc_gaddr(
                 c_Type    : int16;
                 Index     : int16;
-                Addr      : out System.Address)
+                Addr      : out void_ptr)
                return int16;
 
     function rsrc_gaddr(
                 Index     : int16)
-               return OBJECT_ptr;
+               return AESTREE_ptr;
 
     function rsrc_gaddr(
                 Index     : int16)
@@ -2064,7 +2064,7 @@ package Atari.Aes is
     function rsrc_saddr(
                 c_Type    : int16;
                 Index     : int16;
-                Addr      : System.Address)
+                Addr      : void_ptr)
                return int16;
 
     function rsrc_obfix(
@@ -2073,7 +2073,7 @@ package Atari.Aes is
                return int16;
 
     function rsrc_rcfix(
-                rc_header : System.Address)
+                rc_header : void_ptr)
                return int16;
 
 
@@ -2088,7 +2088,7 @@ package Atari.Aes is
                 c_Exit    : int16;
                 Graphic   : int16;
                 Aes       : int16;
-                Command   : System.Address;
+                Command   : void_ptr;
                 Tail      : chars_ptr)
                return int16;
 

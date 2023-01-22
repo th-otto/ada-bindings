@@ -26,13 +26,13 @@ aes_pb: aliased AESPB := (
 
 procedure aes(pb: AESPB_ptr) is
     use ASCII;
-    function to_address is new Ada.Unchecked_Conversion(AESPB_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(AESPB_ptr, void_ptr);
 begin
     asm("move.l %0,%%d1" & LF & HT &
         "move.w #200,%%d0" & LF & HT &
         "trap #2" & LF & HT,
         volatile => true,
-        inputs => System.Address'Asm_Input("g", to_address(pb)),
+        inputs => void_ptr'Asm_Input("g", to_address(pb)),
         clobber => "d0, d1, d2, a0, a1, a2, cc, memory"
     );
 end;
@@ -41,6 +41,12 @@ end;
 procedure aes_trap is
 begin
 	aes(aes_pb'Access);
+end;
+
+
+function to_address(tree: AEStree_ptr) return void_ptr is
+begin
+	return tree.all'Address;
 end;
 
 
@@ -60,7 +66,7 @@ end;
 function appl_read(
             ap_id     : int16;
             length    : int16;
-            ap_pbuff  : System.Address)
+            ap_pbuff  : void_ptr)
            return int16 is
 begin
 	aes_control.opcode := 11;
@@ -79,7 +85,7 @@ end;
 function appl_write(
             ap_id     : int16;
             length    : int16;
-            ap_pbuff  : System.Address)
+            ap_pbuff  : void_ptr)
            return int16 is
 begin
 	aes_control.opcode := 12;
@@ -100,14 +106,14 @@ function appl_write(
             length    : int16;
             ap_pbuff  : array_8_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(array_8_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(array_8_ptr, void_ptr);
 begin
 	return appl_write(ap_id, length, to_address(ap_pbuff));
 end;
 
 
 function appl_find(name: chars_ptr) return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 13;
 	aes_control.num_intin := 0;
@@ -122,14 +128,14 @@ end;
 
 function appl_find(name: String) return int16 is
     c_str: String := name & ASCII.NUL;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, chars_ptr);
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, chars_ptr);
 begin
 	return appl_find(to_address(c_str'Address));
 end;
 
 
 procedure appl_tplay(
-            mem       : System.Address;
+            mem       : void_ptr;
             num       : int16;
             scale     : int16)
            is
@@ -147,7 +153,7 @@ end;
 
 
 function appl_trecord(
-            mem       : System.Address;
+            mem       : void_ptr;
             count     : int16)
            return int16 is
 begin
@@ -208,7 +214,7 @@ function appl_search(
             c_type    : out int16;
             ap_id     : out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 18;
 	aes_control.num_intin := 1;
@@ -231,7 +237,7 @@ function appl_search(
             ap_id     : out int16)
            return int16 is
     c_str: String := fname & ASCII.NUL;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, chars_ptr);
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, chars_ptr);
 begin
 	return appl_search(mode, to_address(c_str'Address), c_type, ap_id);
 end;
@@ -251,7 +257,7 @@ end;
 function appl_control(
             ap_cid    : int16;
             ap_cwhat  : int16;
-            ap_cout   : System.Address)
+            ap_cout   : void_ptr)
            return int16 is
 begin
 	aes_control.opcode := 129;
@@ -320,7 +326,7 @@ function appl_getinfo(
             out3      : chars_ptr;
             out4      : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	if (has_agi < 0) then
 		if (aes_global(0) >= 1024 or else
@@ -420,7 +426,7 @@ end;
 function evnt_mesag(
             MesagBuf  : short_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(short_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(short_ptr, void_ptr);
 begin
 	aes_control.opcode := 23;
 	aes_control.num_intin := 0;
@@ -499,7 +505,7 @@ function evnt_multi(
             Key        : out int16;
             ReturnCount: out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(array_8_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(array_8_ptr, void_ptr);
 begin
 	aes_control.opcode := 25;
 	aes_control.num_intin := 16;
@@ -540,7 +546,7 @@ function evnt_multi(
             MesagBuf   : array_8_ptr;
             em_o       : out EVMULT_OUT)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(array_8_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(array_8_ptr, void_ptr);
 begin
 	aes_control.opcode := 25;
 	aes_control.num_intin := 16;
@@ -594,10 +600,9 @@ end;
 
 
 function menu_bar(
-            me_tree: in AEStree;
+            me_tree: AEStree_ptr;
             me_mode: int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(AEStree, System.Address);
 begin
 	aes_control.opcode := 30;
 	aes_control.num_intin := 1;
@@ -612,11 +617,10 @@ end;
 
 
 function menu_icheck(
-            me_tree : in AEStree;
+            me_tree : in AEStree_ptr;
             me_item : int16;
             me_check: int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(AEStree, System.Address);
 begin
 	aes_control.opcode := 30;
 	aes_control.num_intin := 2;
@@ -632,11 +636,10 @@ end;
 
 
 function menu_ienable(
-            me_tree  : in AEStree;
+            me_tree  : in AEStree_ptr;
             me_item  : int16;
             me_enable: int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(AEStree, System.Address);
 begin
 	aes_control.opcode := 32;
 	aes_control.num_intin := 2;
@@ -652,11 +655,10 @@ end;
 
 
 function menu_tnormal(
-            me_tree  : in AEStree;
+            me_tree  : in AEStree_ptr;
             me_item  : int16;
             me_normal: int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(AEStree, System.Address);
 begin
 	aes_control.opcode := 33;
 	aes_control.num_intin := 2;
@@ -672,12 +674,11 @@ end;
 
 
 function menu_text(
-            me_tree: in AEStree;
+            me_tree: in AEStree_ptr;
             me_item: int16;
             me_text: const_chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(AEStree, System.Address);
-    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 34;
 	aes_control.num_intin := 1;
@@ -696,7 +697,7 @@ function menu_register(
             ap_id  : int16;
             me_text: const_chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 35;
 	aes_control.num_intin := 1;
@@ -748,11 +749,11 @@ end;
 
 function menu_attach(
             me_flag : int16;
-            me_tree : in AEStree;
+            me_tree : AEStree_ptr;
             me_item : int16;
             me_mdata: AMENU_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(AMENU_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(AMENU_ptr, void_ptr);
 begin
 	aes_control.opcode := 37;
 	aes_control.num_intin := 2;
@@ -761,7 +762,7 @@ begin
 	aes_control.num_addrout := 0;
 	aes_intin(0) := me_flag;
 	aes_intin(1) := me_item;
-	aes_addrin(0) := me_tree'Address;
+	aes_addrin(0) := to_address(me_tree);
 	aes_addrin(1) := to_address(me_mdata);
 	aes_trap;
 	return aes_intout(0);
@@ -787,7 +788,7 @@ end;
 
 function menu_istart(
             me_flag : int16;
-            me_tree : in AEStree;
+            me_tree : AEStree_ptr;
             me_imenu: int16;
             me_item : int16)
            return int16 is
@@ -800,7 +801,7 @@ begin
 	aes_intin(0) := me_flag;
 	aes_intin(1) := me_imenu;
 	aes_intin(2) := me_item;
-	aes_addrin(0) := me_tree'Address;
+	aes_addrin(0) := to_address(me_tree);
 	aes_trap;
 	return aes_intout(0);
 end;
@@ -829,7 +830,6 @@ procedure objc_add(
             Parent: int16;
             Child : int16)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
 begin
 	aes_control.opcode := 40;
 	aes_control.num_intin := 2;
@@ -838,7 +838,7 @@ begin
 	aes_control.num_addrout := 0;
 	aes_intin(0) := Parent;
 	aes_intin(1) := Child;
-	aes_addrin(0) := to_address(tree);
+	aes_addrin(0) := tree.all'Address;
 	aes_trap;
 end;
 
@@ -847,7 +847,7 @@ function objc_delete(
             tree      : OBJECT_ptr;
             Obj       : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 41;
 	aes_control.num_intin := 1;
@@ -870,7 +870,7 @@ procedure objc_draw(
             Cw        : int16;
             Ch        : int16)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 42;
 	aes_control.num_intin := 6;
@@ -894,7 +894,7 @@ procedure objc_draw(
             Depth     : int16;
             r         : in GRECT)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 42;
 	aes_control.num_intin := 6;
@@ -919,7 +919,7 @@ function objc_find(
             Mx        : int16;
             My        : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 43;
 	aes_control.num_intin := 4;
@@ -942,7 +942,7 @@ procedure objc_offset(
             X         : out int16;
             Y         : out int16)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 44;
 	aes_control.num_intin := 1;
@@ -962,7 +962,7 @@ function objc_order(
             Obj       : int16;
             NewPos    : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 45;
 	aes_control.num_intin := 2;
@@ -984,7 +984,7 @@ function objc_edit(
             Index     : in out int16;
             Kind      : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 46;
 	aes_control.num_intin := 4;
@@ -1010,7 +1010,7 @@ function objc_edit(
             Kind      : int16;
             r         : out GRECT)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 46;
 	aes_control.num_intin := 4;
@@ -1040,7 +1040,7 @@ procedure objc_change(
             NewState  : int16;
             Redraw    : int16)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 47;
 	aes_control.num_intin := 8;
@@ -1068,7 +1068,7 @@ procedure objc_change(
             NewState  : int16;
             Redraw    : int16)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 47;
 	aes_control.num_intin := 8;
@@ -1120,7 +1120,7 @@ function objc_xfind(
             Mx        : int16;
             My        : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 49;
 	aes_control.num_intin := 4;
@@ -1144,7 +1144,7 @@ function form_do(
             tree      : OBJECT_ptr;
             StartObj  : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 50;
 	aes_control.num_intin := 1;
@@ -1215,7 +1215,7 @@ end;
 
 
 function form_alert(fo_adefbttn: int16; alertstr: chars_ptr) return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 52;
 	aes_control.num_intin := 1;
@@ -1231,7 +1231,7 @@ end;
 
 function form_alert(fo_adefbttn: int16; alertstr: String) return int16 is
     c_str: String := alertstr & ASCII.NUL;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, chars_ptr);
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, chars_ptr);
 begin
 	return form_alert(fo_adefbttn, to_address(c_str'Address));
 end;
@@ -1278,7 +1278,7 @@ function form_center(
             Cw        : out int16;
             Ch        : out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 54;
 	aes_control.num_intin := 0;
@@ -1299,7 +1299,7 @@ function form_center(
             tree      : OBJECT_ptr;
             r         : out GRECT)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 54;
 	aes_control.num_intin := 0;
@@ -1324,7 +1324,7 @@ function form_keybd(
             Knxtobject: out int16;
             Knxtchar  : out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 55;
 	aes_control.num_intin := 3;
@@ -1348,7 +1348,7 @@ function form_button(
             Bclicks   : int16;
             Bnxtobj   : out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 56;
 	aes_control.num_intin := 2;
@@ -1620,7 +1620,7 @@ function graf_watchbox(
             InState   : int16;
             OutState  : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 75;
 	aes_control.num_intin := 4;
@@ -1643,7 +1643,7 @@ function graf_slidebox(
             Obj       : int16;
             Direction : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 75;
 	aes_control.num_intin := 4;
@@ -1707,7 +1707,7 @@ procedure graf_mouse(
             Form       : Mouse_Type;
             FormAddress: MFORM_const_ptr := null)
            is
-    function to_address is new Ada.Unchecked_Conversion(MFORM_const_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(MFORM_const_ptr, void_ptr);
 begin
 	aes_control.opcode := 78;
 	aes_control.num_intin := 1;
@@ -1748,7 +1748,7 @@ function graf_multirubber(
             rw        : out int16;
             rh        : out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(GRECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(GRECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 69;
 	aes_control.num_intin := 4;
@@ -1772,7 +1772,7 @@ end;
 function scrp_read(
             Scrappath : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 80;
 	aes_control.num_intin := 0;
@@ -1788,7 +1788,7 @@ end;
 function scrp_write(
             Scrappath : const_chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 81;
 	aes_control.num_intin := 0;
@@ -1820,7 +1820,7 @@ function fsel_input(
             file       : chars_ptr;
             exit_button: out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 90;
 	aes_control.num_intin := 0;
@@ -1841,8 +1841,8 @@ function fsel_exinput(
             exit_button: out int16;
             title      : const_chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
-    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
+    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 91;
 	aes_control.num_intin := 0;
@@ -1865,9 +1865,9 @@ function fsel_boxinput(
             title      : const_chars_ptr;
             callback   : FSEL_CALLBACK)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
-    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
-    function to_address2 is new Ada.Unchecked_Conversion(FSEL_CALLBACK, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
+    function to_address2 is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
+    function to_address2 is new Ada.Unchecked_Conversion(FSEL_CALLBACK, void_ptr);
 begin
 	aes_control.opcode := 91;
 	aes_control.num_intin := 0;
@@ -2048,9 +2048,9 @@ function wind_get(
             W3          : out int16;
             W4          : out int16)
            return int16 is
-    type short_ptr_ptr is access all System.Address;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, short_ptr_ptr);
-    ptr: System.Address;
+    type short_ptr_ptr is access all void_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, short_ptr_ptr);
+    ptr: void_ptr;
     pptr: aliased short_ptr_ptr;
 begin
 	aes_control.opcode := 104;
@@ -2099,10 +2099,10 @@ function wind_get(
             What        : wind_get_set_type;
             W1          : chars_ptr)
            return int16 is
-    type short_ptr_ptr is access all System.Address;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, short_ptr_ptr);
-    function to_address2 is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
-    ptr: System.Address;
+    type short_ptr_ptr is access all void_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, short_ptr_ptr);
+    function to_address2 is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
+    ptr: void_ptr;
     pptr: aliased short_ptr_ptr;
 begin
 	aes_control.opcode := 104;
@@ -2292,8 +2292,8 @@ function wind_set(
             str         : const_chars_ptr)
            return int16 is
     type const_chars_ptr_ptr is access all const_chars_ptr;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, const_chars_ptr_ptr);
-    ptr: System.Address;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr_ptr);
+    ptr: void_ptr;
     pptr: const_chars_ptr_ptr;
 begin
 	aes_control.opcode := 105;
@@ -2342,12 +2342,12 @@ end;
 function wind_set(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            v           : System.Address;
+            v           : void_ptr;
             W3          : int16 := 0)
            return int16 is
-    type address_ptr is access all System.Address;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, address_ptr);
-    ptr: System.Address;
+    type address_ptr is access all void_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, address_ptr);
+    ptr: void_ptr;
     pptr: address_ptr;
 begin
 	aes_control.opcode := 105;
@@ -2405,7 +2405,7 @@ begin
 end;
 
 
-function wind_calc(
+procedure wind_calc(
             c_Type    : int16;
             Parts     : int16;
             InX       : int16;
@@ -2416,7 +2416,7 @@ function wind_calc(
             OutY      : out int16;
             OutW      : out int16;
             OutH      : out int16)
-           return int16 is
+           is
 begin
 	aes_control.opcode := 108;
 	aes_control.num_intin := 6;
@@ -2436,16 +2436,15 @@ begin
 	OutY := aes_intout(2);
 	OutW := aes_intout(3);
 	OutH := aes_intout(4);
-	return aes_intout(0);
 end;
 
 
-function wind_calc(
+procedure wind_calc(
             c_Type    : int16;
             Parts     : int16;
             c_In      : in GRECT;
             c_Out     : out GRECT)
-           return int16 is
+           is
 begin
 	aes_control.opcode := 108;
 	aes_control.num_intin := 6;
@@ -2465,7 +2464,6 @@ begin
 	c_Out.g_y := aes_intout(2);
 	c_Out.g_w := aes_intout(3);
 	c_Out.g_h := aes_intout(4);
-	return aes_intout(0);
 end;
 
 
@@ -2486,7 +2484,7 @@ end;
 function rsrc_load(
             Name      : const_chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 110;
 	aes_control.num_intin := 0;
@@ -2504,7 +2502,7 @@ function rsrc_load(
             Name      : String)
            return int16 is
     c_str: String := Name & ASCII.NUL;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, const_chars_ptr);
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
 begin
 	return rsrc_load(to_address(c_str'Address));
 end;
@@ -2526,7 +2524,7 @@ end;
 function rsrc_gaddr(
             c_Type    : int16;
             Index     : int16;
-            Addr      : out System.Address)
+            Addr      : out void_ptr)
            return int16 is
 begin
 	aes_control.opcode := 112;
@@ -2544,32 +2542,29 @@ end;
 
 function rsrc_gaddr(
             Index     : int16)
-           return OBJECT_ptr is
-    treeadr: System.Address;
-    treeptr: OBJECT_ptr_ptr;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, OBJECT_ptr_ptr);
+           return AESTREE_ptr is
+    treeadr: void_ptr;
+    treeptr: aliased AEStree_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, AEStree_ptr);
 begin
 	if rsrc_gaddr(R_TREE, Index, treeadr) = 0 then
 	   return null;
 	end if;
 	treeptr := to_address(treeadr);
-	return treeptr.all;
+	return treeptr;
 end;
 
 
-function rsrc_gaddr(
-            Index     : int16)
-           return const_chars_ptr is
-    type const_chars_ptr_ptr is access const_chars_ptr;
-    stradr: System.Address;
-    strptr: const_chars_ptr_ptr;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, const_chars_ptr_ptr);
+function rsrc_gaddr(Index: int16) return const_chars_ptr is
+    stradr: void_ptr;
+    strptr: const_chars_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
 begin
 	if rsrc_gaddr(R_STRING, Index, stradr) = 0 then
 	   return null;
 	end if;
 	strptr := to_address(stradr);
-	return strptr.all;
+	return strptr;
 end;
 
 
@@ -2577,7 +2572,7 @@ end;
 function rsrc_saddr(
             c_Type    : int16;
             Index     : int16;
-            Addr      : System.Address)
+            Addr      : void_ptr)
            return int16 is
 begin
 	aes_control.opcode := 113;
@@ -2597,7 +2592,7 @@ function rsrc_obfix(
             tree      : OBJECT_ptr;
             Index     : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 114;
 	aes_control.num_intin := 1;
@@ -2612,7 +2607,7 @@ end;
 
 
 function rsrc_rcfix(
-            rc_header : System.Address)
+            rc_header : void_ptr)
            return int16 is
 begin
 	aes_control.opcode := 115;
@@ -2631,7 +2626,7 @@ function shel_read(
             Command   : chars_ptr;
             Tail      : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 120;
 	aes_control.num_intin := 0;
@@ -2649,10 +2644,10 @@ function shel_write(
             c_Exit    : int16;
             Graphic   : int16;
             Aes       : int16;
-            Command   : System.Address;
+            Command   : void_ptr;
             Tail      : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 121;
 	aes_control.num_intin := 3;
@@ -2673,7 +2668,7 @@ function shel_get(
             Buf       : chars_ptr;
             Len       : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 122;
 	aes_control.num_intin := 1;
@@ -2691,7 +2686,7 @@ function shel_put(
             Buf       : chars_ptr;
             Len       : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 123;
 	aes_control.num_intin := 1;
@@ -2708,7 +2703,7 @@ end;
 function shel_find(
             buf       : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 124;
 	aes_control.num_intin := 0;
@@ -2725,7 +2720,7 @@ function shel_envrn(
             result    : out chars_ptr;
             param     : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
     ptr: chars_ptr;
 begin
 	aes_control.opcode := 125;
@@ -2744,7 +2739,7 @@ end;
 procedure shel_rdef(
             lpcmd     : chars_ptr;
             lpdir     : chars_ptr) is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 126;
 	aes_control.num_intin := 0;
@@ -2760,7 +2755,7 @@ end;
 procedure shel_wdef(
             lpcmd     : chars_ptr;
             lpdir     : chars_ptr) is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 127;
 	aes_control.num_intin := 0;
@@ -2778,7 +2773,7 @@ function shel_help(
             sh_hfile  : chars_ptr;
             sh_hkey   : chars_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(chars_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(chars_ptr, void_ptr);
 begin
 	aes_control.opcode := 128;
 	aes_control.num_intin := 1;
