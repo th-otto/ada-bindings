@@ -24,7 +24,6 @@ procedure eyes is
     menu_id: int16;
     title: constant char_array(0..10) := " ADA Eyes " & ASCII.NUL;
     menu_name: constant char_array(0..10) := "  ADA Eyes" & ASCII.NUL;
-    events: int16;
     oldx, oldy: int16;
     wx, wy: aliased int16;
     
@@ -48,7 +47,6 @@ procedure eyes is
            workin(i) := 1;
         end loop;
         workin(10) := 2;
-        handle := 0;
         phys_handle := graf_handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
         handle := phys_handle;
         v_opnvwk(workin, handle, workout);
@@ -177,7 +175,6 @@ procedure eyes is
                 if is_Application then
                     return true;
                 end if;
-                events := MU_MESAG;
             when WM_MOVED =>
                 if pipe(3) = whandle then
                     dummy := wind_set(whandle, WF_CURRXYWH, pipe(4), pipe(5), pipe(6), pipe(7));
@@ -186,7 +183,6 @@ procedure eyes is
             when AC_OPEN =>
                 if pipe(4) = menu_id then
                     open_window;
-                    events := MU_MESAG or MU_TIMER;
                 end if;
             when AC_CLOSE =>
                 whandle := 0;
@@ -202,12 +198,18 @@ procedure eyes is
         event: int16;
         quit: boolean;
         pipe: aliased array_8;
+        events: int16;
     begin
         quit := false;
         
         loop
+            if whandle > 0 then
+                events := MU_MESAG or MU_M1;
+            else
+                events := MU_MESAG;
+            end if;
             event := evnt_multi(events, 0, 0, 0,
-                0, 0, 0, 0, 0,
+                1, oldx, oldy, 1, 1,
                 0, 0, 0, 0, 0,
                 pipe'Unchecked_Access,
                 100,
@@ -216,7 +218,7 @@ procedure eyes is
             if (event and MU_MESAG) /= 0 then
                 quit := handle_message(pipe'Unchecked_Access);
             end if;
-            if (event and MU_TIMER) /= 0 then
+            if (event and MU_M1) /= 0 then
                 redrawwindow(EYES, x, y);
             end if;
             dummy := wind_update(END_UPDATE);
@@ -235,10 +237,8 @@ begin
             oldy := -1;
             if not Is_Application then
                 menu_id := menu_register(gl_apid, menu_name(0)'Unchecked_Access);
-                events := MU_MESAG;
             else
                 graf_mouse(ARROW);
-                events := MU_MESAG or MU_TIMER;
                 open_window;
             end if;
             loop
