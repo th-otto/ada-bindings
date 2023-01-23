@@ -93,8 +93,11 @@ procedure wdlgdemo is
             if not quit and then dialog /= null then
 	            quit := Wdialog.wdlg_evnt(dialog, event'Unchecked_Access) = 0;
 	        end if;
-            if quit and then not Is_Application then
-            	quit := false;
+            if quit then
+                close_window;
+                if not Is_Application then
+                    quit := false;
+                end if;
             end if;
             exit when quit;
         end loop;
@@ -120,7 +123,6 @@ begin
 	        loop
 	            exit when event_loop;
 	        end loop;
-	        close_window;
 	    end if;
         appl_exit;
     end if;

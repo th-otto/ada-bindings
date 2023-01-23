@@ -35,7 +35,8 @@ package Atari.Aes.Wdialog is
             reserved: aliased short_array(0..8);
             msg     : aliased array_8;
             unused  : aliased short_array(0..7);
-        end record;
+        end record
+    	with Convention => C;
     type EVNT_ptr is access all EVNT;
 
 

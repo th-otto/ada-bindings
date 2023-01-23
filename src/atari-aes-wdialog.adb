@@ -9,10 +9,7 @@ pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
 -- function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
-function to_address is new Ada.Unchecked_Conversion(DIALOG_ptr, void_ptr);
-function to_address is new Ada.Unchecked_Conversion(HNDL_OBJ, void_ptr);
 function to_address is new Ada.Unchecked_Conversion(const_chars_ptr, void_ptr);
-function to_address is new Ada.Unchecked_Conversion(EVNT_ptr, void_ptr);
 function to_pointer is new Ada.Unchecked_Conversion(void_ptr, DIALOG_ptr);
 
 
@@ -38,7 +35,7 @@ begin
 	aes_control.num_addrout := 1;
 	aes_intin(0) := code;
 	aes_intin(1) := flags;
-	aes_addrin(0) := to_address(handle_exit);
+	aes_addrin(0) := handle_exit.all'Address;
 	aes_addrin(1) := to_address(tree);
 	aes_addrin(2) := user_data;
 	aes_addrin(3) := data;
@@ -67,7 +64,7 @@ begin
 	aes_intin(1) := x;
 	aes_intin(2) := y;
 	aes_intin(3) := code;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := c_str'Address;
 	aes_addrin(2) := data;
 	aes_trap;
@@ -86,7 +83,7 @@ begin
 	aes_control.num_intout := 3;
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_intout(0) := -1;
 	aes_intout(1) := -1;
 	aes_trap;
@@ -103,7 +100,7 @@ begin
 	aes_control.num_intout := 3;
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_trap;
 	return aes_intout(0);
 end;
@@ -117,7 +114,7 @@ begin
 	aes_control.num_intout := 1;
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_trap;
 	return aes_intout(0);
 end;
@@ -135,7 +132,7 @@ begin
 	aes_control.num_addrin := 3;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 0;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := tree'Address;
 	aes_addrin(2) := r'Address;
 	aes_trap;
@@ -154,7 +151,7 @@ begin
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 1;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_trap;
 	cursor := aes_intout(1);
 	return aes_intout(0);
@@ -169,7 +166,7 @@ begin
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 1;
 	aes_intin(0) := 2;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_trap;
 	return aes_addrout(0);
 end;
@@ -183,7 +180,7 @@ begin
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 3;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_trap;
 	return aes_intout(0);
 end;
@@ -201,7 +198,7 @@ begin
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 0;
 	aes_intin(1) := obj;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_trap;
 	return aes_intout(0);
 end;
@@ -218,7 +215,7 @@ begin
 	aes_control.num_addrin := 2;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 1;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := to_address(tree);
 	aes_trap;
 	return aes_intout(0);
@@ -236,7 +233,7 @@ begin
 	aes_control.num_addrin := 2;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 2;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := size'Address;
 	aes_trap;
 	return aes_intout(0);
@@ -258,7 +255,7 @@ begin
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 3;
 	aes_intin(1) := obj;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := g'Address;
 	aes_addrin(2) := to_address(title);
 	aes_addrin(3) := to_address(tree);
@@ -283,7 +280,7 @@ begin
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 3;
 	aes_intin(1) := obj;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := g'Address;
 	aes_addrin(2) := c_str'Address;
 	aes_addrin(3) := to_address(tree);
@@ -305,7 +302,7 @@ begin
 	aes_control.num_addrin := 4;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 4;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := g'Address;
 	aes_addrin(2) := to_address(title);
 	aes_addrin(3) := to_address(tree);
@@ -328,7 +325,7 @@ begin
 	aes_control.num_addrin := 4;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := 4;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := g'Address;
 	aes_addrin(2) := c_Str'Address;
 	aes_addrin(3) := to_address(tree);
@@ -347,8 +344,8 @@ begin
 	aes_control.num_intout := 1;
 	aes_control.num_addrin := 2;
 	aes_control.num_addrout := 0;
-	aes_addrin(0) := to_address(dialog);
-	aes_addrin(1) := to_address(events);
+	aes_addrin(0) := dialog.all'Address;
+	aes_addrin(1) := events.all'Address;
 	aes_trap;
 	return aes_intout(0);
 end;
@@ -367,7 +364,7 @@ begin
 	aes_control.num_addrout := 0;
 	aes_intin(0) := obj;
 	aes_intin(1) := depth;
-	aes_addrin(0) := to_address(dialog);
+	aes_addrin(0) := dialog.all'Address;
 	aes_addrin(1) := rect'Address;
 	aes_trap;
 end;
