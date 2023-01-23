@@ -956,7 +956,7 @@ package Atari.Vdi is
                 dst     : in MFDB;
                 color   : in short_array);
 
-    procedure v_show_c(handle : VdiHdl; reset: int16);
+    procedure v_show_c(handle : VdiHdl; reset: int16 := 0);
 
     procedure v_hide_c(handle: VdiHdl);
 

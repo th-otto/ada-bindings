@@ -2320,7 +2320,7 @@ begin
 end;
 
 
-procedure v_show_c(handle : VdiHdl; reset: int16) is
+procedure v_show_c(handle : VdiHdl; reset: int16 := 0) is
 begin
     vdi_intin(0) := reset;
 
