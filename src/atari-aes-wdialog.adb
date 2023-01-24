@@ -46,14 +46,13 @@ end;
 
 function wdlg_open(
             dialog: DIALOG_ptr;
-            title : in String;
+            title : const_chars_ptr;
             kind  : int16;
             x     : int16;
             y     : int16;
             code  : int16;
             data  : void_ptr)
            return int16 is
-    c_str: String := title & ASCII.NUL;
 begin
 	aes_control.opcode := 161;
 	aes_control.num_intin := 4;
@@ -65,7 +64,7 @@ begin
 	aes_intin(2) := y;
 	aes_intin(3) := code;
 	aes_addrin(0) := dialog.all'Address;
-	aes_addrin(1) := c_str'Address;
+	aes_addrin(1) := title.all'Address;
 	aes_addrin(2) := data;
 	aes_trap;
 	return aes_intout(0);

@@ -65,7 +65,7 @@ package Atari.Aes.Wdialog is
 
     function wdlg_open(
                 dialog: DIALOG_ptr;
-                title : in String;
+                title : const_chars_ptr;
                 kind  : int16;
                 x     : int16;
                 y     : int16;

@@ -24,7 +24,7 @@ procedure gemwin is
     gl_wchar, gl_hchar: int16;
     gl_wbox, gl_hbox: int16;
     dummy: int16;
-    menu_name: constant char_array(0..12) := "  ADA Window" & ASCII.NUL;
+    menu_name: constant char_array := "  ADA Window" & ASCII.NUL;
 
 	WIN_KIND : constant int16 := NAME or INFO or CLOSER or MOVER or SIZER or FULLER;
 
@@ -164,7 +164,7 @@ begin
     if appl_init /= -1 then
 		if open_vwk then
             if not Is_Application then
-                menu_id := menu_register(gl_apid, menu_name(0)'Unchecked_Access);
+                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
             else
                 graf_mouse(ARROW);
                 open_window;

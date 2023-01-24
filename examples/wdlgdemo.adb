@@ -18,8 +18,8 @@ procedure wdlgdemo is
 
     dialog: Wdialog.DIALOG_ptr;
     menu_id: int16;
-    title: constant String := " WDLG DEMO ";
-    menu_name: constant char_array(0..13) := " Wdialog Demo" & ASCII.NUL;
+    title: constant char_array := " WDLG DEMO " & ASCII.NUL;
+    menu_name: constant char_array := " Wdialog Demo" & ASCII.NUL;
     tree: AEStree_ptr;
     dummy: aliased int16;
 
@@ -33,7 +33,7 @@ procedure wdlgdemo is
         	end if;
             dialog := Wdialog.wdlg_create(handle_dlg'Access, tree, System.Null_Address, 0, System.Null_Address, WDialog.WDLG_BKGD);
             if (dialog /= null) then
-	            dummy := Wdialog.wdlg_open(dialog, title, PARTS, -1, -1, 0, System.Null_Address);
+	            dummy := Wdialog.wdlg_open(dialog, title(title'First)'Unchecked_Access, PARTS, -1, -1, 0, System.Null_Address);
 	        end if;
         else
             dummy := wind_set(Wdialog.wdlg_get_handle(dialog), WF_TOP);
@@ -116,7 +116,7 @@ begin
         	tree := rsrc_gaddr(TEST);
         	adaptrsc.substitute_objects(tree, NUM_OBS, adaptrsc.aes_flags);
 	        if not Is_Application then
-	            menu_id := menu_register(gl_apid, menu_name(0)'Unchecked_Access);
+	            menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
 	        else
 	            open_window;
 	        end if;
