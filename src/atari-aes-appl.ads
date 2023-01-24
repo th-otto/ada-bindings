@@ -14,7 +14,6 @@ package Atari.Aes.Appl is
                return int16 renames appl_write;
     function Write(
                 ap_id     : int16;
-                length    : int16;
                 ap_pbuff  : Message_Buffer)
                return int16 renames appl_write;
     function Find(name: chars_ptr) return int16 renames appl_find;

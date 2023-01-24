@@ -119,6 +119,9 @@ procedure gemwin is
 	                if is_Application then
 						exit;
 					end if;
+	            when AP_TERM =>
+	            	close_window;
+	            	exit;
 				when WM_REDRAW =>
 	                if msg_buf.simple.handle = win_h then
 						wind_redraw(win_h, msg_buf.rect.rect);

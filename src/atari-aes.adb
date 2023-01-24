@@ -120,11 +120,10 @@ end;
 
 function appl_write(
             ap_id     : int16;
-            length    : int16;
             ap_pbuff  : Message_Buffer)
            return int16 is
 begin
-	return appl_write(ap_id, length, ap_pbuff'Address);
+	return appl_write(ap_id, 16, ap_pbuff'Address);
 end;
 
 
@@ -2846,8 +2845,8 @@ procedure array_to_grect(
 begin
 	area.g_x := c_array(0);
 	area.g_y := c_array(1);
-	area.g_w := c_array(2);
-	area.g_h := c_array(3);
+	area.g_w := c_array(2) - c_array(0) + 1;
+	area.g_h := c_array(3) - c_array(1) + 1;
 end;
 
 
@@ -2857,8 +2856,8 @@ procedure grect_to_array(
 begin
 	c_array(0) := area.g_x;
 	c_array(1) := area.g_y;
-	c_array(2) := area.g_w;
-	c_array(3) := area.g_h;
+	c_array(2) := area.g_x + area.g_w - 1;
+	c_array(3) := area.g_y + area.g_h - 1;
 end;
 
 

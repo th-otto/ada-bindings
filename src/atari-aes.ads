@@ -1340,7 +1340,6 @@ package Atari.Aes is
                return int16;
     function appl_write(
                 ap_id     : int16;
-                length    : int16;
                 ap_pbuff  : Message_Buffer)
                return int16;
     function appl_find(name: chars_ptr) return int16;

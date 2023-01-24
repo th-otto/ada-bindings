@@ -88,6 +88,8 @@ procedure wdlgdemo is
                 end if;
             when AC_CLOSE =>
                 dialog := null;
+            when AP_TERM =>
+            	return true;
             when others =>
                 null;
         end case;

@@ -166,6 +166,16 @@ procedure eyes is
         end if;
     end;
 
+	procedure close_window is
+	begin
+		if whandle > 0
+		then
+			dummy := wind_close(whandle);
+			dummy := wind_delete(whandle);
+			whandle := 0;
+		end if;
+	end;
+
     function handle_message(pipe: Message_Buffer) return boolean is
         dummy2: int16;
     begin
@@ -180,13 +190,14 @@ procedure eyes is
             when WM_CLOSED =>
                 if pipe.simple.handle = whandle then
                     dummy := wind_get(whandle, WF_CURRXYWH, wx, wy, dummy, dummy2);
-                    dummy := wind_close(whandle);
-                    dummy := wind_delete(whandle);
-                    whandle := 0;
+                    close_window;
                 end if;
                 if is_Application then
                     return true;
                 end if;
+            when AP_TERM =>
+            	close_window;
+            	return true;
             when WM_MOVED =>
                 if pipe.simple.handle = whandle then
                     dummy := wind_set(whandle, WF_CURRXYWH, pipe.rect.rect);
