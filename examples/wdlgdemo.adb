@@ -1,3 +1,13 @@
+--
+--	Copyright (c) 2022 Thorsten Otto
+--
+--	Simple example for WDIALOG (dialogs in a window)
+--	Example program for ADA Atari TOS bindings
+--
+--	This example program is in the Public Domain under the terms of
+--	Unlicense: http://unlicense.org/
+--
+
 with System;
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
@@ -5,7 +15,6 @@ use Atari;
 with Interfaces; use Interfaces;
 with Text_IO;
 with wdlgdemo_resource; use wdlgdemo_resource;
-with wdlgdemo_callbacks; use wdlgdemo_callbacks;
 with Atari.Aes.Wdialog; use Atari.Aes.Wdialog;
 with Adaptrsc;
 
@@ -23,6 +32,25 @@ procedure wdlgdemo is
     tree: AEStree_ptr;
     dummy: aliased int16;
 
+	function handle_dlg(args: Wdialog.HNDL_OBJ_args) return int16 with Convention => C;
+	function handle_dlg(args: Wdialog.HNDL_OBJ_args) return int16 is
+		tree: AEStree_ptr;
+		r: GRECT;
+	begin
+		tree := Wdialog.wdlg_get_tree(args.dialog, r);
+	
+        case args.obj is
+            when WDialog.HNDL_CLSD =>
+				return 0;
+			when TEST_OK =>
+				tree(TEST_OK).ob_state := tree(TEST_OK).ob_state and not OS_SELECTED;
+				return 0;
+            when others =>
+                null;
+        end case;
+		return 1;
+	end;
+
     procedure open_window is
 	    out1, out2, out3, out4: int16;
     begin
@@ -31,7 +59,7 @@ procedure wdlgdemo is
         		dummy := form_alert(1, "[3][No WDIALOG functions available][Abort]");
         		return;
         	end if;
-            dialog := Wdialog.wdlg_create(handle_dlg'Access, tree, System.Null_Address, 0, System.Null_Address, WDialog.WDLG_BKGD);
+            dialog := Wdialog.wdlg_create(handle_dlg'Unrestricted_Access, tree, System.Null_Address, 0, System.Null_Address, WDialog.WDLG_BKGD);
             if (dialog /= null) then
 	            dummy := Wdialog.wdlg_open(dialog, title(title'First)'Unchecked_Access, PARTS, -1, -1, 0, System.Null_Address);
 	        end if;
@@ -127,4 +155,5 @@ begin
 	    end if;
         appl_exit;
     end if;
+
 end wdlgdemo;

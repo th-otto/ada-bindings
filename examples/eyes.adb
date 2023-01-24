@@ -1,3 +1,13 @@
+--
+--	Copyright (c) 2022 Thorsten Otto
+--
+--	Simple Eyes clone
+--	Example program for ADA Atari TOS bindings
+--
+--	This example program is in the Public Domain under the terms of
+--	Unlicense: http://unlicense.org/
+--
+
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
 with Atari.Vdi; use Atari.Vdi;
