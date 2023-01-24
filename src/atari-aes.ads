@@ -1145,9 +1145,10 @@ package Atari.Aes is
             pb_hc       : aliased int16;
             pb_parm     : aliased intptr;
         end record;
+	type PARMBLK_ptr is access all PARMBLK;
 
     type ub_code_func_ptr is access function(
-               parmblock: access PARMBLK)
+               parmblock: PARMBLK_ptr)
                return int16;
     pragma Convention(C, ub_code_func_ptr);
 
@@ -1176,7 +1177,7 @@ package Atari.Aes is
 
     type BITBLK is
         record
-            bi_pdata: aliased short_array_ptr;
+            bi_pdata: aliased void_ptr;
             bi_wb   : aliased int16;
             bi_hl   : aliased int16;
             bi_x    : aliased int16;
@@ -1188,8 +1189,8 @@ package Atari.Aes is
 
     type ICONBLK is
         record
-            ib_pmask: aliased short_array_ptr;
-            ib_pdata: aliased short_array_ptr;
+            ib_pmask: aliased void_ptr;
+            ib_pdata: aliased void_ptr;
             ib_ptext: aliased chars_ptr;
             ib_char : aliased int16;
             ib_xchar: aliased int16;
@@ -1211,10 +1212,10 @@ package Atari.Aes is
     type CICON is
         record
             num_planes: aliased int16;
-            col_data  : aliased short_array_ptr;
-            col_mask  : aliased short_array_ptr;
-            sel_data  : aliased short_array_ptr;
-            sel_mask  : aliased short_array_ptr;
+            col_data  : aliased void_ptr;
+            col_mask  : aliased void_ptr;
+            sel_data  : aliased void_ptr;
+            sel_mask  : aliased void_ptr;
             next_res  : aliased CICON_ptr;
         end record;
 
@@ -1384,21 +1385,21 @@ package Atari.Aes is
                 out2      : out int16;
                 out3      : out int16;
                 out4      : out int16)
-               return int16;
+               return boolean;
     function appl_xgetinfo(
                 c_type    : int16;
                 out1      : out int16;
                 out2      : out int16;
                 out3      : out int16;
                 out4      : out int16)
-               return int16;
+               return boolean;
     function appl_getinfo(
                 c_type    : int16;
                 out1      : chars_ptr;
                 out2      : chars_ptr;
                 out3      : chars_ptr;
                 out4      : chars_ptr)
-               return int16;
+               return boolean;
 
 
     function evnt_keybd return int16;
@@ -2067,10 +2068,9 @@ package Atari.Aes is
                 Addr      : void_ptr)
                return int16;
 
-    function rsrc_obfix(
+    procedure rsrc_obfix(
                 tree      : OBJECT_ptr;
-                Index     : int16)
-               return int16;
+                Index     : int16);
 
     function rsrc_rcfix(
                 rc_header : void_ptr)
@@ -2154,7 +2154,8 @@ package Atari.Aes is
                 area   : in GRECT;
                 c_array: out short_array);
 
-    function Is_Application return boolean;
+    function Is_Application return boolean with inline;
+	function Is_MultiTask return boolean with inline;
 
 private
    pragma Inline (aes_trap);

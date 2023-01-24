@@ -22,8 +22,8 @@ procedure eyes is
     gl_wbox, gl_hbox: int16;
     max_x, max_y: int16;
     menu_id: int16;
-    title: constant char_array(0..10) := " ADA Eyes " & ASCII.NUL;
-    menu_name: constant char_array(0..10) := "  ADA Eyes" & ASCII.NUL;
+    title: constant char_array := " ADA Eyes " & ASCII.NUL;
+    menu_name: constant char_array := "  ADA Eyes" & ASCII.NUL;
     oldx, oldy: int16;
     wx, wy: aliased int16;
     
@@ -132,13 +132,15 @@ procedure eyes is
     procedure open_window is
         calc: GRECT;
         button, kstate: int16;
+		desk: GRECT;
     begin
         if whandle <= 0 then
-            whandle := wind_create(PARTS, 0, 0, max_x +1, max_y + 1);
+        	dummy := wind_get(0, WF_WORKXYWH, desk);
+            whandle := wind_create(PARTS, desk);
             if whandle<=0 then
                 return;
             end if;
-            dummy := wind_set(whandle, WF_NAME, title(0)'Unchecked_Access);
+            dummy := wind_set(whandle, WF_NAME, title(title'First)'Unchecked_Access);
             mouse_off;
             if wx = -1 then
                 wind_calc(WC_BORDER, PARTS, 100, 100, 100, 100,
@@ -236,7 +238,7 @@ begin
             oldx := -1;
             oldy := -1;
             if not Is_Application then
-                menu_id := menu_register(gl_apid, menu_name(0)'Unchecked_Access);
+                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
             else
                 graf_mouse(ARROW);
                 open_window;

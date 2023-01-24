@@ -1,9 +1,9 @@
 top_srcdir = ..
 include $(top_srcdir)/config.mak
 
-all:: hello.prg hellogem.prg eyes.prg wdlgdemo.prg
+all:: hello.tos hellogem.prg eyes.prg wdlgdemo.prg gemwin.prg
 
-hello.prg: hello.adb
+hello.tos: hello.adb
 	$(GNAT) $< -o $@ $(GNATCFLAGS) $(GNATLDFLAGS)
 
 hellogem.prg: hellogem.adb ../src/libgem.a
@@ -12,7 +12,10 @@ hellogem.prg: hellogem.adb ../src/libgem.a
 eyes.prg: eyes.adb ../src/libgem.a
 	$(GNAT) $< -o $@ $(GNATCFLAGS) $(GNATLDFLAGS)
 
-wdlgdemo.prg: wdlgdemo.adb wdlgdemo_resource.ads wdlgdemo_callbacks.adb wdlgdemo_callbacks.ads ../src/libgem.a
+wdlgdemo.prg: wdlgdemo.adb wdlgdemo_resource.ads wdlgdemo_callbacks.adb wdlgdemo_callbacks.ads adaptrsc.adb adaptrsc.ads ../src/libgem.a
+	$(GNAT) $< -o $@ $(GNATCFLAGS) $(GNATLDFLAGS)
+
+gemwin.prg: gemwin.adb ../src/libgem.a
 	$(GNAT) $< -o $@ $(GNATCFLAGS) $(GNATLDFLAGS)
 
 ../src/libgem.a::

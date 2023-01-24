@@ -556,6 +556,12 @@ package Atari.Vdi is
                 handle: VdiHdl;
                 x  : int16;
                 y  : int16;
+                str: const_chars_ptr);
+
+    procedure v_gtext(
+                handle: VdiHdl;
+                x  : int16;
+                y  : int16;
                 str: in Wide_String);
 
     procedure v_fillarea(

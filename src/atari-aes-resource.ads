@@ -30,10 +30,10 @@ package Atari.Aes.Resource is
                 Addr      : System.Address)
                return int16 renames rsrc_saddr;
 
-    function Obfix(
+    procedure Obfix(
                 tree      : OBJECT_ptr;
                 Index     : int16)
-               return int16 renames rsrc_obfix;
+               renames rsrc_obfix;
 
     function Rcfix(
                 rc_header : System.Address)

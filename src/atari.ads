@@ -33,11 +33,11 @@ package Atari is
 	pragma No_Strict_Aliasing (const_chars_ptr);
     type chars_ptr_array is array (integer range <>) of aliased chars_ptr;
 
-    type void_ptr_ptr is access System.Address;
+    type void_ptr_ptr is access void_ptr;
 
-    function "not"(i: int16) return int16;
-    function "or"(left: int16; right: int16) return int16;
-    function "and"(left: int16; right: int16) return int16;
-    function "xor"(left: int16; right: int16) return int16;
+    function "not"(i: int16) return int16 with inline;
+    function "or"(left: int16; right: int16) return int16 with inline;
+    function "and"(left: int16; right: int16) return int16 with inline;
+    function "xor"(left: int16; right: int16) return int16 with inline;
 
 end Atari;

@@ -55,20 +55,20 @@ package Atari.Aes.Appl is
                 out2      : out int16;
                 out3      : out int16;
                 out4      : out int16)
-               return int16 renames appl_getinfo;
+               return boolean renames appl_getinfo;
     function Xgetinfo(
                 c_type    : int16;
                 out1      : out int16;
                 out2      : out int16;
                 out3      : out int16;
                 out4      : out int16)
-               return int16 renames appl_xgetinfo;
+               return boolean renames appl_xgetinfo;
     function Getinfo(
                 c_type    : int16;
                 out1      : chars_ptr;
                 out2      : chars_ptr;
                 out3      : chars_ptr;
                 out4      : chars_ptr)
-               return int16 renames appl_getinfo;
+               return boolean renames appl_getinfo;
 
 end Atari.Aes.Appl;

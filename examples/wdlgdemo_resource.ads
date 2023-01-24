@@ -12,4 +12,6 @@ package wdlgdemo_resource is
 	TEST : constant int16 := 0;
 	TEST_OK : constant int16 := 3;
 
+	NUM_OBS: constant int16 := 5;
+
 end wdlgdemo_resource;

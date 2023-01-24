@@ -21,6 +21,17 @@ vdi_pb: aliased VDIPB := (
 );
 
 
+function To_chars_ptr is new Ada.Unchecked_Conversion (System.Address, const_chars_ptr);
+
+function To_Address is new Ada.Unchecked_Conversion (const_chars_ptr, System.Address);
+
+function "+" (Left : const_chars_ptr; Right : Integer) return const_chars_ptr is
+pragma Inline ("+");
+begin
+	return To_chars_ptr (To_Address (Left) + Storage_Offset(Right));
+end "+";
+
+
 procedure vdi(pb: VDIPB_ptr) is
     use ASCII;
     function to_address is new Ada.Unchecked_Conversion(VDIPB_ptr, System.Address);
@@ -50,6 +61,25 @@ begin
     for i in src'First .. src'Last loop
         vdi_intin(dst) := Character'Pos(src(i));
         dst := dst + 1;
+    end loop;
+    return len;
+end;
+
+
+function string_to_vdi(src: const_chars_ptr; offset: int16) return int16 is
+    dst: Integer;
+    ptr: const_chars_ptr;
+    len: int16;
+begin
+	len := 0;
+    dst := Integer(offset);
+    ptr := src;
+    loop
+    	exit when Character'Pos(ptr.all) = 0;
+        vdi_intin(dst) := Character'Pos(ptr.all);
+        dst := dst + 1;
+        ptr := ptr + 1;
+        len := len + 1;
     end loop;
     return len;
 end;
@@ -828,6 +858,25 @@ procedure v_gtext(
             x  : int16;
             y  : int16;
             str: in String) is
+    len: int16;
+begin
+    len := string_to_vdi(str, 0);
+    vdi_control.opcode := 8;
+    vdi_control.num_ptsin := 1;
+    vdi_control.num_intin := len;
+    vdi_control.subcode := 0;
+    vdi_control.handle := handle;
+    vdi_ptsin(0) := x;
+    vdi_ptsin(1) := y;
+    vdi_trap;
+end;
+
+
+procedure v_gtext(
+            handle: VdiHdl;
+            x  : int16;
+            y  : int16;
+            str: const_chars_ptr) is
     len: int16;
 begin
     len := string_to_vdi(str, 0);

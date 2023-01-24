@@ -275,7 +275,7 @@ function appl_getinfo(
             out2      : out int16;
             out3      : out int16;
             out4      : out int16)
-           return int16 is
+           return boolean is
 begin
 	aes_control.opcode := 130;
 	aes_control.num_intin := 1;
@@ -288,7 +288,7 @@ begin
 	out2 := aes_intout(2);
 	out3 := aes_intout(3);
 	out4 := aes_intout(4);
-	return aes_intout(0);
+	return aes_intout(0) /= 0;
 end;
 
 
@@ -298,7 +298,7 @@ function appl_xgetinfo(
             out2      : out int16;
             out3      : out int16;
             out4      : out int16)
-           return int16 is
+           return boolean is
 begin
 	if (has_agi < 0) then
 		if (aes_global(0) >= 1024 or else
@@ -309,7 +309,7 @@ begin
 		end if;
 	end if;
 	if (has_agi = 0) then
-		return 0;
+		return false;
 	end if;
 	return appl_getinfo(c_type, out1, out2, out3, out4);
 end;
@@ -321,7 +321,7 @@ function appl_getinfo(
             out2      : chars_ptr;
             out3      : chars_ptr;
             out4      : chars_ptr)
-           return int16 is
+           return boolean is
 begin
 	if (has_agi < 0) then
 		if (aes_global(0) >= 1024 or else
@@ -332,7 +332,7 @@ begin
 		end if;
 	end if;
 	if (has_agi = 0) then
-		return 0;
+		return false;
 	end if;
 	aes_control.opcode := 130;
 	aes_control.num_intin := 1;
@@ -345,7 +345,7 @@ begin
 	aes_addrin(2) := out3.all'Address;
 	aes_addrin(3) := out4.all'Address;
 	aes_trap;
-	return aes_intout(0);
+	return aes_intout(0) /= 0;
 end;
 
 
@@ -2547,10 +2547,10 @@ begin
 end;
 
 
-function rsrc_obfix(
+procedure rsrc_obfix(
             tree      : OBJECT_ptr;
             Index     : int16)
-           return int16 is
+           is
     function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 114;
@@ -2561,7 +2561,6 @@ begin
 	aes_intin(0) := Index;
 	aes_addrin(0) := to_address(tree);
 	aes_trap;
-	return aes_intout(0);
 end;
 
 
@@ -2852,6 +2851,12 @@ function Is_Application return boolean is
        External_Name => "_app";
 begin
 	return is_app /= 0;
+end;
+
+
+function Is_MultiTask return boolean is
+begin
+	return gl_numapps /= 1;
 end;
 
 

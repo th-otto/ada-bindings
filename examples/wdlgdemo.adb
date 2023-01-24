@@ -7,6 +7,7 @@ with Text_IO;
 with wdlgdemo_resource; use wdlgdemo_resource;
 with wdlgdemo_callbacks; use wdlgdemo_callbacks;
 with Atari.Aes.Wdialog; use Atari.Aes.Wdialog;
+with Adaptrsc;
 
 Pragma Unreferenced(Text_IO);
 
@@ -16,8 +17,6 @@ procedure wdlgdemo is
     PARTS: constant int16 := NAME or CLOSER or MOVER;
 
     dialog: Wdialog.DIALOG_ptr;
-    gl_wchar, gl_hchar: int16;
-    gl_wbox, gl_hbox: int16;
     menu_id: int16;
     title: constant String := " WDLG DEMO ";
     menu_name: constant char_array(0..13) := " Wdialog Demo" & ASCII.NUL;
@@ -28,7 +27,7 @@ procedure wdlgdemo is
 	    out1, out2, out3, out4: int16;
     begin
         if dialog = null then
-        	if appl_xgetinfo(7, out1, out2, out3, out4) = 0 or else (out1 and 1) = 0 then
+        	if appl_xgetinfo(7, out1, out2, out3, out4) = false or else (out1 and 1) = 0 then
         		dummy := form_alert(1, "[3][No WDIALOG functions available][Abort]");
         		return;
         	end if;
@@ -112,17 +111,19 @@ begin
     	if rsrc_load("wdlgdemo.rsc") = 0 then
     		dummy := form_alert(1, "[3][Resource file not found][Abort]");
         else
-        	dummy := graf_handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
+        	adaptrsc.vdi_handle := graf_handle(adaptrsc.gl_wchar, adaptrsc.gl_hchar, adaptrsc.gl_wbox, adaptrsc.gl_hbox);
+        	adaptrsc.get_aes_info;
         	tree := rsrc_gaddr(TEST);
+        	adaptrsc.substitute_objects(tree, NUM_OBS, adaptrsc.aes_flags);
 	        if not Is_Application then
 	            menu_id := menu_register(gl_apid, menu_name(0)'Unchecked_Access);
 	        else
 	            open_window;
 	        end if;
-	        tree := rsrc_gaddr(TEST);
 	        loop
 	            exit when event_loop;
 	        end loop;
+	        adaptrsc.substitute_free;
 	    end if;
         appl_exit;
     end if;
