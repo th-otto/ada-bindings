@@ -2,7 +2,7 @@ package Atari.Aes.Extensions is
 
     type XEDITINFO is private;
     type XEDITINFO_ptr is access all XEDITINFO;
-    
+
     type SCANX is
         record
             scancode: aliased uint8;
@@ -21,13 +21,42 @@ package Atari.Aes.Extensions is
         end record;
     type XDO_INF_ptr is access all XDO_INF;
 
+    type AESVARS is
+        record
+            magic: int32;                           -- Must be $87654321
+            membot: void_ptr;                       -- End of the AES-variables
+            aes_start: void_ptr;                    -- Start address
+            magic2: int32;                          -- Is 'MAGX'
+            date: uint32;                           -- Creation date ddmmyyyy
+            chgres: void_ptr;                       -- Change resolution
+            shel_vector: void_ptr;                  -- Resident desktop
+            aes_bootdrv: uint8_ptr;                 -- Booting took place from here
+            vdi_device: short_ptr;                  -- VDI-driver used by AES
+            nvdi_workstation: void_ptr_ptr;         -- workstation used by AES
+            shelw_doex: short_ptr;                  -- last <doex> for APP #0
+            shelw_isgr: short_ptr;                  -- last <isgr> for APP #0
+            version: int16;                         -- e.g. $0201 is V2.1
+            release: int16;                         -- 0=alpha..3=release
+        end record;
+    type AESVARS_ptr is access all AESVARS;
 
-	procedure objc_wdraw(
-	            tree   : OBJECT_ptr;
-	            start  : int16;
-	            depth  : int16;
-	            clip   : in GRECT;
-	            whandle: int16);
+    type MAGX_COOKIE is
+        record
+            config_status: int32;
+            dosvars: void_ptr;
+            aesvars: AESVARS_ptr;
+            res1: void_ptr;
+            hddrv_functions: void_ptr;
+            status_bits: uint32;
+        end record;
+    type MAGX_COOKIE_ptr is access all MAGX_COOKIE;
+
+    procedure objc_wdraw(
+                tree   : OBJECT_ptr;
+                start  : int16;
+                depth  : int16;
+                clip   : in GRECT;
+                whandle: int16);
 
     procedure objc_wchange(
                 tree     : OBJECT_ptr;
@@ -62,14 +91,14 @@ package Atari.Aes.Extensions is
                 whandle      : int16)
                return int16;
 
-	function objc_wedit(
-	            tree   : OBJECT_ptr;
-	            obj    : int16;
-	            key    : int16;
-	            idx    : in out int16;
-	            kind   : int16;
-	            whandle: int16)
-	           return int16;
+    function objc_wedit(
+                tree   : OBJECT_ptr;
+                obj    : int16;
+                key    : int16;
+                idx    : in out int16;
+                kind   : int16;
+                whandle: int16)
+               return int16;
 
     function objc_xedit(
                 tree  : OBJECT_ptr;
@@ -152,6 +181,6 @@ package Atari.Aes.Extensions is
 
 
 private
-	type XEDITINFO is record null; end record;
+    type XEDITINFO is record null; end record;
 
 end Atari.Aes.Extensions;
