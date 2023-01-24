@@ -19,9 +19,6 @@ package Atari.Aes is
     -- AES
     --
 
-    subtype array_8 is short_array(0 .. 7);
-    type array_8_ptr is access all array_8;
-
     NIL                 : constant  := -1;                      -- *< Value for no more object in object
     DESKTOP_HANDLE      : constant  := 0;                       -- *< TODO
     DESK                : constant  := 0;                       -- *< TODO
@@ -1301,7 +1298,7 @@ package Atari.Aes is
             title: int16;
             item: int16;
         end record;
-    type aes_msg_array (Which: int16 := 0) is
+    type Message_Buffer (Which: int16 := 0) is
         record
             case Which is
                 when 0 => simple: aes_msg_simple;
@@ -1310,7 +1307,9 @@ package Atari.Aes is
                 when others => arr: short_array(0..7);
             end case;
         end record;
-    type aes_msg_array_ptr is access all aes_msg_array;
+    pragma Convention(C, Message_Buffer);
+    pragma Unchecked_Union(Message_Buffer);
+    type Message_Buffer_ptr is access all Message_Buffer;
 
     aes_global: aliased AESglobal;
     function gl_ap_version return int16 with Inline;
@@ -1342,7 +1341,7 @@ package Atari.Aes is
     function appl_write(
                 ap_id     : int16;
                 length    : int16;
-                ap_pbuff  : array_8_ptr)
+                ap_pbuff  : Message_Buffer)
                return int16;
     function appl_find(name: chars_ptr) return int16;
     function appl_find(name: String) return int16;
@@ -1420,10 +1419,10 @@ package Atari.Aes is
                 ButtonState: out int16;
                 KeyState   : out int16);
     function evnt_mesag(
-                MesagBuf  : short_ptr)
+                MesagBuf  : out short_array)
                return int16;
     function evnt_mesag(
-                MesagBuf  : array_8_ptr)
+                MesagBuf  : out Message_Buffer)
                return int16;
     procedure evnt_timer(
                 Interval  : uint32);
@@ -1446,7 +1445,7 @@ package Atari.Aes is
                 In2Y       : int16;
                 In2W       : int16;
                 In2H       : int16;
-                MesagBuf   : array_8_ptr;
+                MesagBuf   : out Message_Buffer;
                 Interval   : uint32;
                 OutX       : out int16;
                 OutY       : out int16;
@@ -1457,7 +1456,7 @@ package Atari.Aes is
                return int16;
     function evnt_multi(
                 em_i       : in EVMULT_IN;
-                MesagBuf   : array_8_ptr;
+                MesagBuf   : out Message_Buffer;
                 em_o       : out EVMULT_OUT)
                return int16;
     function evnt_dclick(

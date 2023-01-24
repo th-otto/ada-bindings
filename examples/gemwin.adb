@@ -106,28 +106,30 @@ procedure gemwin is
 	end;
 
 	procedure event_loop is
-		msg_buf: aliased array_8;
+		msg_buf: Message_Buffer;
 		fsrect: GRECT;
 	begin
 		loop
-			dummy := evnt_mesag(msg_buf'Unchecked_Access);
-			case msg_buf(0) is
+			dummy := evnt_mesag(msg_buf);
+			case msg_buf.simple.msgtype is
 				when WM_CLOSED =>
-	                if msg_buf(3) = win_h then
+	                if msg_buf.simple.handle = win_h then
 	                	close_window;
 	                end if;
 	                if is_Application then
 						exit;
 					end if;
 				when WM_REDRAW =>
-					wind_redraw(win_h, GRECT'(msg_buf(4), msg_buf(5), msg_buf(6), msg_buf(7)));
+	                if msg_buf.simple.handle = win_h then
+						wind_redraw(win_h, msg_buf.rect.rect);
+					end if;
 				when WM_MOVED | WM_SIZED =>
-	                if msg_buf(3) = win_h then
-						dummy := wind_set(win_h, WF_CURRXYWH, GRECT'(msg_buf(4), msg_buf(5), msg_buf(6), msg_buf(7)));
+	                if msg_buf.simple.handle = win_h then
+						dummy := wind_set(win_h, WF_CURRXYWH, msg_buf.rect.rect);
 						fulled := false;
 					end if;
 				when WM_FULLED =>
-	                if msg_buf(3) = win_h then
+	                if msg_buf.simple.handle = win_h then
 						if fulled then
 							dummy := wind_get(win_h, WF_PREVXYWH, fsrect);
 							dummy := wind_set(win_h, WF_CURRXYWH, fsrect);
@@ -141,11 +143,11 @@ procedure gemwin is
 						end if;
 					end if;
 				when WM_TOPPED | WM_NEWTOP =>
-	                if msg_buf(3) = win_h then
+	                if msg_buf.simple.handle = win_h then
 						dummy := wind_set(win_h, WF_TOP);
 					end if;
 	            when AC_OPEN =>
-	                if msg_buf(4) = menu_id then
+	                if msg_buf.simple.menu_id = menu_id then
 	                    open_window;
 	                end if;
 	            when AC_CLOSE =>

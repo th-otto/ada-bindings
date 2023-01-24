@@ -21,10 +21,10 @@ package Atari.Aes.Event is
                 ButtonState: out int16;
                 KeyState   : out int16) renames evnt_mouse;
     function Mesag(
-                MesagBuf  : short_ptr)
+                MesagBuf  : out short_array)
                return int16 renames evnt_mesag;
     function Mesag(
-                MesagBuf  : array_8_ptr)
+                MesagBuf  : out Message_Buffer)
                return int16 renames evnt_mesag;
     procedure Timer(
                 Interval  : uint32) renames evnt_timer;
@@ -47,7 +47,7 @@ package Atari.Aes.Event is
                 In2Y       : int16;
                 In2W       : int16;
                 In2H       : int16;
-                MesagBuf   : array_8_ptr;
+                MesagBuf   : out Message_Buffer;
                 Interval   : uint32;
                 OutX       : out int16;
                 OutY       : out int16;
@@ -58,7 +58,7 @@ package Atari.Aes.Event is
                return int16 renames evnt_multi;
     function Multi(
                 em_i       : in EVMULT_IN;
-                MesagBuf   : array_8_ptr;
+                MesagBuf   : out Message_Buffer;
                 em_o       : out EVMULT_OUT)
                return int16 renames evnt_multi;
     function Dclick(

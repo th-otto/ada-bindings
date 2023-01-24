@@ -121,10 +121,10 @@ end;
 function appl_write(
             ap_id     : int16;
             length    : int16;
-            ap_pbuff  : array_8_ptr)
+            ap_pbuff  : Message_Buffer)
            return int16 is
 begin
-	return appl_write(ap_id, length, ap_pbuff.all'Address);
+	return appl_write(ap_id, length, ap_pbuff'Address);
 end;
 
 
@@ -436,22 +436,22 @@ begin
 end;
 
 
-function evnt_mesag(MesagBuf: short_ptr) return int16 is
+function evnt_mesag(MesagBuf: out short_array) return int16 is
 begin
 	aes_control.opcode := 23;
 	aes_control.num_intin := 0;
 	aes_control.num_intout := 1;
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
-	aes_addrin(0) := MesagBuf.all'Address;
+	aes_addrin(0) := MesagBuf'Address;
 	aes_trap;
 	return aes_intout(0);
 end;
 
 
-function evnt_mesag(MesagBuf: array_8_ptr) return int16 is
+function evnt_mesag(MesagBuf: out Message_Buffer) return int16 is
 begin
-	return evnt_mesag(MesagBuf(0)'Access);
+	return evnt_mesag(MesagBuf.arr);
 end;
 
 
@@ -503,7 +503,7 @@ function evnt_multi(
             In2Y       : int16;
             In2W       : int16;
             In2H       : int16;
-            MesagBuf   : array_8_ptr;
+            MesagBuf   : out Message_Buffer;
             Interval   : uint32;
             OutX       : out int16;
             OutY       : out int16;
@@ -534,7 +534,7 @@ begin
 	aes_intin(13) := In2H;
 	aes_intin(14) := int16(Interval and 16#ffff#);
 	aes_intin(15) := int16(Shift_Right(Interval, 16));
-	aes_addrin(0) := MesagBuf.all'Address;
+	aes_addrin(0) := MesagBuf'Address;
 	aes_trap;
 	OutX := aes_intout(1);
 	OutY := aes_intout(2);
@@ -549,7 +549,7 @@ end;
 
 function evnt_multi(
             em_i       : in EVMULT_IN;
-            MesagBuf   : array_8_ptr;
+            MesagBuf   : out Message_Buffer;
             em_o       : out EVMULT_OUT)
            return int16 is
 begin
@@ -574,7 +574,7 @@ begin
 	aes_intin(13) := em_i.emi_m2.g_h;
 	aes_intin(14) := em_i.emi_tlow;
 	aes_intin(15) := em_i.emi_thigh;
-	aes_addrin(0) := MesagBuf.all'Address;
+	aes_addrin(0) := MesagBuf'Address;
 	aes_trap;
 	em_o.emo_events := uint16(aes_intout(0));
 	em_o.emo_mouse.p_x := aes_intout(1);

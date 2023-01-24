@@ -33,7 +33,7 @@ package Atari.Aes.Wdialog is
             key     : aliased int16;
             mclicks : aliased int16;
             reserved: aliased short_array(0..8);
-            msg     : aliased array_8;
+            msg     : aliased Message_Buffer;
             unused  : aliased short_array(0..7);
         end record
     	with Convention => C;

@@ -156,20 +156,20 @@ procedure eyes is
         end if;
     end;
 
-    function handle_message(pipe: array_8_ptr) return boolean is
+    function handle_message(pipe: Message_Buffer) return boolean is
         dummy2: int16;
     begin
-        -- Text_IO.Put_Line("got message " & pipe(0)'image);
-        case pipe(0) is
+        -- Text_IO.Put_Line("got message " & pipe.simple.msgtype'image);
+        case pipe.simple.msgtype is
             when WM_REDRAW =>
                 redrawwindow(DRAW_ALL, -1, -1);
             when WM_TOPPED =>
-                if pipe(3) = whandle then
+                if pipe.simple.handle = whandle then
                     dummy := wind_set(whandle, WF_TOP);
                 end if;
             when WM_CLOSED =>
-                if pipe(3) = whandle then
-                    dummy := wind_get(whandle, WF_WORKXYWH, wx, wy, dummy, dummy2);
+                if pipe.simple.handle = whandle then
+                    dummy := wind_get(whandle, WF_CURRXYWH, wx, wy, dummy, dummy2);
                     dummy := wind_close(whandle);
                     dummy := wind_delete(whandle);
                     whandle := 0;
@@ -178,12 +178,12 @@ procedure eyes is
                     return true;
                 end if;
             when WM_MOVED =>
-                if pipe(3) = whandle then
-                    dummy := wind_set(whandle, WF_CURRXYWH, pipe(4), pipe(5), pipe(6), pipe(7));
+                if pipe.simple.handle = whandle then
+                    dummy := wind_set(whandle, WF_CURRXYWH, pipe.rect.rect);
                     redrawwindow(DRAW_ALL, -1, -1);
                 end if;
             when AC_OPEN =>
-                if pipe(4) = menu_id then
+                if pipe.simple.menu_id = menu_id then
                     open_window;
                 end if;
             when AC_CLOSE =>
@@ -199,7 +199,7 @@ procedure eyes is
         kstate, state: int16;
         event: int16;
         quit: boolean;
-        pipe: aliased array_8;
+        pipe: Message_Buffer;
         events: int16;
     begin
         quit := false;
@@ -213,12 +213,12 @@ procedure eyes is
             event := evnt_multi(events, 0, 0, 0,
                 1, oldx, oldy, 1, 1,
                 0, 0, 0, 0, 0,
-                pipe'Unchecked_Access,
+                pipe,
                 100,
                 x, y, state, kstate, key, clicks);
             dummy := wind_update(BEG_UPDATE);
             if (event and MU_MESAG) /= 0 then
-                quit := handle_message(pipe'Unchecked_Access);
+                quit := handle_message(pipe);
             end if;
             if (event and MU_M1) /= 0 then
                 redrawwindow(EYES, x, y);

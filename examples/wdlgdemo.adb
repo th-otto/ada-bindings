@@ -49,13 +49,13 @@ procedure wdlgdemo is
        	end if;
 	end;
 
-    function handle_message(pipe: array_8_ptr) return boolean is
+    function handle_message(pipe: Message_Buffer) return boolean is
         dummy2: int16;
     begin
         -- Text_IO.Put_Line("got message " & pipe(0)'image);
-        case pipe(0) is
+        case pipe.simple.msgtype is
             when AC_OPEN =>
-                if pipe(4) = menu_id then
+                if pipe.simple.menu_id = menu_id then
                     open_window;
                 end if;
             when AC_CLOSE =>
@@ -83,11 +83,11 @@ procedure wdlgdemo is
             	2, 1, 1,
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0,
-                event.msg'Unchecked_Access,
+                event.msg,
                 0,
                 event.mx, event.my, event.mbutton, event.kstate, event.key, event.mclicks);
             if (event.mwhich and MU_MESAG) /= 0 then
-                quit := handle_message(event.msg'Unchecked_Access);
+                quit := handle_message(event.msg);
             end if;
             if not quit and then dialog /= null then
 	            quit := Wdialog.wdlg_evnt(dialog, event'Unchecked_Access) = 0;

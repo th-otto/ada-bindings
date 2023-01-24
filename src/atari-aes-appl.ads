@@ -5,17 +5,17 @@ package Atari.Aes.Appl is
     function Read(
                 ap_id     : int16;
                 length    : int16;
-                ap_pbuff  : System.Address)
+                ap_pbuff  : void_ptr)
                return int16 renames appl_read;
     function Write(
                 ap_id     : int16;
                 length    : int16;
-                ap_pbuff  : System.Address)
+                ap_pbuff  : void_ptr)
                return int16 renames appl_write;
     function Write(
                 ap_id     : int16;
                 length    : int16;
-                ap_pbuff  : array_8_ptr)
+                ap_pbuff  : Message_Buffer)
                return int16 renames appl_write;
     function Find(name: chars_ptr) return int16 renames appl_find;
     function Find(name: String) return int16 renames appl_find;
