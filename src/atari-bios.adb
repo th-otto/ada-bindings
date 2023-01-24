@@ -14,7 +14,7 @@ function to_address is new Ada.Unchecked_Conversion(System.Address, int32);
 
 
 
-function trap_13_w(n: int16) return int32 is
+function trap_13_w(n: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -31,7 +31,7 @@ begin
 end;
 
 
-function trap_13_ww(n: int16; a: int16) return int32 is
+function trap_13_ww(n: int16; a: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -50,7 +50,7 @@ begin
 end;
 
 
-function trap_13_www(n: int16; a: int16; b: int16) return int32 is
+function trap_13_www(n: int16; a: int16; b: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -71,7 +71,7 @@ begin
 end;
 
 
-function trap_13_wwl(n: int16; a: int16; b: int32) return int32 is
+function trap_13_wwl(n: int16; a: int16; b: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -92,7 +92,7 @@ begin
 end;
 
 
-function trap_13_wl(n: int16; a: int32) return int32 is
+function trap_13_wl(n: int16; a: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -111,7 +111,7 @@ begin
 end;
 
 
-function trap_13_wwlwww(n: int16; a: int16; b: int32; c: int16; d: int16; e: int16) return int32 is
+function trap_13_wwlwww(n: int16; a: int16; b: int32; c: int16; d: int16; e: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -138,7 +138,7 @@ begin
 end;
 
 
-function trap_13_wwlwwwl(n: int16; a: int16; b: int32; c: int16; d: int16; e: int16; f: int32) return int32 is
+function trap_13_wwlwwwl(n: int16; a: int16; b: int32; c: int16; d: int16; e: int16; f: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -218,10 +218,10 @@ end;
 
 function Setexc(
             number : int16;
-            exchdlr: exchdlr_proc)
-           return exchdlr_proc is
-    function to_address is new Ada.Unchecked_Conversion(exchdlr_proc, int32);
-    function to_pointer is new Ada.Unchecked_Conversion(int32, exchdlr_proc);
+            exchdlr: void_ptr)
+           return void_ptr is
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, int32);
+    function to_pointer is new Ada.Unchecked_Conversion(int32, void_ptr);
 begin
     return to_pointer(trap_13_wwl(5, number, to_address(exchdlr)));
 end;

@@ -13,7 +13,7 @@ function to_pointer is new Ada.Unchecked_Conversion(int32, System.Address);
 function to_address is new Ada.Unchecked_Conversion(System.Address, int32);
 
 
-function trap_14_w(n: int16) return int32 is
+function trap_14_w(n: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -30,7 +30,7 @@ begin
 end;
 
 
-function trap_14_ww(n: int16; a: int16) return int32 is
+function trap_14_ww(n: int16; a: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -49,7 +49,7 @@ begin
 end;
 
 
-function trap_14_www(n: int16; a: int16; b: int16) return int32 is
+function trap_14_www(n: int16; a: int16; b: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -70,7 +70,7 @@ begin
 end;
 
 
-function trap_14_wwwwwww(n: int16; a: int16; b: int16; c: int16; d: int16; e: int16; f: int16) return int32 is
+function trap_14_wwwwwww(n: int16; a: int16; b: int16; c: int16; d: int16; e: int16; f: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -99,7 +99,7 @@ begin
 end;
 
 
-function trap_14_wwl(n: int16; a: int16; b: int32) return int32 is
+function trap_14_wwl(n: int16; a: int16; b: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -120,7 +120,7 @@ begin
 end;
 
 
-function trap_14_wlll(n: int16; a: int32; b: int32; c: int32) return int32 is
+function trap_14_wlll(n: int16; a: int32; b: int32; c: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -143,7 +143,7 @@ begin
 end;
 
 
-function trap_14_wwwl(n: int16; a: int16; b: int16; c: int32) return int32 is
+function trap_14_wwwl(n: int16; a: int16; b: int16; c: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -166,7 +166,7 @@ begin
 end;
 
 
-function trap_14_wwwwl(n: int16; a: int16; b: int16; c: int16; d: int32) return int32 is
+function trap_14_wwwwl(n: int16; a: int16; b: int16; c: int16; d: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -191,7 +191,7 @@ begin
 end;
 
 
-function trap_14_wlwlw(n: int16; a: int32; b: int16; c: int32; d: int16) return int32 is
+function trap_14_wlwlw(n: int16; a: int32; b: int16; c: int32; d: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -216,7 +216,7 @@ begin
 end;
 
 
-function trap_14_wl(n: int16; a: int32) return int32 is
+function trap_14_wl(n: int16; a: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -235,7 +235,7 @@ begin
 end;
 
 
-function trap_14_wwll(n: int16; a: int16; b: int32; c: int32) return int32 is
+function trap_14_wwll(n: int16; a: int16; b: int32; c: int32) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -258,7 +258,7 @@ begin
 end;
 
 
-function trap_14_wllw(n: int16; a: int32; b: int32; c: int16) return int32 is
+function trap_14_wllw(n: int16; a: int32; b: int32; c: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -281,7 +281,7 @@ begin
 end;
 
 
-function trap_14_wllww(n: int16; a: int32; b: int32; c: int16; d: int16) return int32 is
+function trap_14_wllww(n: int16; a: int32; b: int32; c: int16; d: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -306,7 +306,7 @@ begin
 end;
 
 
-function trap_14_wllwwwww(n: int16; a: int32; b: int32; c: int16; d: int16; e: int16; f: int16; g: int16) return int32 is
+function trap_14_wllwwwww(n: int16; a: int32; b: int32; c: int16; d: int16; e: int16; f: int16; g: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin
@@ -337,7 +337,7 @@ begin
 end;
 
 
-function trap_14_wllwwwwwlw(n: int16; a: int32; b: int32; c: int16; d: int16; e: int16; f: int16; g: int16; h: int32; i: int16) return int32 is
+function trap_14_wllwwwwwlw(n: int16; a: int32; b: int32; c: int16; d: int16; e: int16; f: int16; g: int16; h: int32; i: int16) return int32 with Inline is
     use ASCII;
     retvalue: int32;
 begin

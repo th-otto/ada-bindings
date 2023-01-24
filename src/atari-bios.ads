@@ -86,6 +86,9 @@ Package Atari.Bios is
             mp_rover: aliased MD_ptr;
         end record;
 
+
+
+
     procedure Getmpb(ptr: out MPB)
       with Inline;
 
@@ -118,11 +121,10 @@ Package Atari.Bios is
                return int32
       with Inline;
 
-    type exchdlr_proc is access procedure;
     function Setexc(
                 number : int16;
-                exchdlr: exchdlr_proc)
-               return exchdlr_proc
+                exchdlr: void_ptr)
+               return void_ptr
       with Inline;
 
     function Tickcal return int32
