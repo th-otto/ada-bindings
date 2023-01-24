@@ -358,22 +358,4 @@ begin
 	return aes_intout(0);
 end;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end Atari.Aes.Extensions;
