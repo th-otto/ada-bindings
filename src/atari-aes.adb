@@ -49,6 +49,24 @@ begin
 end;
 
 
+function gl_ap_version return int16 is
+begin
+	return aes_global(0);
+end;
+
+
+function gl_numapps return int16 is
+begin
+	return aes_global(1);
+end;
+
+
+function gl_apid return int16 is
+begin
+	return aes_global(2);
+end;
+
+
 
 function appl_init return int16 is
 begin

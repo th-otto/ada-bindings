@@ -1313,12 +1313,9 @@ package Atari.Aes is
     type aes_msg_array_ptr is access all aes_msg_array;
 
     aes_global: aliased AESglobal;
-    gl_ap_version: int16;
-    for gl_ap_version'Address use aes_global(0)'Address;
-    gl_numapps: int16;
-    for gl_numapps'Address use aes_global(1)'Address;
-    gl_apid: int16;
-    for gl_apid'Address use aes_global(2)'Address;
+    function gl_ap_version return int16 with Inline;
+    function gl_numapps return int16 with Inline;
+    function gl_apid return int16 with Inline;
 
     -- FIXME: how to make private to sub-packages?
     aes_control: aliased AESContrl;
@@ -1327,8 +1324,8 @@ package Atari.Aes is
     aes_addrin: aliased AESAddrIn;
     aes_addrout: aliased AESAddrOut;
 
-    procedure aes(pb: AESPB_ptr);
-    procedure aes_trap;
+    procedure aes(pb: AESPB_ptr) with Inline;
+    procedure aes_trap with Inline;
 
     function appl_init return int16;
     procedure appl_exit;
@@ -2156,8 +2153,5 @@ package Atari.Aes is
 
     function Is_Application return boolean with inline;
 	function Is_MultiTask return boolean with inline;
-
-private
-   pragma Inline (aes_trap);
 
 end Atari.Aes;
