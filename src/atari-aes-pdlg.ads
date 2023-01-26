@@ -2,13 +2,12 @@ with Atari.Aes.Wdialog;
 
 package Atari.Aes.Pdlg is
 
-pragma Elaborate_Body;
-
     type PRN_DIALOG is record null; end record;
     type PRN_DIALOG_ptr is access all PRN_DIALOG;
 
     subtype DIALOG_ptr is Wdialog.DIALOG_ptr;
-
+	subtype EVNT_ptr is Wdialog.EVNT_ptr;
+	
     PRN_STD_SUBS             : constant  := 16#1#;              -- *< standard sub-dialogs for NVDI printer
     PRN_FSM_SUBS             : constant  := 16#2#;              -- *< standard sub-dialogs for FSM printer
     PRN_QD_SUBS              : constant  := 16#4#;              -- *< standard sub-dialogs for QuickDraw printer
@@ -291,7 +290,7 @@ pragma Elaborate_Body;
             length      : aliased int32;
             format      : aliased int32;
             reserved    : aliased int32;
-            drivers     : aliased System.Address;
+            drivers     : aliased void_ptr;
             option_flags: aliased int16;
             sub_id      : aliased int16;
             dialog      : aliased DIALOG_ptr;
@@ -315,5 +314,138 @@ pragma Elaborate_Body;
             private4    : aliased int32;
         end record;
 
+    function pdlg_create(dialog_flags: int16) return PRN_DIALOG_ptr;
+    function Create(dialog_flags: int16) return PRN_DIALOG_ptr renames pdlg_create;
+
+    procedure pdlg_delete(prn_dialog: PRN_DIALOG_ptr);
+    procedure Delete(prn_dialog: PRN_DIALOG_ptr) renames pdlg_delete;
+
+    function pdlg_open(
+                prn_dialog   : PRN_DIALOG_ptr;
+                settings     : PRN_SETTINGS_ptr;
+                document_name: in String;
+                option_flags : int16;
+                x            : int16;
+                y            : int16)
+               return int16;
+    function Open(
+                prn_dialog   : PRN_DIALOG_ptr;
+                settings     : PRN_SETTINGS_ptr;
+                document_name: in String;
+                option_flags : int16;
+                x            : int16;
+                y            : int16)
+               return int16 renames pdlg_open;
+
+    procedure pdlg_close(
+                prn_dialog: PRN_DIALOG_ptr;
+                x         : out int16;
+                y         : out int16);
+    procedure Close(
+                prn_dialog: PRN_DIALOG_ptr;
+                x         : out int16;
+                y         : out int16) renames pdlg_close;
+
+    function pdlg_get_setsize return int32;
+    function Get_Setsize return int32 renames pdlg_get_setsize;
+
+    function pdlg_add_printers(
+                prn_dialog: PRN_DIALOG_ptr;
+                drv_info  : DRV_INFO_ptr)
+               return boolean;
+    function Add_printers(
+                prn_dialog: PRN_DIALOG_ptr;
+                drv_info  : DRV_INFO_ptr)
+               return boolean renames pdlg_add_printers;
+
+    procedure pdlg_remove_printers(prn_dialog: PRN_DIALOG_ptr);
+    procedure Remove_Printers(prn_dialog: PRN_DIALOG_ptr) renames pdlg_remove_printers;
+
+    function pdlg_update(
+                prn_dialog   : PRN_DIALOG_ptr;
+                document_name: in String)
+               return boolean;
+    function Update(
+                prn_dialog   : PRN_DIALOG_ptr;
+                document_name: in String)
+               return boolean renames pdlg_update;
+
+    function pdlg_add_sub_dialogs(
+                prn_dialog : PRN_DIALOG_ptr;
+                sub_dialogs: PDLG_SUB_ptr)
+               return boolean;
+    function Add_Sub_Dialogs(
+                prn_dialog : PRN_DIALOG_ptr;
+                sub_dialogs: PDLG_SUB_ptr)
+               return boolean renames pdlg_add_sub_dialogs;
+
+    procedure pdlg_remove_sub_dialogs(prn_dialog: PRN_DIALOG_ptr);
+    procedure Remove_Sub_Dialogs(prn_dialog: PRN_DIALOG_ptr) renames pdlg_remove_sub_dialogs;
+
+    function pdlg_new_settings(prn_dialog: PRN_DIALOG_ptr) return PRN_SETTINGS_ptr;
+    function New_Settings(prn_dialog: PRN_DIALOG_ptr) return PRN_SETTINGS_ptr renames pdlg_new_settings;
+
+    function pdlg_free_settings(settings: PRN_SETTINGS_ptr) return boolean;
+    function Free_Settings(settings: PRN_SETTINGS_ptr) return boolean renames pdlg_free_settings;
+
+    procedure pdlg_dflt_settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr);
+    procedure Default_Settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr) renames pdlg_dflt_settings;
+
+    function pdlg_validate_settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr)
+               return boolean;
+    function Validate_Settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr)
+               return boolean renames pdlg_validate_settings;
+
+    function pdlg_use_settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr)
+               return boolean;
+    function Use_Settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr)
+               return boolean renames pdlg_use_settings;
+
+    function pdlg_save_default_settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr)
+               return boolean;
+    function Save_Default_Settings(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr)
+               return boolean renames pdlg_save_default_settings;
+
+    function pdlg_evnt(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr;
+                events    : EVNT_ptr;
+                button    : out int16)
+               return boolean;
+    function Event(
+                prn_dialog: PRN_DIALOG_ptr;
+                settings  : PRN_SETTINGS_ptr;
+                events    : EVNT_ptr;
+                button    : out int16)
+               return boolean renames pdlg_evnt;
+
+    function pdlg_do(
+                prn_dialog   : PRN_DIALOG_ptr;
+                settings     : PRN_SETTINGS_ptr;
+                document_name: in String;
+                option_flags : int16)
+               return int16;
+    function Run(
+                prn_dialog   : PRN_DIALOG_ptr;
+                settings     : PRN_SETTINGS_ptr;
+                document_name: in String;
+                option_flags : int16)
+               return int16 renames pdlg_do;
 
 end Atari.Aes.Pdlg;
