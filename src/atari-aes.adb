@@ -2516,9 +2516,7 @@ begin
 end;
 
 
-function rsrc_gaddr(
-            Index     : int16)
-           return AESTREE_ptr is
+function rsrc_gaddr(Index: int16) return AEStree_ptr is
     treeadr: void_ptr;
     treeptr: AEStree_ptr;
     function to_address is new Ada.Unchecked_Conversion(void_ptr, AEStree_ptr);
@@ -2536,11 +2534,32 @@ function rsrc_gaddr(Index: int16) return const_chars_ptr is
     strptr: const_chars_ptr;
     function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
 begin
+	--
+	-- Note: R_FRSTR returns the address of the string pointer,
+	-- while R_STRING returns the string pointer itself
+	--
 	if rsrc_gaddr(R_STRING, Index, stradr) = 0 then
 	   return null;
 	end if;
 	strptr := to_address(stradr);
 	return strptr;
+end;
+
+
+function rsrc_gaddr(Index: int16) return BITBLK_ptr is
+    bitadr: void_ptr;
+    bitptr: BITBLK_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, BITBLK_ptr);
+begin
+	--
+	-- Note: R_FRIMG returns the address of the BITBLK pointer,
+	-- while R_IMAGEDATA returns the BITBLK pointer itself
+	--
+	if rsrc_gaddr(R_IMAGEDATA, Index, bitadr) = 0 then
+	   return null;
+	end if;
+	bitptr := to_address(bitadr);
+	return bitptr;
 end;
 
 

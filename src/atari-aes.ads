@@ -2049,13 +2049,11 @@ package Atari.Aes is
                 Addr      : out void_ptr)
                return int16;
 
-    function rsrc_gaddr(
-                Index     : int16)
-               return AESTREE_ptr;
+    function rsrc_gaddr(Index: int16) return AEStree_ptr;
 
-    function rsrc_gaddr(
-                Index     : int16)
-               return const_chars_ptr;
+    function rsrc_gaddr(Index: int16) return const_chars_ptr;
+
+    function rsrc_gaddr(Index: int16) return BITBLK_ptr;
 
     function rsrc_saddr(
                 c_Type    : int16;

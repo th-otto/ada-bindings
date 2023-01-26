@@ -45,9 +45,9 @@ RADIO_LARGE_DESELECTED: constant int16 :=              2; -- IMAGE in tree RADIO
 RADIO_SMALL_DESELECTED: constant int16 :=              3; -- IMAGE in tree RADIOBUTTONS_DIALOG
 RADIO_SMALL_SELECTED: constant int16 :=                4; -- IMAGE in tree RADIOBUTTONS_DIALOG
 
-NUM_BB: constant int16 := 4;
-NUM_OBS: constant int16 := 5;
-NUM_TREE: constant int16 := 1;
+Num_Bitblks: constant int16 := 4;
+Num_Objects: constant int16 := 5;
+Num_Trees: constant int16 := 1;
 
 -- data of RADIO_LARGE_SELECTED
 adaptrsc_IMAGE0: array(0..31) of uint8 := (
@@ -71,14 +71,14 @@ adaptrsc_IMAGE3: array(0..15) of uint8 := (
     16#00#, 16#00#, 16#07#, 16#E0#, 16#18#, 16#18#, 16#23#, 16#C4#, 16#27#, 16#E4#, 16#23#, 16#C4#, 16#18#, 16#18#, 16#07#, 16#E0#
 );
 
-rs_bitblk: array(0..NUM_BB-1) of aliased BITBLK := (
+rs_bitblk: array(0..Num_Bitblks-1) of aliased Bitblk := (
     ( adaptrsc_IMAGE0'Address, 2, 16, 0, 0, 1 ),
     ( adaptrsc_IMAGE1'Address, 2, 16, 0, 0, 1 ),
     ( adaptrsc_IMAGE2'Address, 2, 8, 0, 0, 1 ),
     ( adaptrsc_IMAGE3'Address, 2, 8, 0, 0, 1 )
 );
 
-rs_object: array(0..NUM_OBS-1) of aliased OBJECT := (
+rs_object: constant array(0..Num_Objects-1) of aliased Object := (
     -- RADIOBUTTONS_DIALOG
     ( -1, 1, 4, G_BOX, OF_NONE, OS_OUTLINED, (which => 0, index => 16#21100#), 0,0, 52,9 ),
     ( 2, -1, -1, G_IMAGE, OF_NONE, OS_NORMAL, (which => G_IMAGE, bitblk => rs_bitblk(0)'Access), 5,1, 4096,4096 ), -- RADIO_LARGE_SELECTED
@@ -87,14 +87,16 @@ rs_object: array(0..NUM_OBS-1) of aliased OBJECT := (
     ( 0, -1, -1, G_IMAGE, OF_LASTOB, OS_NORMAL, (which => G_IMAGE, bitblk => rs_bitblk(3)'Access), 5,3, 4096,2048 ) -- RADIO_SMALL_SELECTED
 );
 
-rs_trindex: constant array(0..NUM_TREE-1) of void_ptr := (
-    (RADIOBUTTONS_DIALOG => rs_object(0)'Address)
+function to_pointer is new Ada.Unchecked_Conversion(System.Address, Object_Ptr);
+
+rs_trindex: constant array(0..Num_Trees-1) of Object_Ptr := (
+    RADIOBUTTONS_DIALOG => to_pointer(rs_object(0)'Address)
 );
 
-procedure rsc_fix is
+procedure rsrc_load is
 begin
-    for Obj in 0 .. NUM_TREE - 1 loop
-        rsrc_obfix(rs_object(0)'Access, Obj);
+    for Obj in 0 .. Num_Objects - 1 loop
+        rsrc_obfix(to_pointer(rs_object(0)'Address), Obj);
     end loop;
 end;
 
@@ -585,7 +587,6 @@ procedure substitute_objects(objects: AEStree_ptr; nobs: int16; flags: uint16) i
     i: int16;
     count: int16;
     function to_pointer is new Ada.Unchecked_Conversion(void_ptr, USERBLK_ptr);
-    function to_pointer is new Ada.Unchecked_Conversion(void_ptr, AEStree_ptr);
     blk: USERBLK_ptr;
     o_type: uint16;
     state: uint16;
@@ -631,14 +632,14 @@ begin
         user_blks := to_pointer(Gemdos.Malloc(int32(count) * (USERBLK'Object_Size / 8)));
         if (user_blks /= NULL)
         then
-            rsc_fix;
+            rsrc_load;
             if (gl_hchar < 15)
             then
-                radio_selected := to_pointer(rs_trindex(RADIOBUTTONS_DIALOG))(RADIO_SMALL_SELECTED)'Access;
-                radio_deselected := to_pointer(rs_trindex(RADIOBUTTONS_DIALOG))(RADIO_SMALL_DESELECTED)'Access;
+                radio_selected := AEStree_ptr'Deref(rs_trindex(RADIOBUTTONS_DIALOG)'Address)(RADIO_SMALL_SELECTED)'Access;
+                radio_deselected := AEStree_ptr'Deref(rs_trindex(RADIOBUTTONS_DIALOG)'Address)(RADIO_SMALL_DESELECTED)'Access;
             else
-                radio_selected := to_pointer(rs_trindex(RADIOBUTTONS_DIALOG))(RADIO_LARGE_SELECTED)'Access;
-                radio_deselected := to_pointer(rs_trindex(RADIOBUTTONS_DIALOG))(RADIO_LARGE_DESELECTED)'Access;
+                radio_selected := AEStree_ptr'Deref(rs_trindex(RADIOBUTTONS_DIALOG)'Address)(RADIO_LARGE_SELECTED)'Access;
+                radio_deselected := AEStree_ptr'Deref(rs_trindex(RADIOBUTTONS_DIALOG)'Address)(RADIO_LARGE_DESELECTED)'Access;
             end if;
             blk := user_blks;
             obj := objects;

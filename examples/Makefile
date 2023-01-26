@@ -26,4 +26,4 @@ clock.prg: clock.adb ../src/libgem.a
 
 clean::
 	$(MAKE) -C ../src clean
-	rm -f *.o *.ali *.prg
+	rm -f *.o *.ali *.prg *.tos
