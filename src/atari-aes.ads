@@ -1,13 +1,10 @@
 with Interfaces.C;
 with Interfaces.C.Extensions;
 
+
 --
 -- NOT YET IMPLEMENTED:
--- wdgl_*
 -- lbox_*
--- fnts_*
--- fslx_*
--- pdlg_*
 -- edit_*
 
 -- Geneva functions
@@ -359,25 +356,6 @@ package Atari.Aes is
     SHW_XMDNICE          : constant  := 16#200#;                -- *< alias
     SHW_XMDDEFDIR        : constant  := 16#400#;                -- *< alias
     SHW_XMDENV           : constant  := 16#800#;                -- *< alias
-
-    --  Resource structure types as used by rsrc_gaddr()/rsrc_saddr()
-    R_TREE               : constant  := 0;                      -- *< Object tree, see mt_rsrc_gaddr()
-    R_OBJECT             : constant  := 1;                      -- *< Individual object, see mt_rsrc_gaddr()
-    R_TEDINFO            : constant  := 2;                      -- *< TEDINFO structure, see mt_rsrc_gaddr()
-    R_ICONBLK            : constant  := 3;                      -- *< ICONBLK structure, see mt_rsrc_gaddr()
-    R_BITBLK             : constant  := 4;                      -- *< BITBLK structure, see mt_rsrc_gaddr()
-    R_STRING             : constant  := 5;                      -- *< Free String data, see mt_rsrc_gaddr()
-    R_IMAGEDATA          : constant  := 6;                      -- *< Free Image data, see mt_rsrc_gaddr()
-    R_OBSPEC             : constant  := 7;                      -- *< ob_spec field within OBJECTs, see mt_rsrc_gaddr()
-    R_TEPTEXT            : constant  := 8;                      -- *< te_ptext within TEDINFOs, see mt_rsrc_gaddr()
-    R_TEPTMPLT           : constant  := 9;                      -- *< te_ptmplt within TEDINFOs, see mt_rsrc_gaddr()
-    R_TEPVALID           : constant  := 10;                     -- *< te_pvalid within TEDINFOs, see mt_rsrc_gaddr()
-    R_IBPMASK            : constant  := 11;                     -- *< ib_pmask within ICONBLKs, see mt_rsrc_gaddr()
-    R_IBPDATA            : constant  := 12;                     -- *< ib_pdata within ICONBLKs, see mt_rsrc_gaddr()
-    R_IBPTEXT            : constant  := 13;                     -- *< ib_ptext within ICONBLKs, see mt_rsrc_gaddr()
-    R_BIPDATA            : constant  := 14;                     -- *< bi_pdata within BITBLKs, see mt_rsrc_gaddr()
-    R_FRSTR              : constant  := 15;                     -- *< Free string, see mt_rsrc_gaddr()
-    R_FRIMG              : constant  := 16;                     -- *< Free image, see mt_rsrc_gaddr()
 
     --  scrp_read return values
     SCRAP_CSV            : constant  := 16#1#;                  -- *< clipboard has a scrap.csv file, see mt_scrap_read()
@@ -1323,7 +1301,7 @@ package Atari.Aes is
     aes_addrin: aliased AESAddrIn;
     aes_addrout: aliased AESAddrOut;
 
-    procedure aes(pb: AESPB_ptr) with Inline;
+    procedure crystal(pb: AESPB_ptr) with Inline;
     procedure aes_trap with Inline;
 
     function appl_init return int16;
@@ -2030,44 +2008,6 @@ package Atari.Aes is
                 c_Out     : out GRECT);
 
     procedure wind_new;
-
-
-
-    function rsrc_load(
-                Name      : const_chars_ptr)
-               return int16;
-
-    function rsrc_load(
-                Name      : String)
-               return int16;
-
-    function rsrc_free return int16;
-
-    function rsrc_gaddr(
-                c_Type    : int16;
-                Index     : int16;
-                Addr      : out void_ptr)
-               return int16;
-
-    function rsrc_gaddr(Index: int16) return AEStree_ptr;
-
-    function rsrc_gaddr(Index: int16) return const_chars_ptr;
-
-    function rsrc_gaddr(Index: int16) return BITBLK_ptr;
-
-    function rsrc_saddr(
-                c_Type    : int16;
-                Index     : int16;
-                Addr      : void_ptr)
-               return int16;
-
-    procedure rsrc_obfix(
-                tree      : OBJECT_ptr;
-                Index     : int16);
-
-    function rsrc_rcfix(
-                rc_header : void_ptr)
-               return int16;
 
 
 

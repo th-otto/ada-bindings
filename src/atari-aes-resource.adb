@@ -1,0 +1,153 @@
+pragma No_Strict_Aliasing;
+with Ada.Unchecked_Conversion;
+with Interfaces; use Interfaces;
+
+package body Atari.Aes.Resource is
+
+pragma Suppress (Range_Check);
+pragma Suppress (Overflow_Check);
+pragma Suppress (Access_Check);
+
+function rsrc_load(Name: const_chars_ptr) return Int16 is
+begin
+	aes_control.opcode := 110;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+
+	aes_addrin(0) := Name.all'Address;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function rsrc_load(Name: String) return Int16 is
+    c_str: String := Name & ASCII.NUL;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
+begin
+	return rsrc_load(to_address(c_str'Address));
+end;
+
+
+function rsrc_free return Int16 is
+begin
+	aes_control.opcode := 111;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 0;
+
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+function rsrc_gaddr(Typ: Resource_Type; Index: Int16; Addr: out void_ptr) return Int16 is
+begin
+	aes_control.opcode := 112;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 0;
+	aes_control.num_addrout := 1;
+	aes_intin(0) := Typ'Enum_Rep;
+	aes_intin(1) := Index;
+	aes_trap;
+	addr := aes_addrout(0);
+	return aes_intout(0);
+end;
+
+
+function rsrc_gaddr(Index: Int16) return AEStree_ptr is
+    treeadr: void_ptr;
+    treeptr: AEStree_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, AEStree_ptr);
+begin
+	if rsrc_gaddr(R_TREE, Index, treeadr) = 0 then
+	   return null;
+	end if;
+	treeptr := to_address(treeadr);
+	return treeptr;
+end;
+
+
+function rsrc_gaddr(Index: Int16) return const_chars_ptr is
+    stradr: void_ptr;
+    strptr: const_chars_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
+begin
+	--
+	-- Note: R_FRSTR returns the address of the string pointer,
+	-- while R_STRING returns the string pointer itself
+	--
+	if rsrc_gaddr(R_STRING, Index, stradr) = 0 then
+	   return null;
+	end if;
+	strptr := to_address(stradr);
+	return strptr;
+end;
+
+
+function rsrc_gaddr(Index: int16) return BITBLK_ptr is
+    bitadr: void_ptr;
+    bitptr: BITBLK_ptr;
+    function to_address is new Ada.Unchecked_Conversion(void_ptr, BITBLK_ptr);
+begin
+	--
+	-- Note: R_FRIMG returns the address of the BITBLK pointer,
+	-- while R_IMAGEDATA returns the BITBLK pointer itself
+	--
+	if rsrc_gaddr(R_IMAGEDATA, Index, bitadr) = 0 then
+	   return null;
+	end if;
+	bitptr := to_address(bitadr);
+	return bitptr;
+end;
+
+
+function rsrc_saddr(Typ: Resource_Type; Index: int16; Addr: void_ptr) return Int16 is
+begin
+	aes_control.opcode := 113;
+	aes_control.num_intin := 2;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Typ'Enum_Rep;
+	aes_intin(1) := Index;
+	aes_addrin(0) := Addr;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+procedure rsrc_obfix(tree: OBJECT_ptr; Index: Int16) is
+    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
+begin
+	aes_control.opcode := 114;
+	aes_control.num_intin := 1;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_intin(0) := Index;
+	aes_addrin(0) := to_address(tree);
+	aes_trap;
+end;
+
+
+function rsrc_rcfix(
+            rc_header : void_ptr)
+           return int16 is
+begin
+	aes_control.opcode := 115;
+	aes_control.num_intin := 0;
+	aes_control.num_intout := 1;
+	aes_control.num_addrin := 1;
+	aes_control.num_addrout := 0;
+	aes_addrin(0) := rc_header;
+	aes_trap;
+	return aes_intout(0);
+end;
+
+
+
+end Atari.Aes.Resource;

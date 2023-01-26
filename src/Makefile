@@ -67,7 +67,7 @@ atari-aes-filesel.ali: atari-aes-filesel.ads atari-aes.ads atari.ads
 atari-aes-window.ali: atari-aes-window.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-resource.ali: atari-aes-resource.ads atari-aes.ads atari.ads
+atari-aes-resource.ali: atari-aes-resource.adb atari-aes-resource.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-shell.ali: atari-aes-shell.ads atari-aes.ads atari.ads

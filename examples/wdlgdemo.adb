@@ -11,6 +11,7 @@
 with System;
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
+with Atari.Aes.Resource;
 use Atari;
 with Interfaces; use Interfaces;
 with Text_IO;
@@ -138,12 +139,12 @@ begin
     if appl_init /= -1 then
         dialog := null;
         graf_mouse(ARROW);
-        if rsrc_load("wdlgrsc.rsc") = 0 then
+        if Resource.Load("wdlgrsc.rsc") = 0 then
             dummy := form_alert(1, "[3][Resource file not found][Abort]");
         else
             adaptrsc.vdi_handle := graf_handle(adaptrsc.gl_wchar, adaptrsc.gl_hchar, adaptrsc.gl_wbox, adaptrsc.gl_hbox);
             adaptrsc.get_aes_info;
-            tree := rsrc_gaddr(TEST);
+            tree := Resource.Get_Address(TEST);
             adaptrsc.substitute_objects(tree, Num_Objects, adaptrsc.aes_flags);
             if not Is_Application then
                 menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
@@ -154,6 +155,7 @@ begin
                 exit when event_loop;
             end loop;
             adaptrsc.substitute_free;
+            dummy := Resource.Free;
         end if;
         appl_exit;
     end if;

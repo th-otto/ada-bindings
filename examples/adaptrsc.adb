@@ -2,6 +2,7 @@ with Ada.Unchecked_Conversion;
 with Atari.Bios;
 with Atari.Gemdos;
 with Atari.Aes.Extensions; use Atari.Aes.Extensions;
+with Atari.Aes.Resource;
 with Interfaces; use Interfaces;
 with System;
 with System.Storage_Elements; use System.Storage_Elements;
@@ -96,7 +97,7 @@ rs_trindex: constant array(0..Num_Trees-1) of Object_Ptr := (
 procedure rsrc_load is
 begin
     for Obj in 0 .. Num_Objects - 1 loop
-        rsrc_obfix(to_pointer(rs_object(0)'Address), Obj);
+        Resource.Obfix(to_pointer(rs_object(0)'Address), Obj);
     end loop;
 end;
 
