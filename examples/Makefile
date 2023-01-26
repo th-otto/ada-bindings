@@ -12,7 +12,7 @@ hellogem.prg: hellogem.adb ../src/libgem.a
 eyes.prg: eyes.adb ../src/libgem.a
 	$(GNAT) $< -o $@ $(GNATCFLAGS) $(GNATLDFLAGS)
 
-wdlgdemo.prg: wdlgdemo.adb wdlgdemo_resource.ads adaptrsc.adb adaptrsc.ads ../src/libgem.a
+wdlgdemo.prg: wdlgdemo.adb wdlgrsc.ads adaptrsc.adb adaptrsc.ads ../src/libgem.a
 	$(GNAT) $< -o $@ $(GNATCFLAGS) $(GNATLDFLAGS)
 
 gemwin.prg: gemwin.adb ../src/libgem.a

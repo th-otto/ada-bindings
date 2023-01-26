@@ -1,11 +1,11 @@
 --
---	Copyright (c) 2022 Thorsten Otto
+--  Copyright (c) 2022 Thorsten Otto
 --
---	Simple example for WDIALOG (dialogs in a window)
---	Example program for ADA Atari TOS bindings
+--  Simple example for WDIALOG (dialogs in a window)
+--  Example program for ADA Atari TOS bindings
 --
---	This example program is in the Public Domain under the terms of
---	Unlicense: http://unlicense.org/
+--  This example program is in the Public Domain under the terms of
+--  Unlicense: http://unlicense.org/
 --
 
 with System;
@@ -14,7 +14,7 @@ with Atari.Aes; use Atari.Aes;
 use Atari;
 with Interfaces; use Interfaces;
 with Text_IO;
-with wdlgdemo_resource; use wdlgdemo_resource;
+with wdlgrsc; use wdlgrsc;
 with Atari.Aes.Wdialog; use Atari.Aes.Wdialog;
 with Adaptrsc;
 
@@ -32,50 +32,50 @@ procedure wdlgdemo is
     tree: AEStree_ptr;
     dummy: aliased int16;
 
-	function handle_dlg(args: Wdialog.HNDL_OBJ_args) return int16 with Convention => C;
-	function handle_dlg(args: Wdialog.HNDL_OBJ_args) return int16 is
-		tree: AEStree_ptr;
-		r: GRECT;
-	begin
-		tree := Wdialog.wdlg_get_tree(args.dialog, r);
-	
+    function handle_dlg(args: Wdialog.HNDL_OBJ_args) return int16 with Convention => C;
+    function handle_dlg(args: Wdialog.HNDL_OBJ_args) return int16 is
+        tree: AEStree_ptr;
+        r: GRECT;
+    begin
+        tree := Wdialog.wdlg_get_tree(args.dialog, r);
+    
         case args.obj is
             when WDialog.HNDL_CLSD =>
-				return 0;
-			when TEST_OK =>
-				tree(TEST_OK).ob_state := tree(TEST_OK).ob_state and not OS_SELECTED;
-				return 0;
+                return 0;
+            when TEST_OK =>
+                tree(TEST_OK).ob_state := tree(TEST_OK).ob_state and not OS_SELECTED;
+                return 0;
             when others =>
                 null;
         end case;
-		return 1;
-	end;
+        return 1;
+    end;
 
     procedure open_window is
-	    out1, out2, out3, out4: int16;
+        out1, out2, out3, out4: int16;
     begin
         if dialog = null then
-        	if appl_xgetinfo(7, out1, out2, out3, out4) = false or else (out1 and 1) = 0 then
-        		dummy := form_alert(1, "[3][No WDIALOG functions available][Abort]");
-        		return;
-        	end if;
+            if appl_xgetinfo(7, out1, out2, out3, out4) = false or else (out1 and 1) = 0 then
+                dummy := form_alert(1, "[3][No WDIALOG functions available][Abort]");
+                return;
+            end if;
             dialog := Wdialog.wdlg_create(handle_dlg'Unrestricted_Access, tree, System.Null_Address, 0, System.Null_Address, WDialog.WDLG_BKGD);
             if (dialog /= null) then
-	            dummy := Wdialog.wdlg_open(dialog, title(title'First)'Unchecked_Access, PARTS, -1, -1, 0, System.Null_Address);
-	        end if;
+                dummy := Wdialog.wdlg_open(dialog, title(title'First)'Unchecked_Access, PARTS, -1, -1, 0, System.Null_Address);
+            end if;
         else
             dummy := wind_set(Wdialog.wdlg_get_handle(dialog), WF_TOP);
         end if;
     end;
 
     procedure close_window is
-	begin
+    begin
         if dialog /= null then
-       		dummy := Wdialog.wdlg_close(dialog);
-       		dummy := Wdialog.wdlg_delete(dialog);
-       		dialog := null;
-       	end if;
-	end;
+            dummy := Wdialog.wdlg_close(dialog);
+            dummy := Wdialog.wdlg_delete(dialog);
+            dialog := null;
+        end if;
+    end;
 
     function handle_message(pipe: Message_Buffer) return boolean is
         dummy2: int16;
@@ -89,7 +89,7 @@ procedure wdlgdemo is
             when AC_CLOSE =>
                 dialog := null;
             when AP_TERM =>
-            	return true;
+                return true;
             when others =>
                 null;
         end case;
@@ -98,19 +98,19 @@ procedure wdlgdemo is
 
     function event_loop return boolean is
         event: aliased Wdialog.EVNT;
-	    events: int16;
+        events: int16;
         quit: boolean;
     begin
         quit := false;
         
         loop
-	        if dialog = null then
-	        	events := MU_MESAG;
-	        else
-	            events := MU_MESAG or MU_BUTTON or MU_KEYBD;
-	        end if;
+            if dialog = null then
+                events := MU_MESAG;
+            else
+                events := MU_MESAG or MU_BUTTON or MU_KEYBD;
+            end if;
             event.mwhich := evnt_multi(events,
-            	2, 1, 1,
+                2, 1, 1,
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0,
                 event.msg,
@@ -120,8 +120,8 @@ procedure wdlgdemo is
                 quit := handle_message(event.msg);
             end if;
             if not quit and then dialog /= null then
-	            quit := Wdialog.wdlg_evnt(dialog, event'Unchecked_Access) = 0;
-	        end if;
+                quit := Wdialog.wdlg_evnt(dialog, event'Unchecked_Access) = 0;
+            end if;
             if quit then
                 close_window;
                 if not Is_Application then
@@ -136,25 +136,25 @@ procedure wdlgdemo is
 
 begin
     if appl_init /= -1 then
-    	dialog := null;
+        dialog := null;
         graf_mouse(ARROW);
-    	if rsrc_load("wdlgdemo.rsc") = 0 then
-    		dummy := form_alert(1, "[3][Resource file not found][Abort]");
+        if rsrc_load("wdlgrsc.rsc") = 0 then
+            dummy := form_alert(1, "[3][Resource file not found][Abort]");
         else
-        	adaptrsc.vdi_handle := graf_handle(adaptrsc.gl_wchar, adaptrsc.gl_hchar, adaptrsc.gl_wbox, adaptrsc.gl_hbox);
-        	adaptrsc.get_aes_info;
-        	tree := rsrc_gaddr(TEST);
-        	adaptrsc.substitute_objects(tree, NUM_OBS, adaptrsc.aes_flags);
-	        if not Is_Application then
-	            menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
-	        else
-	            open_window;
-	        end if;
-	        loop
-	            exit when event_loop;
-	        end loop;
-	        adaptrsc.substitute_free;
-	    end if;
+            adaptrsc.vdi_handle := graf_handle(adaptrsc.gl_wchar, adaptrsc.gl_hchar, adaptrsc.gl_wbox, adaptrsc.gl_hbox);
+            adaptrsc.get_aes_info;
+            tree := rsrc_gaddr(TEST);
+            adaptrsc.substitute_objects(tree, Num_Objects, adaptrsc.aes_flags);
+            if not Is_Application then
+                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+            else
+                open_window;
+            end if;
+            loop
+                exit when event_loop;
+            end loop;
+            adaptrsc.substitute_free;
+        end if;
         appl_exit;
     end if;
 
