@@ -3,9 +3,6 @@ use Atari;
 
 package Atari.Aes.Extensions is
 
-    type XEDITINFO is private;
-    type XEDITINFO_ptr is access all XEDITINFO;
-
     type SCANX is
         record
             scancode: aliased uint8;
@@ -181,9 +178,5 @@ package Atari.Aes.Extensions is
                 out3: out int16)
                return int16;
 
-
-
-private
-    type XEDITINFO is record null; end record;
 
 end Atari.Aes.Extensions;

@@ -23,6 +23,7 @@ OBJS = \
 	atari-aes-fontsel.o \
 	atari-aes-listbox.o \
 	atari-aes-pdlg.o \
+	atari-aes-edit.o \
 	atari-vdi.o \
 	atari-vdi-nvdi.o \
 	atari-gemdos.o \
@@ -89,6 +90,9 @@ atari-aes-listbox.o: atari-aes-listbox.adb atari-aes-listbox.ads atari-aes.ads a
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-pdlg.o: atari-aes-pdlg.adb atari-aes-pdlg.ads atari-aes.ads atari.ads
+	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
+
+atari-aes-edit.o: atari-aes-edit.adb atari-aes-edit.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-vdi.o: atari-vdi.adb atari-vdi.ads atari.ads
