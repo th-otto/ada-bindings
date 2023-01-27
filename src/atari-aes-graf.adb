@@ -6,13 +6,13 @@ pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
-procedure graf_rubberbox(
-            Ix        : int16;
-            Iy        : int16;
-            Iw        : int16;
-            Ih        : int16;
-            Fw        : out int16;
-            Fh        : out int16)
+procedure Rubber_Box(
+            Ix        : Int16;
+            Iy        : Int16;
+            Iw        : Int16;
+            Ih        : Int16;
+            Fw        : out Int16;
+            Fh        : out Int16)
            is
 begin
 	aes_control.opcode := 70;
@@ -30,10 +30,10 @@ begin
 end;
 
 
-procedure graf_rubberbox(
+procedure Rubber_Box(
             r         : in Rectangle;
-            Fw        : out int16;
-            Fh        : out int16)
+            Fw        : out Int16;
+            Fh        : out Int16)
            is
 begin
 	aes_control.opcode := 70;
@@ -51,17 +51,17 @@ begin
 end;
 
 
-procedure graf_dragbox(
-            Sw        : int16;
-            Sh        : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Bx        : int16;
-            By        : int16;
-            Bw        : int16;
-            Bh        : int16;
-            Fw        : out int16;
-            Fh        : out int16)
+procedure Drag_Box(
+            Sw        : Int16;
+            Sh        : Int16;
+            Sx        : Int16;
+            Sy        : Int16;
+            Bx        : Int16;
+            By        : Int16;
+            Bw        : Int16;
+            Bh        : Int16;
+            Fw        : out Int16;
+            Fh        : out Int16)
            is
 begin
 	aes_control.opcode := 71;
@@ -83,11 +83,11 @@ begin
 end;
 
 
-procedure graf_dragbox(
+procedure Drag_Box(
             little    : in Rectangle;
             big       : in Rectangle;
-            Fw        : out int16;
-            Fh        : out int16)
+            Fw        : out Int16;
+            Fh        : out Int16)
            is
 begin
 	aes_control.opcode := 71;
@@ -109,13 +109,13 @@ begin
 end;
 
 
-procedure graf_movebox(
-            Sw        : int16;
-            Sh        : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Dx        : int16;
-            Dy        : int16)
+procedure Move_Box(
+            Sw        : Int16;
+            Sh        : Int16;
+            Sx        : Int16;
+            Sy        : Int16;
+            Dx        : Int16;
+            Dy        : Int16)
            is
 begin
 	aes_control.opcode := 72;
@@ -133,10 +133,10 @@ begin
 end;
 
 
-procedure graf_movebox(
-                r         : in grect;
-                Dx        : int16;
-                Dy        : int16)
+procedure Move_Box(
+                r         : in Rectangle;
+                Dx        : Int16;
+                Dy        : Int16)
                is
 begin
 	aes_control.opcode := 72;
@@ -154,15 +154,15 @@ begin
 end;
 
 
-procedure graf_growbox(
-            Sx        : int16;
-            Sy        : int16;
-            Sw        : int16;
-            Sh        : int16;
-            Fx        : int16;
-            Fy        : int16;
-            Fw        : int16;
-            Fh        : int16)
+procedure Grow_Box(
+            Sx        : Int16;
+            Sy        : Int16;
+            Sw        : Int16;
+            Sh        : Int16;
+            Fx        : Int16;
+            Fy        : Int16;
+            Fw        : Int16;
+            Fh        : Int16)
            is
 begin
 	aes_control.opcode := 73;
@@ -182,7 +182,7 @@ begin
 end;
 
 
-procedure graf_growbox(
+procedure Grow_Box(
             little    : in Rectangle;
             big       : in Rectangle)
            is
@@ -204,15 +204,15 @@ begin
 end;
 
 
-procedure graf_shrinkbox(
-            Fx        : int16;
-            Fy        : int16;
-            Fw        : int16;
-            Fh        : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Sw        : int16;
-            Sh        : int16)
+procedure Shrink_Box(
+            Fx        : Int16;
+            Fy        : Int16;
+            Fw        : Int16;
+            Fh        : Int16;
+            Sx        : Int16;
+            Sy        : Int16;
+            Sw        : Int16;
+            Sh        : Int16)
            is
 begin
 	aes_control.opcode := 74;
@@ -232,7 +232,7 @@ begin
 end;
 
 
-procedure graf_shrinkbox(
+procedure Shrink_Box(
             big       : in Rectangle;
             little    : in Rectangle)
            is
@@ -254,12 +254,12 @@ begin
 end;
 
 
-function graf_watchbox(
+function Watch_Box(
             tree      : Objects.Object_Ptr;
-            Obj       : int16;
-            InState   : int16;
-            OutState  : int16)
-           return int16 is
+            Obj       : Int16;
+            InState   : Int16;
+            OutState  : Int16)
+           return Int16 is
 begin
 	aes_control.opcode := 75;
 	aes_control.num_intin := 4;
@@ -276,12 +276,12 @@ begin
 end;
 
 
-function graf_slidebox(
+function Slide_Box(
             tree      : Objects.Object_Ptr;
-            Parent    : int16;
-            Obj       : int16;
-            Direction : int16)
-           return int16 is
+            Parent    : Int16;
+            Obj       : Int16;
+            Direction : Int16)
+           return Int16 is
 begin
 	aes_control.opcode := 75;
 	aes_control.num_intin := 4;
@@ -297,12 +297,12 @@ begin
 end;
 
 
-function graf_handle(
-            Wchar     : out int16;
-            Hchar     : out int16;
-            Wbox      : out int16;
-            Hbox      : out int16)
-           return int16 is
+function Handle(
+            Wchar     : out Int16;
+            Hchar     : out Int16;
+            Wbox      : out Int16;
+            Hbox      : out Int16)
+           return Int16 is
 begin
 	aes_control.opcode := 77;
 	aes_control.num_intin := 0;
@@ -318,13 +318,13 @@ begin
 end;
 
 
-function graf_handle(
-            Wchar     : out int16;
-            Hchar     : out int16;
-            Wbox      : out int16;
-            Hbox      : out int16;
-            device    : out int16)
-           return int16 is
+function Handle(
+            Wchar     : out Int16;
+            Hchar     : out Int16;
+            Wbox      : out Int16;
+            Hbox      : out Int16;
+            device    : out Int16)
+           return Int16 is
 begin
 	aes_control.opcode := 77;
 	aes_control.num_intin := 0;
@@ -341,7 +341,7 @@ begin
 end;
 
 
-procedure graf_mouse(
+procedure Mouse(
             Form       : Mouse_Type;
             FormAddress: MFORM_const_ptr := null)
            is
@@ -357,11 +357,11 @@ begin
 end;
 
 
-procedure graf_mkstate(
-            Mx         : out int16;
-            My         : out int16;
-            ButtonState: out int16;
-            KeyState   : out int16) is
+procedure Mkstate(
+            Mx         : out Int16;
+            My         : out Int16;
+            ButtonState: out Int16;
+            KeyState   : out Int16) is
 begin
 	aes_control.opcode := 79;
 	aes_control.num_intin := 0;
@@ -376,15 +376,15 @@ begin
 end;
 
 
-function graf_multirubber(
-            bx        : int16;
-            by        : int16;
-            minw      : int16;
-            minh      : int16;
+function Multirubber(
+            bx        : Int16;
+            by        : Int16;
+            minw      : Int16;
+            minh      : Int16;
             rec       : Rectangle_Ptr;
-            rw        : out int16;
-            rh        : out int16)
-           return int16 is
+            rw        : out Int16;
+            rh        : out Int16)
+           return Int16 is
 begin
 	aes_control.opcode := 69;
 	aes_control.num_intin := 4;

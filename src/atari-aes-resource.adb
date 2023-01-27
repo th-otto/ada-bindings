@@ -9,7 +9,7 @@ pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
 
-function rsrc_load(Name: const_chars_ptr) return Int16 is
+function Load(Name: const_chars_ptr) return Int16 is
 begin
 	aes_control.opcode := 110;
 	aes_control.num_intin := 0;
@@ -23,7 +23,7 @@ begin
 end;
 
 
-function rsrc_load(Name: String) return Int16 is
+function Load(Name: String) return Int16 is
     c_str: String := Name & ASCII.NUL;
     function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
 begin
@@ -31,7 +31,7 @@ begin
 end;
 
 
-function rsrc_free return Int16 is
+function Free return Int16 is
 begin
 	aes_control.opcode := 111;
 	aes_control.num_intin := 0;
@@ -44,7 +44,7 @@ begin
 end;
 
 
-function rsrc_gaddr(Typ: Resource_Type; Index: Int16; Addr: out void_ptr) return Int16 is
+function Get_Address(Typ: Resource_Type; Index: Int16; Addr: out void_ptr) return Int16 is
 begin
 	aes_control.opcode := 112;
 	aes_control.num_intin := 2;
@@ -59,7 +59,7 @@ begin
 end;
 
 
-function rsrc_gaddr(Index: Int16) return Objects.AEStree_ptr is
+function Get_Address(Index: Int16) return Objects.AEStree_ptr is
     treeadr: void_ptr;
 begin
 	if rsrc_gaddr(R_TREE, Index, treeadr) = 0 then
@@ -69,7 +69,7 @@ begin
 end;
 
 
-function rsrc_gaddr(Index: Int16) return const_chars_ptr is
+function Get_Address(Index: Int16) return const_chars_ptr is
     stradr: void_ptr;
 begin
 	--
@@ -83,7 +83,7 @@ begin
 end;
 
 
-function rsrc_gaddr(Index: int16) return Objects.BITBLK_ptr is
+function Get_Address(Index: int16) return Objects.BITBLK_ptr is
     bitadr: void_ptr;
 begin
 	--
@@ -97,7 +97,7 @@ begin
 end;
 
 
-function rsrc_saddr(Typ: Resource_Type; Index: int16; Addr: void_ptr) return Int16 is
+function Set_Address(Typ: Resource_Type; Index: int16; Addr: void_ptr) return Int16 is
 begin
 	aes_control.opcode := 113;
 	aes_control.num_intin := 2;
@@ -112,7 +112,7 @@ begin
 end;
 
 
-procedure rsrc_obfix(tree: Objects.Object_Ptr; Index: Int16) is
+procedure Obfix(tree: Objects.Object_Ptr; Index: Int16) is
 begin
 	aes_control.opcode := 114;
 	aes_control.num_intin := 1;
@@ -125,7 +125,7 @@ begin
 end;
 
 
-function rsrc_rcfix(
+function Rcfix(
             rc_header : void_ptr)
            return int16 is
 begin

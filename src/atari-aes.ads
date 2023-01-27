@@ -836,15 +836,6 @@ package Atari.Aes is
             ap_value: aliased int32;
         end record;
 
-    type MN_SET is
-        record
-            display: aliased int32;
-            drag   : aliased int32;
-            c_delay: aliased int32;
-            speed  : aliased int32;
-            height : aliased int16;
-        end record;
-
     --  tail for default shell
     type SHELTAIL is
         record
@@ -863,53 +854,6 @@ package Atari.Aes is
             g_h: aliased int16;
         end record;
     type Rectangle_ptr is access all Rectangle;
-
-    type RSHDR is
-        record
-            rsh_vrsn   : aliased int16;
-            rsh_object : aliased uint16;
-            rsh_tedinfo: aliased uint16;
-            rsh_iconblk: aliased uint16;
-            rsh_bitblk : aliased uint16;
-            rsh_frstr  : aliased uint16;
-            rsh_string : aliased uint16;
-            rsh_imdata : aliased uint16;
-            rsh_frimg  : aliased uint16;
-            rsh_trindex: aliased uint16;
-            rsh_nobs   : aliased int16;
-            rsh_ntree  : aliased int16;
-            rsh_nted   : aliased int16;
-            rsh_nib    : aliased int16;
-            rsh_nbb    : aliased int16;
-            rsh_nstring: aliased int16;
-            rsh_nimages: aliased int16;
-            rsh_rssize : aliased uint16;
-        end record;
-    type RSHDR_ptr is access all RSHDR;
-
-    type RSXHDR is
-        record
-            rsh_vrsn   : aliased uint16;
-            rsh_extvrsn: aliased uint16;
-            rsh_object : aliased uint32;
-            rsh_tedinfo: aliased uint32;
-            rsh_iconblk: aliased uint32;
-            rsh_bitblk : aliased uint32;
-            rsh_frstr  : aliased uint32;
-            rsh_string : aliased uint32;
-            rsh_imdata : aliased uint32;
-            rsh_frimg  : aliased uint32;
-            rsh_trindex: aliased uint32;
-            rsh_nobs   : aliased uint32;
-            rsh_ntree  : aliased uint32;
-            rsh_nted   : aliased uint32;
-            rsh_nib    : aliased uint32;
-            rsh_nbb    : aliased uint32;
-            rsh_nstring: aliased uint32;
-            rsh_nimages: aliased uint32;
-            rsh_rssize : aliased uint32;
-        end record;
-    type RSHXDR_ptr is access all RSXHDR;
 
     type MOBLK is
         record

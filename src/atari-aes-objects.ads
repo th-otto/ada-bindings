@@ -105,7 +105,7 @@ package Atari.Aes.Objects is
             pb_hc       : aliased int16;
             pb_parm     : aliased intptr;
         end record;
-	type PARMBLK_ptr is access all PARMBLK;
+    type PARMBLK_ptr is access all PARMBLK;
 
     type ub_code_func_ptr is access function(
                parmblock: PARMBLK_ptr)
@@ -243,12 +243,12 @@ package Atari.Aes.Objects is
                 Parent: int16;
                 Child : int16);
 
-    function objc_delete(
+    function Delete(
                 tree      : OBJECT_ptr;
                 Obj       : int16)
                return int16;
 
-    procedure objc_draw(
+    procedure Draw(
                 tree      : OBJECT_ptr;
                 Start     : int16;
                 Depth     : int16;
@@ -257,106 +257,11 @@ package Atari.Aes.Objects is
                 Cw        : int16;
                 Ch        : int16);
 
-    procedure objc_draw(
+    procedure Draw(
                 tree      : OBJECT_ptr;
                 Start     : int16;
                 Depth     : int16;
                 r         : in GRECT);
-
-    function objc_find(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Mx        : int16;
-                My        : int16)
-               return int16;
-
-    procedure objc_offset(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                X         : out int16;
-                Y         : out int16);
-
-    function objc_order(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                NewPos    : int16)
-               return int16;
-
-    function objc_edit(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                Kchar     : int16;
-                Index     : in out int16;
-                Kind      : int16)
-               return int16;
-
-    function objc_edit(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                Kchar     : int16;
-                Index     : in out int16;
-                Kind      : int16;
-                r         : out GRECT)
-               return int16;
-
-    procedure objc_change(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Cx        : int16;
-                Cy        : int16;
-                Cw        : int16;
-                Ch        : int16;
-                NewState  : int16;
-                Redraw    : int16);
-
-    procedure objc_change(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                r         : in GRECT;
-                NewState  : int16;
-                Redraw    : int16);
-
-    function objc_sysvar(
-                mode      : int16;
-                which     : int16;
-                in1       : int16;
-                in2       : int16;
-                out1      : out int16;
-                out2      : out int16)
-               return int16;
-
-    function objc_xfind(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Mx        : int16;
-                My        : int16)
-               return int16;
-
-
-
-    function Delete(
-                tree      : OBJECT_ptr;
-                Obj       : int16)
-               return int16 renames objc_delete;
-
-    procedure Draw(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Cx        : int16;
-                Cy        : int16;
-                Cw        : int16;
-                Ch        : int16) renames objc_draw;
-
-    procedure Draw(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                r         : in GRECT) renames objc_draw;
 
     function Find(
                 tree      : OBJECT_ptr;
@@ -364,19 +269,19 @@ package Atari.Aes.Objects is
                 Depth     : int16;
                 Mx        : int16;
                 My        : int16)
-               return int16 renames objc_find;
+               return int16;
 
     procedure Offset(
                 tree      : OBJECT_ptr;
                 Obj       : int16;
                 X         : out int16;
-                Y         : out int16) renames objc_offset;
+                Y         : out int16);
 
     function Order(
                 tree      : OBJECT_ptr;
                 Obj       : int16;
                 NewPos    : int16)
-               return int16 renames objc_order;
+               return int16;
 
     function Edit(
                 tree      : OBJECT_ptr;
@@ -384,7 +289,7 @@ package Atari.Aes.Objects is
                 Kchar     : int16;
                 Index     : in out int16;
                 Kind      : int16)
-               return int16 renames objc_edit;
+               return int16;
 
     function Edit(
                 tree      : OBJECT_ptr;
@@ -393,7 +298,7 @@ package Atari.Aes.Objects is
                 Index     : in out int16;
                 Kind      : int16;
                 r         : out GRECT)
-               return int16 renames objc_edit;
+               return int16;
 
     procedure Change(
                 tree      : OBJECT_ptr;
@@ -404,7 +309,7 @@ package Atari.Aes.Objects is
                 Cw        : int16;
                 Ch        : int16;
                 NewState  : int16;
-                Redraw    : int16) renames objc_change;
+                Redraw    : int16);
 
     procedure Change(
                 tree      : OBJECT_ptr;
@@ -412,7 +317,7 @@ package Atari.Aes.Objects is
                 Depth     : int16;
                 r         : in GRECT;
                 NewState  : int16;
-                Redraw    : int16) renames objc_change;
+                Redraw    : int16);
 
     function Sysvar(
                 mode      : int16;
@@ -421,7 +326,7 @@ package Atari.Aes.Objects is
                 in2       : int16;
                 out1      : out int16;
                 out2      : out int16)
-               return int16 renames objc_sysvar;
+               return int16;
 
     function Xfind(
                 tree      : OBJECT_ptr;
@@ -429,12 +334,106 @@ package Atari.Aes.Objects is
                 Depth     : int16;
                 Mx        : int16;
                 My        : int16)
-               return int16 renames objc_xfind;
+               return int16;
 
 
+    --  old C-style names
     procedure objc_add(
                 tree  : OBJECT_ptr;
                 Parent: int16;
                 Child : int16) renames Add;
+
+    function objc_delete(
+                tree      : OBJECT_ptr;
+                Obj       : int16)
+               return int16 renames Delete;
+
+    procedure objc_draw(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Cx        : int16;
+                Cy        : int16;
+                Cw        : int16;
+                Ch        : int16) renames Draw;
+
+    procedure objc_draw(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                r         : in GRECT) renames Draw;
+
+    function objc_find(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Mx        : int16;
+                My        : int16)
+               return int16 renames Find;
+
+    procedure objc_offset(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                X         : out int16;
+                Y         : out int16) renames Offset;
+
+    function objc_order(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                NewPos    : int16)
+               return int16 renames Order;
+
+    function objc_edit(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                Kchar     : int16;
+                Index     : in out int16;
+                Kind      : int16)
+               return int16 renames Edit;
+
+    function objc_edit(
+                tree      : OBJECT_ptr;
+                Obj       : int16;
+                Kchar     : int16;
+                Index     : in out int16;
+                Kind      : int16;
+                r         : out GRECT)
+               return int16 renames Edit;
+
+    procedure objc_change(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Cx        : int16;
+                Cy        : int16;
+                Cw        : int16;
+                Ch        : int16;
+                NewState  : int16;
+                Redraw    : int16) renames Change;
+
+    procedure objc_change(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                r         : in GRECT;
+                NewState  : int16;
+                Redraw    : int16) renames Change;
+
+    function objc_sysvar(
+                mode      : int16;
+                which     : int16;
+                in1       : int16;
+                in2       : int16;
+                out1      : out int16;
+                out2      : out int16)
+               return int16 renames Sysvar;
+
+    function objc_xfind(
+                tree      : OBJECT_ptr;
+                Start     : int16;
+                Depth     : int16;
+                Mx        : int16;
+                My        : int16)
+               return int16 renames Xfind;
 
 end Atari.Aes.Objects;

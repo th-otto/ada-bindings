@@ -7,7 +7,7 @@ pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
-function form_do(
+function Run(
             tree      : Objects.Object_Ptr;
             StartObj  : int16)
            return int16 is
@@ -24,7 +24,7 @@ begin
 end;
 
 
-function form_dial(
+function Dial(
             Flag      : int16;
             Sx        : int16;
             Sy        : int16;
@@ -55,7 +55,7 @@ begin
 end;
 
 
-function form_dial(
+function Dial(
             Flag      : int16;
             little    : in Rectangle;
             big       : in Rectangle)
@@ -80,7 +80,7 @@ begin
 end;
 
 
-function form_alert(fo_adefbttn: int16; alertstr: const_chars_ptr) return int16 is
+function Alert(fo_adefbttn: int16; alertstr: const_chars_ptr) return int16 is
 begin
 	aes_control.opcode := 52;
 	aes_control.num_intin := 1;
@@ -94,7 +94,7 @@ begin
 end;
 
 
-function form_alert(fo_adefbttn: int16; alertstr: String) return int16 is
+function Alert(fo_adefbttn: int16; alertstr: String) return int16 is
     c_str: constant String := alertstr & ASCII.NUL;
     adr: void_ptr := c_str(c_str'First)'Address;
 begin
@@ -102,7 +102,7 @@ begin
 end;
 
 
-function form_error(
+function Error(
             ErrorCode : int16)
            return int16 is
 begin
@@ -118,7 +118,7 @@ end;
 
 
 -- form_xerr
-function form_error(
+function Error(
             ErrorCode : int32;
             filename: String)
            return int16 is
@@ -136,7 +136,7 @@ begin
 	return aes_intout(0);
 end;
 
-function form_center(
+function Center(
             tree      : Objects.Object_Ptr;
             Cx        : out int16;
             Cy        : out int16;
@@ -159,7 +159,7 @@ begin
 end;
 
 
-function form_center(
+function Center(
             tree      : Objects.Object_Ptr;
             r         : out Rectangle)
            return int16 is
@@ -179,7 +179,7 @@ begin
 end;
 
 
-function form_keybd(
+function Keybd(
             tree      : Objects.Object_Ptr;
             Kobject   : int16;
             Kobnext   : int16;
@@ -204,7 +204,7 @@ begin
 end;
 
 
-function form_button(
+function Button(
             tree      : Objects.Object_Ptr;
             Bobject   : int16;
             Bclicks   : int16;

@@ -18,7 +18,7 @@ begin
 end;
 
 
-function objc_delete(
+function Delete(
             tree      : OBJECT_ptr;
             Obj       : int16)
            return int16 is
@@ -35,7 +35,7 @@ begin
 end;
 
 
-procedure objc_draw(
+procedure Draw(
             tree      : OBJECT_ptr;
             Start     : int16;
             Depth     : int16;
@@ -61,7 +61,7 @@ begin
 end;
 
 
-procedure objc_draw(
+procedure Draw(
             tree      : OBJECT_ptr;
             Start     : int16;
             Depth     : int16;
@@ -84,7 +84,7 @@ begin
 end;
 
 
-function objc_find(
+function Find(
             tree      : OBJECT_ptr;
             Start     : int16;
             Depth     : int16;
@@ -107,7 +107,7 @@ begin
 end;
 
 
-procedure objc_offset(
+procedure Offset(
             tree      : OBJECT_ptr;
             Obj       : int16;
             X         : out int16;
@@ -127,7 +127,7 @@ begin
 end;
 
 
-function objc_order(
+function Order(
             tree      : OBJECT_ptr;
             Obj       : int16;
             NewPos    : int16)
@@ -146,7 +146,7 @@ begin
 end;
 
 
-function objc_edit(
+function Edit(
             tree      : OBJECT_ptr;
             Obj       : int16;
             Kchar     : int16;
@@ -170,7 +170,7 @@ begin
 end;
 
 
-function objc_edit(
+function Edit(
             tree      : OBJECT_ptr;
             Obj       : int16;
             Kchar     : int16;
@@ -196,7 +196,7 @@ begin
 end;
 
 
-procedure objc_change(
+procedure Change(
             tree      : OBJECT_ptr;
             Start     : int16;
             Depth     : int16;
@@ -226,7 +226,7 @@ begin
 end;
 
 
-procedure objc_change(
+procedure Change(
             tree      : OBJECT_ptr;
             Start     : int16;
             Depth     : int16;
@@ -253,7 +253,7 @@ begin
 end;
 
 
-function objc_sysvar(
+function Sysvar(
             mode      : int16;
             which     : int16;
             in1       : int16;
@@ -278,7 +278,7 @@ begin
 end;
 
 
-function objc_xfind(
+function Xfind(
             tree      : OBJECT_ptr;
             Start     : int16;
             Depth     : int16;

@@ -6,7 +6,7 @@ pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
-function menu_bar(
+function Bar(
             me_tree: Objects.Aestree_Ptr;
             me_mode: int16)
            return int16 is
@@ -23,7 +23,7 @@ begin
 end;
 
 
-function menu_icheck(
+function Icheck(
             me_tree : in Objects.Aestree_Ptr;
             me_item : int16;
             me_check: int16)
@@ -42,7 +42,7 @@ begin
 end;
 
 
-function menu_ienable(
+function Ienable(
             me_tree  : in Objects.Aestree_Ptr;
             me_item  : int16;
             me_enable: int16)
@@ -61,7 +61,7 @@ begin
 end;
 
 
-function menu_tnormal(
+function Tnormal(
             me_tree  : in Objects.Aestree_Ptr;
             me_item  : int16;
             me_normal: int16)
@@ -80,7 +80,7 @@ begin
 end;
 
 
-function menu_text(
+function Text(
             me_tree: in Objects.Aestree_Ptr;
             me_item: int16;
             me_text: const_chars_ptr)
@@ -99,7 +99,7 @@ begin
 end;
 
 
-function menu_register(
+function Register(
             ap_id  : int16;
             me_text: const_chars_ptr)
            return int16 is
@@ -116,7 +116,7 @@ begin
 end;
 
 
-function menu_unregister(
+function Unregister(
             id    : int16)
            return int16 is
 begin
@@ -131,7 +131,7 @@ begin
 end;
 
 
-function menu_popup(
+function Popup(
             me_menu : in AMENU;
             me_xpos : int16;
             me_ypos : int16;
@@ -152,7 +152,7 @@ begin
 end;
 
 
-function menu_attach(
+function Attach(
             me_flag : int16;
             me_tree : Objects.Aestree_Ptr;
             me_item : int16;
@@ -173,7 +173,7 @@ begin
 end;
 
 
-function menu_click(
+function Click(
             click : int16;
             setit : int16)
            return int16 is
@@ -190,7 +190,7 @@ begin
 end;
 
 
-function menu_istart(
+function Istart(
             me_flag : int16;
             me_tree : Objects.Aestree_Ptr;
             me_imenu: int16;
@@ -211,7 +211,7 @@ begin
 end;
 
 
-function menu_settings(
+function Settings(
             me_flag  : int16;
             me_values: in MN_SET)
            return int16 is

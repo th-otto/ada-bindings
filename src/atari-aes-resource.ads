@@ -3,6 +3,53 @@ use Atari;
 
 package Atari.Aes.Resource is
 
+    type RSHDR is
+        record
+            rsh_vrsn   : aliased int16;
+            rsh_object : aliased uint16;
+            rsh_tedinfo: aliased uint16;
+            rsh_iconblk: aliased uint16;
+            rsh_bitblk : aliased uint16;
+            rsh_frstr  : aliased uint16;
+            rsh_string : aliased uint16;
+            rsh_imdata : aliased uint16;
+            rsh_frimg  : aliased uint16;
+            rsh_trindex: aliased uint16;
+            rsh_nobs   : aliased int16;
+            rsh_ntree  : aliased int16;
+            rsh_nted   : aliased int16;
+            rsh_nib    : aliased int16;
+            rsh_nbb    : aliased int16;
+            rsh_nstring: aliased int16;
+            rsh_nimages: aliased int16;
+            rsh_rssize : aliased uint16;
+        end record;
+    type RSHDR_ptr is access all RSHDR;
+
+    type RSXHDR is
+        record
+            rsh_vrsn   : aliased uint16;
+            rsh_extvrsn: aliased uint16;
+            rsh_object : aliased uint32;
+            rsh_tedinfo: aliased uint32;
+            rsh_iconblk: aliased uint32;
+            rsh_bitblk : aliased uint32;
+            rsh_frstr  : aliased uint32;
+            rsh_string : aliased uint32;
+            rsh_imdata : aliased uint32;
+            rsh_frimg  : aliased uint32;
+            rsh_trindex: aliased uint32;
+            rsh_nobs   : aliased uint32;
+            rsh_ntree  : aliased uint32;
+            rsh_nted   : aliased uint32;
+            rsh_nib    : aliased uint32;
+            rsh_nbb    : aliased uint32;
+            rsh_nstring: aliased uint32;
+            rsh_nimages: aliased uint32;
+            rsh_rssize : aliased uint32;
+        end record;
+    type RSHXDR_ptr is access all RSXHDR;
+
     --  Resource structure types as used by rsrc_gaddr()/rsrc_saddr()
     type Resource_Type is (Tree,               -- R_TREE
                           R_Object,            -- R_OBJECT
@@ -40,8 +87,30 @@ package Atari.Aes.Resource is
                           Free_String => 15,
                           Free_Image => 16
                          );
-	for Resource_Type'Size use Int16'Size;
+    for Resource_Type'Size use Int16'Size;
 
+    function Load(Name: const_chars_ptr) return Int16;
+
+    function Load(Name: String) return Int16;
+
+    function Free return Int16;
+
+    function Get_Address(Typ: Resource_Type; Index: Int16; Addr: out System.Address) return Int16;
+
+    function Get_Address(Index: Int16) return Objects.AEStree_ptr;
+
+    function Get_Address(Index: Int16) return const_chars_ptr;
+
+    function Get_Address(Index: Int16) return Objects.BITBLK_ptr;
+
+    function Set_Address(Typ: Resource_Type; Index: Int16; Addr: System.Address) return Int16;
+
+    procedure Obfix(tree: Objects.Object_Ptr; Index: Int16);
+
+    function Rcfix(rc_header: System.Address) return Int16;
+
+
+    --  old C-style names
     R_TREE               : constant Resource_Type := Tree;                   -- *< Object tree, see mt_rsrc_gaddr()
     -- R_OBJECT          : constant Resource_Type := R_Object;               -- *< Individual object, see mt_rsrc_gaddr()
     R_TEDINFO            : constant Resource_Type := Text_Ed_Info;           -- *< TEDINFO structure, see mt_rsrc_gaddr()
@@ -60,45 +129,16 @@ package Atari.Aes.Resource is
     R_FRSTR              : constant Resource_Type := Free_String;            -- *< Free string, see mt_rsrc_gaddr()
     R_FRIMG              : constant Resource_Type := Free_Image;             -- *< Free image, see mt_rsrc_gaddr()
 
-    function rsrc_load(Name: const_chars_ptr) return Int16;
-    function Load(Name: const_chars_ptr) return Int16
-    	renames rsrc_load;
+    function rsrc_load(Name: const_chars_ptr) return Int16 renames Load;
+    function rsrc_load(Name: String) return Int16 renames Load;
+    function rsrc_free return int16 renames Free;
+    function rsrc_gaddr(Typ: Resource_Type; Index: Int16; Addr: out void_ptr) return Int16 renames Get_Address;
+    function rsrc_gaddr(Index: Int16) return Objects.AEStree_ptr renames Get_Address;
+    function rsrc_gaddr(Index: Int16) return const_chars_ptr renames Get_Address;
+    function rsrc_gaddr(Index: Int16) return Objects.BITBLK_ptr renames Get_Address;
+    function rsrc_saddr(Typ: Resource_Type; Index: Int16; Addr: void_ptr) return Int16 renames Set_Address;
+    procedure rsrc_obfix(tree: Objects.Object_Ptr; Index: Int16) renames Obfix;
+    function rsrc_rcfix(rc_header: void_ptr) return Int16 renames Rcfix;
 
-
-    function rsrc_load(Name: String) return Int16;
-    function Load(Name: String) return Int16
-    	renames rsrc_load;
-
-    function rsrc_free return int16;
-    function Free return Int16
-    	renames rsrc_free;
-
-    function rsrc_gaddr(Typ: Resource_Type; Index: Int16; Addr: out void_ptr) return Int16;
-    function Get_Address(Typ: Resource_Type; Index: Int16; Addr: out System.Address) return Int16
-    	renames rsrc_gaddr;
-
-    function rsrc_gaddr(Index: Int16) return Objects.AEStree_ptr;
-    function Get_Address(Index: Int16) return Objects.AEStree_ptr
-    	renames rsrc_gaddr;
-
-    function rsrc_gaddr(Index: Int16) return const_chars_ptr;
-    function Get_Address(Index: Int16) return const_chars_ptr
-    	renames rsrc_gaddr;
-
-    function rsrc_gaddr(Index: Int16) return Objects.BITBLK_ptr;
-    function Get_Address(Index: Int16) return Objects.BITBLK_ptr
-    	renames rsrc_gaddr;
-
-    function rsrc_saddr(Typ: Resource_Type; Index: Int16; Addr: void_ptr) return Int16;
-    function Set_Address(Typ: Resource_Type; Index: Int16; Addr: System.Address) return Int16
-    	renames rsrc_saddr;
-
-    procedure rsrc_obfix(tree: Objects.Object_Ptr; Index: Int16);
-    procedure Obfix(tree: Objects.Object_Ptr; Index: Int16)
-        renames rsrc_obfix;
-
-    function rsrc_rcfix(rc_header: void_ptr) return Int16;
-    function Rcfix(rc_header: System.Address) return Int16
-    	renames rsrc_rcfix;
 
 end Atari.Aes.Resource;
