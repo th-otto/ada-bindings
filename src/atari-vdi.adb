@@ -32,7 +32,7 @@ begin
 end "+";
 
 
-procedure vdi(pb: VDIPB_ptr) is
+procedure vdicall(pb: VDIPB_ptr) is
     use ASCII;
     function to_address is new Ada.Unchecked_Conversion(VDIPB_ptr, System.Address);
 begin
@@ -48,7 +48,7 @@ end;
 
 procedure vdi_trap is
 begin
-    vdi(vdi_pb'Access);
+    vdicall(vdi_pb'Access);
 end;
 
 
@@ -162,7 +162,7 @@ begin
     pb.intout := to_intout(work_out(0)'Address);
     pb.ptsout := to_ptsout(work_out(45)'Address);
     
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
     
     handle := vdi_control.handle;
 end;
@@ -692,7 +692,7 @@ begin
     pb.ptsin := to_ptsin(a_ptsin'Address);
     pb.intout := vdi_intout'Access;
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -796,7 +796,7 @@ begin
     pb.ptsin := to_ptsin(pxy'Address);
     pb.intout := vdi_intout'Access;
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -822,7 +822,7 @@ begin
     pb.ptsin := to_ptsin(pxy'Address);
     pb.intout := vdi_intout'Access;
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
     totpts := vdi_intout(0);
     totmoves := vdi_intout(1);
     extent(0) := vdi_ptsout(0);
@@ -849,7 +849,7 @@ begin
     pb.ptsin := to_ptsin(pxy'Address);
     pb.intout := vdi_intout'Access;
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -927,7 +927,7 @@ begin
     pb.ptsin := to_ptsin(pxy'Address);
     pb.intout := vdi_intout'Access;
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -954,7 +954,7 @@ begin
     pb.ptsin := to_ptsin(pxy'Address);
     pb.intout := vdi_intout'Access;
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
     totpts := vdi_intout(0);
     totmoves := vdi_intout(1);
     extent(0) := vdi_ptsout(0);
@@ -1860,7 +1860,7 @@ begin
     pb.intout := to_intout(work_out(0)'Address);
     pb.ptsout := to_ptsout(work_out(45)'Address);
     
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
     
     handle := vdi_control.handle;
 end;
@@ -1897,7 +1897,7 @@ begin
     pb.ptsin := vdi_ptsin'Access;
     pb.intout := to_intout(work_out(0)'Address);
     pb.ptsout := to_ptsout(work_out(45)'Address);
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -1918,7 +1918,7 @@ begin
     pb.ptsin := vdi_ptsin'Access;
     pb.intout := to_intout(work_out(0)'Address);
     pb.ptsout := vdi_ptsout'Access;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -2128,7 +2128,7 @@ begin
     vdi_control.num_intin := 37;
     vdi_control.subcode := 0;
     vdi_control.handle := handle;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 
@@ -2150,7 +2150,7 @@ begin
     vdi_control.num_intin := planes * 16;
     vdi_control.subcode := 0;
     vdi_control.handle := handle;
-    vdi(pb'Unchecked_Access);
+    vdicall(pb'Unchecked_Access);
 end;
 
 

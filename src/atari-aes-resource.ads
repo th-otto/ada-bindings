@@ -1,3 +1,6 @@
+with Atari.Aes.Objects;
+use Atari;
+
 package Atari.Aes.Resource is
 
     --  Resource structure types as used by rsrc_gaddr()/rsrc_saddr()
@@ -40,7 +43,7 @@ package Atari.Aes.Resource is
 	for Resource_Type'Size use Int16'Size;
 
     R_TREE               : constant Resource_Type := Tree;                   -- *< Object tree, see mt_rsrc_gaddr()
-    -- R_OBJECT          : constant Resource_Type := Object;                 -- *< Individual object, see mt_rsrc_gaddr()
+    -- R_OBJECT          : constant Resource_Type := R_Object;               -- *< Individual object, see mt_rsrc_gaddr()
     R_TEDINFO            : constant Resource_Type := Text_Ed_Info;           -- *< TEDINFO structure, see mt_rsrc_gaddr()
     R_ICONBLK            : constant Resource_Type := Icon_Block;             -- *< ICONBLK structure, see mt_rsrc_gaddr()
     R_BITBLK             : constant Resource_Type := Bit_Block;              -- *< BITBLK structure, see mt_rsrc_gaddr()
@@ -74,24 +77,24 @@ package Atari.Aes.Resource is
     function Get_Address(Typ: Resource_Type; Index: Int16; Addr: out System.Address) return Int16
     	renames rsrc_gaddr;
 
-    function rsrc_gaddr(Index: Int16) return AEStree_ptr;
-    function Get_Address(Index: Int16) return AEStree_ptr
+    function rsrc_gaddr(Index: Int16) return Objects.AEStree_ptr;
+    function Get_Address(Index: Int16) return Objects.AEStree_ptr
     	renames rsrc_gaddr;
 
     function rsrc_gaddr(Index: Int16) return const_chars_ptr;
     function Get_Address(Index: Int16) return const_chars_ptr
     	renames rsrc_gaddr;
 
-    function rsrc_gaddr(Index: Int16) return BITBLK_ptr;
-    function Get_Address(Index: Int16) return BITBLK_ptr
+    function rsrc_gaddr(Index: Int16) return Objects.BITBLK_ptr;
+    function Get_Address(Index: Int16) return Objects.BITBLK_ptr
     	renames rsrc_gaddr;
 
     function rsrc_saddr(Typ: Resource_Type; Index: Int16; Addr: void_ptr) return Int16;
     function Set_Address(Typ: Resource_Type; Index: Int16; Addr: System.Address) return Int16
     	renames rsrc_saddr;
 
-    procedure rsrc_obfix(tree: OBJECT_ptr; Index: Int16);
-    procedure Obfix(tree: OBJECT_ptr; Index: Int16)
+    procedure rsrc_obfix(tree: Objects.Object_Ptr; Index: Int16);
+    procedure Obfix(tree: Objects.Object_Ptr; Index: Int16)
         renames rsrc_obfix;
 
     function rsrc_rcfix(rc_header: void_ptr) return Int16;

@@ -271,7 +271,7 @@ end;
 function pdlg_evnt(
             prn_dialog: PRN_DIALOG_ptr;
             settings  : PRN_SETTINGS_ptr;
-            events    : EVNT_ptr;
+            events    : Wdialog.EVNT_ptr;
             button    : out int16)
            return boolean is
 begin

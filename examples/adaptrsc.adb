@@ -8,6 +8,7 @@ with System;
 with System.Storage_Elements; use System.Storage_Elements;
 with Atari.Vdi; use Atari.Vdi;
 use Atari.Aes;
+with Atari.Aes.Objects; use Atari.Aes.Objects;
 
 package body adaptrsc is
 

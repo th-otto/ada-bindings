@@ -10,6 +10,8 @@
 
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
+with Atari.Aes.Menu;
+with Atari.Aes.Graf;
 with Atari.Vdi; use Atari.Vdi;
 use Atari;
 with Interfaces; use Interfaces;
@@ -41,12 +43,12 @@ procedure eyes is
 
     procedure mouse_on is
     begin
-        graf_mouse(M_ON);
+        Graf.Mouse(M_ON);
     end;
 
     procedure mouse_off is
     begin
-        graf_mouse(M_OFF);
+        Graf.Mouse(M_OFF);
     end;
 
     function open_vwork return boolean is
@@ -57,7 +59,7 @@ procedure eyes is
            workin(i) := 1;
         end loop;
         workin(10) := 2;
-        phys_handle := graf_handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
+        phys_handle := Graf.Handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
         handle := phys_handle;
         v_opnvwk(workin, handle, workout);
         max_x := workout(0);
@@ -160,7 +162,7 @@ procedure eyes is
             end if;
             dummy := wind_open(whandle, wx, wy, 100, 100);
             mouse_on;
-            graf_mkstate(oldx, oldy, button, kstate);
+            Graf.Mkstate(oldx, oldy, button, kstate);
         else
             dummy := wind_set(whandle, WF_TOP);
         end if;
@@ -259,9 +261,9 @@ begin
             oldx := -1;
             oldy := -1;
             if not Is_Application then
-                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
             else
-                graf_mouse(ARROW);
+                Graf.Mouse(ARROW);
                 open_window;
             end if;
             loop

@@ -8,13 +8,13 @@ pragma Suppress (Access_Check);
 
 
 procedure objc_wdraw(
-            tree      : OBJECT_ptr;
+            tree      : Objects.Object_Ptr;
             Start     : int16;
             Depth     : int16;
             clip      : in GRECT;
             whandle   : int16)
            is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 60;
 	aes_control.num_intin := 3;
@@ -31,12 +31,12 @@ end;
 
 
 procedure objc_wchange(
-            tree     : OBJECT_ptr;
+            tree     : Objects.Object_Ptr;
             obj      : int16;
             new_state: int16;
             clip     : access GRECT;
             whandle  : int16) is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 61;
 	aes_control.num_intin := 3;
@@ -53,13 +53,13 @@ end;
 
 
 function graf_wwatchbox(
-            tree      : OBJECT_ptr;
+            tree      : Objects.Object_Ptr;
             Obj       : int16;
             InState   : int16;
             OutState  : int16;
             whandle   : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 62;
 	aes_control.num_intin := 4;
@@ -77,13 +77,13 @@ end;
 
 
 function form_wbutton(
-            tree      : OBJECT_ptr;
+            tree      : Objects.Object_Ptr;
             fo_bobject: int16;
             fo_bclicks: int16;
             fo_bnxtobj: out int16;
             whandle   : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 63;
 	aes_control.num_intin := 3;
@@ -101,7 +101,7 @@ end;
 
 
 function form_wkeybd(
-            tree         : OBJECT_ptr;
+            tree         : Objects.Object_Ptr;
             fo_kobject   : int16;
             fo_kobnext   : int16;
             fo_kchar     : int16;
@@ -109,7 +109,7 @@ function form_wkeybd(
             fo_knxtchar  : out int16;
             whandle      : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 64;
 	aes_control.num_intin := 4;
@@ -129,14 +129,14 @@ end;
 
 
 function objc_wedit(
-            tree   : OBJECT_ptr;
+            tree   : Objects.Object_Ptr;
             obj    : int16;
             key    : int16;
             idx    : in out int16;
             kind   : int16;
             whandle: int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 65;
 	aes_control.num_intin := 5;
@@ -156,14 +156,14 @@ end;
 
 
 function objc_xedit(
-            tree  : OBJECT_ptr;
+            tree  : Objects.Object_Ptr;
             obj   : int16;
             key   : int16;
             xpos  : in out int16;
             subfn : int16;
             r     : in GRECT)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 46;
 	aes_control.num_intin := 4;
@@ -183,11 +183,11 @@ end;
 
 
 function form_popup(
-            tree  : OBJECT_ptr;
+            tree  : Objects.Object_Ptr;
             x     : int16;
             y     : int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
 	aes_control.opcode := 135;
 	aes_control.num_intin := 2;
@@ -203,7 +203,7 @@ end;
 
 
 function xfrm_popup(
-            tree       : OBJECT_ptr;
+            tree       : Objects.Object_Ptr;
             x          : int16;
             y          : int16;
             firstscrlob: int16;
@@ -213,7 +213,7 @@ function xfrm_popup(
             param      : System.Address;
             lastscrlpos: in out int16)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
     function to_address2 is new Ada.Unchecked_Conversion(init_proc_ptr, System.Address);
 begin
 	aes_control.opcode := 135;
@@ -237,13 +237,13 @@ end;
 
 
 function form_xdo(
-            tree    : OBJECT_ptr;
+            tree    : Objects.Object_Ptr;
             startob : int16;
             lastcrsr: out int16;
             tabs    : XDO_INF_ptr;
             flydial : void_ptr_ptr)
            return int16 is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, System.Address);
+    function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
     function to_address2 is new Ada.Unchecked_Conversion(XDO_INF_ptr, System.Address);
     function to_address3 is new Ada.Unchecked_Conversion(void_ptr_ptr, System.Address);
 begin

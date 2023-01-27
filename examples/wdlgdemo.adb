@@ -12,6 +12,10 @@ with System;
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
 with Atari.Aes.Resource;
+with Atari.Aes.Objects; use Atari.Aes.Objects;
+with Atari.Aes.Menu;
+with Atari.Aes.Graf;
+with Atari.Aes.Form;
 use Atari;
 with Interfaces; use Interfaces;
 with Text_IO;
@@ -57,7 +61,7 @@ procedure wdlgdemo is
     begin
         if dialog = null then
             if appl_xgetinfo(7, out1, out2, out3, out4) = false or else (out1 and 1) = 0 then
-                dummy := form_alert(1, "[3][No WDIALOG functions available][Abort]");
+                dummy := Form.Alert(1, "[3][No WDIALOG functions available][Abort]");
                 return;
             end if;
             dialog := Wdialog.wdlg_create(handle_dlg'Unrestricted_Access, tree, System.Null_Address, 0, System.Null_Address, WDialog.WDLG_BKGD);
@@ -138,16 +142,16 @@ procedure wdlgdemo is
 begin
     if appl_init /= -1 then
         dialog := null;
-        graf_mouse(ARROW);
+        Graf.Mouse(ARROW);
         if Resource.Load("wdlgrsc.rsc") = 0 then
-            dummy := form_alert(1, "[3][Resource file not found][Abort]");
+            dummy := Form.Alert(1, "[3][Resource file not found][Abort]");
         else
-            adaptrsc.vdi_handle := graf_handle(adaptrsc.gl_wchar, adaptrsc.gl_hchar, adaptrsc.gl_wbox, adaptrsc.gl_hbox);
+            adaptrsc.vdi_handle := Graf.Handle(adaptrsc.gl_wchar, adaptrsc.gl_hchar, adaptrsc.gl_wbox, adaptrsc.gl_hbox);
             adaptrsc.get_aes_info;
             tree := Resource.Get_Address(TEST);
             adaptrsc.substitute_objects(tree, Num_Objects, adaptrsc.aes_flags);
             if not Is_Application then
-                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
             else
                 open_window;
             end if;

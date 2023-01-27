@@ -1,4 +1,129 @@
+with Atari.Aes.Objects;
+use Atari;
+
 package Atari.Aes.Graf is
+
+    procedure graf_rubberbox(
+                Ix        : int16;
+                Iy        : int16;
+                Iw        : int16;
+                Ih        : int16;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_rubberbox(
+                r         : in Rectangle;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_dragbox(
+                Sw        : int16;
+                Sh        : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Bx        : int16;
+                By        : int16;
+                Bw        : int16;
+                Bh        : int16;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_dragbox(
+                little    : in Rectangle;
+                big       : in Rectangle;
+                Fw        : out int16;
+                Fh        : out int16);
+
+    procedure graf_movebox(
+                Sw        : int16;
+                Sh        : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Dx        : int16;
+                Dy        : int16);
+
+    procedure graf_movebox(
+                r         : in grect;
+                Dx        : int16;
+                Dy        : int16);
+
+    procedure graf_growbox(
+                Sx        : int16;
+                Sy        : int16;
+                Sw        : int16;
+                Sh        : int16;
+                Fx        : int16;
+                Fy        : int16;
+                Fw        : int16;
+                Fh        : int16);
+
+    procedure graf_growbox(
+                little    : in Rectangle;
+                big       : in Rectangle);
+
+    procedure graf_shrinkbox(
+                Fx        : int16;
+                Fy        : int16;
+                Fw        : int16;
+                Fh        : int16;
+                Sx        : int16;
+                Sy        : int16;
+                Sw        : int16;
+                Sh        : int16);
+
+    procedure graf_shrinkbox(
+                big       : in Rectangle;
+                little    : in Rectangle);
+
+    function graf_watchbox(
+                tree      : Objects.Object_Ptr;
+                Obj       : int16;
+                InState   : int16;
+                OutState  : int16)
+               return int16;
+
+    function graf_slidebox(
+                tree      : Objects.Object_Ptr;
+                Parent    : int16;
+                Obj       : int16;
+                Direction : int16)
+               return int16;
+
+    function graf_multirubber(
+                bx        : int16;
+                by        : int16;
+                minw      : int16;
+                minh      : int16;
+                rec       : Rectangle_Ptr;
+                rw        : out int16;
+                rh        : out int16)
+               return int16;
+
+    function graf_handle(
+                Wchar     : out int16;
+                Hchar     : out int16;
+                Wbox      : out int16;
+                Hbox      : out int16)
+               return int16;
+
+    function graf_handle(
+                Wchar     : out int16;
+                Hchar     : out int16;
+                Wbox      : out int16;
+                Hbox      : out int16;
+                device    : out int16)
+               return int16;
+
+    procedure graf_mouse(
+                Form       : Mouse_Type;
+                FormAddress: MFORM_const_ptr := null);
+
+    procedure graf_mkstate(
+                Mx         : out int16;
+                My         : out int16;
+                ButtonState: out int16;
+                KeyState   : out int16);
+
 
     procedure Rubberbox(
                 Ix        : int16;
@@ -73,14 +198,14 @@ package Atari.Aes.Graf is
                 little    : in GRECT) renames graf_shrinkbox;
 
     function Watchbox(
-                tree      : OBJECT_ptr;
+                tree      : Objects.Object_Ptr;
                 Obj       : int16;
                 InState   : int16;
                 OutState  : int16)
                return int16 renames graf_watchbox;
 
     function Slidebox(
-                tree      : OBJECT_ptr;
+                tree      : Objects.Object_Ptr;
                 Parent    : int16;
                 Obj       : int16;
                 Direction : int16)
@@ -91,7 +216,7 @@ package Atari.Aes.Graf is
                 by        : int16;
                 minw      : int16;
                 minh      : int16;
-                rec       : GRECT_ptr;
+                rec       : Rectangle_Ptr;
                 rw        : out int16;
                 rh        : out int16)
                return int16 renames graf_multirubber;
@@ -120,5 +245,7 @@ package Atari.Aes.Graf is
                 My         : out int16;
                 ButtonState: out int16;
                 KeyState   : out int16) renames graf_mkstate;
+
+
 
 end Atari.Aes.Graf;

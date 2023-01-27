@@ -1,4 +1,7 @@
 with Atari.Aes.Wdialog;
+with Atari.Aes.Objects;
+use Atari;
+
 package Atari.Aes.Listbox is
 
     LBOX_VERT                : constant  := 1;                  -- *< Listbox with vertical slider
@@ -30,7 +33,7 @@ package Atari.Aes.Listbox is
     type Select_Item_Args is
         record
             box       : aliased Listbox_Ptr;
-            tree      : aliased OBJECT_ptr;
+            tree      : aliased Objects.Object_Ptr;
             item      : aliased Listbox_Item_Ptr;
             user_data : aliased void_ptr;
             obj_index : aliased Int16;
@@ -43,21 +46,19 @@ package Atari.Aes.Listbox is
     type Set_Item_Args is
         record
             box      : aliased Listbox_Ptr;
-            tree     : aliased OBJECT_ptr;
+            tree     : aliased Objects.Object_Ptr;
             item     : aliased Listbox_Item_Ptr;
             obj_index: aliased Int16;
             user_data: aliased void_ptr;
-            rect     : aliased GRECT_ptr;
+            rect     : aliased Rectangle_Ptr;
             first    : aliased Int16;
         end record;
 
     type Set_Item is access function(p1: Set_Item_Args) return Int16;
     pragma Convention(C, Set_Item);
 
-    subtype DIALOG_ptr is Wdialog.DIALOG_ptr;
-
     function Create(
-                tree     : OBJECT_ptr;
+                tree     : Objects.Object_Ptr;
                 slct     : Select_Item;
                 set      : Set_Item;
                 items    : Listbox_Item_Ptr;
@@ -68,7 +69,7 @@ package Atari.Aes.Listbox is
                 flags    : Int16;
                 pause_a  : Int16;
                 user_data: void_ptr;
-                dialog   : DIALOG_ptr;
+                dialog   : Wdialog.DIALOG_ptr;
                 visible_b: Int16;
                 first_b  : Int16;
                 entries_b: Int16;
@@ -83,7 +84,7 @@ package Atari.Aes.Listbox is
 
     function Count_Items(box: Listbox_Ptr) return Int16;
 
-    function Get_Tree(box: Listbox_Ptr) return OBJECT_ptr;
+    function Get_Tree(box: Listbox_Ptr) return Objects.Object_Ptr;
 
     function Get_A_Visible(box: Listbox_Ptr) return Int16;
 
@@ -137,7 +138,7 @@ package Atari.Aes.Listbox is
 
     --  old C-style names
     function lbox_create(
-                tree     : OBJECT_ptr;
+                tree     : Objects.Object_Ptr;
                 slct     : Select_Item;
                 set      : Set_Item;
                 items    : Listbox_Item_Ptr;
@@ -148,7 +149,7 @@ package Atari.Aes.Listbox is
                 flags    : Int16;
                 pause_a  : Int16;
                 user_data: void_ptr;
-                dialog   : DIALOG_ptr;
+                dialog   : Wdialog.DIALOG_ptr;
                 visible_b: Int16;
                 first_b  : Int16;
                 entries_b: Int16;
@@ -168,7 +169,7 @@ package Atari.Aes.Listbox is
     function lbox_cnt_items(box: Listbox_Ptr) return Int16
         renames Count_Items;
 
-    function lbox_get_tree(box: Listbox_Ptr) return OBJECT_ptr
+    function lbox_get_tree(box: Listbox_Ptr) return Objects.Object_Ptr
         renames Get_Tree;
 
     function lbox_get_avis(box: Listbox_Ptr) return Int16

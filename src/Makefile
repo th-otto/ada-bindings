@@ -8,10 +8,10 @@ OBJS = \
 	atari-aes.o \
 	atari-aes-appl.ali \
 	atari-aes-event.ali \
-	atari-aes-menu.ali \
-	atari-aes-objc.ali \
-	atari-aes-form.ali \
-	atari-aes-graf.ali \
+	atari-aes-menu.o \
+	atari-aes-objects.o \
+	atari-aes-form.o \
+	atari-aes-graf.o \
 	atari-aes-scrap.ali \
 	atari-aes-filesel.ali \
 	atari-aes-window.ali \
@@ -46,16 +46,16 @@ atari-aes-appl.ali: atari-aes-appl.ads atari-aes.ads atari.ads
 atari-aes-event.ali: atari-aes-event.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-menu.ali: atari-aes-menu.ads atari-aes.ads atari.ads
+atari-aes-menu.o: atari-aes-menu.adb atari-aes-menu.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-objc.ali: atari-aes-objc.ads atari-aes.ads atari.ads
+atari-aes-objects.o: atari-aes-objects.adb atari-aes-objects.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-form.ali: atari-aes-form.ads atari-aes.ads atari.ads
+atari-aes-form.o: atari-aes-form.adb atari-aes-form.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-graf.ali: atari-aes-graf.ads atari-aes.ads atari.ads
+atari-aes-graf.o: atari-aes-graf.adb atari-aes-graf.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-scrap.ali: atari-aes-scrap.ads atari-aes.ads atari.ads

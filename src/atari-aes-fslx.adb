@@ -125,7 +125,7 @@ end;
 
 function fslx_evnt(
             fsd      : XFSL_DIALOG_ptr;
-            events   : EVNT_ptr;
+            events   : Wdialog.EVNT_ptr;
             path     : in out String;
             fname    : in out String;
             button   : out int16;

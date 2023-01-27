@@ -12,6 +12,8 @@ with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
 with Atari.Vdi; use Atari.Vdi;
 use Atari;
+with Atari.Aes.Menu;
+with Atari.Aes.Graf;
 with Interfaces; use Interfaces;
 
 procedure gemwin is
@@ -32,7 +34,7 @@ procedure gemwin is
 		workin: vdi_workin_array;
 		workout: vdi_workout_array;
 	begin
-	    vdi_h := graf_handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
+	    vdi_h := Graf.Handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
 
         for i in workin'Range loop
            workin(i) := 1;
@@ -167,9 +169,9 @@ begin
     if appl_init /= -1 then
 		if open_vwk then
             if not Is_Application then
-                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
             else
-                graf_mouse(ARROW);
+                Graf.Mouse(ARROW);
                 open_window;
             end if;
 			event_loop;

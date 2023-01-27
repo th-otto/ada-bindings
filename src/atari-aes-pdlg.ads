@@ -1,13 +1,12 @@
 with Atari.Aes.Wdialog;
+with Atari.Aes.Objects;
+use Atari;
 
 package Atari.Aes.Pdlg is
 
     type PRN_DIALOG is record null; end record;
     type PRN_DIALOG_ptr is access all PRN_DIALOG;
 
-    subtype DIALOG_ptr is Wdialog.DIALOG_ptr;
-	subtype EVNT_ptr is Wdialog.EVNT_ptr;
-	
     PRN_STD_SUBS             : constant  := 16#1#;              -- *< standard sub-dialogs for NVDI printer
     PRN_FSM_SUBS             : constant  := 16#2#;              -- *< standard sub-dialogs for FSM printer
     PRN_QD_SUBS              : constant  := 16#4#;              -- *< standard sub-dialogs for QuickDraw printer
@@ -293,8 +292,8 @@ package Atari.Aes.Pdlg is
             drivers     : aliased void_ptr;
             option_flags: aliased int16;
             sub_id      : aliased int16;
-            dialog      : aliased DIALOG_ptr;
-            tree        : aliased OBJECT_ptr;
+            dialog      : aliased Wdialog.DIALOG_ptr;
+            tree        : aliased Objects.Object_Ptr;
             index_offset: aliased int16;
             reserved1   : aliased int16;
             reserved2   : aliased int32;
@@ -304,8 +303,8 @@ package Atari.Aes.Pdlg is
             do_dlg      : aliased PDLG_HNDL;
             reset_dlg   : aliased PDLG_RESET;
             reserved5   : aliased int32;
-            sub_icon    : aliased OBJECT_ptr;
-            sub_tree    : aliased OBJECT_ptr;
+            sub_icon    : aliased Objects.Object_Ptr;
+            sub_tree    : aliased Objects.Object_Ptr;
             reserved6   : aliased int32;
             reserved7   : aliased int32;
             private1    : aliased int32;
@@ -425,13 +424,13 @@ package Atari.Aes.Pdlg is
     function pdlg_evnt(
                 prn_dialog: PRN_DIALOG_ptr;
                 settings  : PRN_SETTINGS_ptr;
-                events    : EVNT_ptr;
+                events    : Wdialog.EVNT_ptr;
                 button    : out int16)
                return boolean;
     function Event(
                 prn_dialog: PRN_DIALOG_ptr;
                 settings  : PRN_SETTINGS_ptr;
-                events    : EVNT_ptr;
+                events    : Wdialog.EVNT_ptr;
                 button    : out int16)
                return boolean renames pdlg_evnt;
 

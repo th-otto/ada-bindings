@@ -13,6 +13,8 @@ with Atari.Aes; use Atari.Aes;
 with Atari.Vdi; use Atari.Vdi;
 with Atari.Gemdos;
 use Atari;
+with Atari.Aes.Menu;
+with Atari.Aes.Graf;
 with Interfaces; use Interfaces;
 with Ada.Numerics; use Ada.Numerics;
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
@@ -43,12 +45,12 @@ pragma Suppress (Overflow_Check);
 
     procedure mouse_on is
     begin
-        graf_mouse(M_ON);
+        Graf.Mouse(M_ON);
     end;
 
     procedure mouse_off is
     begin
-        graf_mouse(M_OFF);
+        Graf.Mouse(M_OFF);
     end;
 
     function open_vwork return boolean is
@@ -59,7 +61,7 @@ pragma Suppress (Overflow_Check);
            workin(i) := 1;
         end loop;
         workin(10) := 2;
-        phys_handle := graf_handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
+        phys_handle := Graf.Handle(gl_wchar, gl_hchar, gl_wbox, gl_hbox);
         vdi_handle := phys_handle;
         v_opnvwk(workin, vdi_handle, workout);
         max_x := workout(0);
@@ -328,9 +330,9 @@ begin
         if open_vwork then
             wx := -1;
             if not Is_Application then
-                menu_id := menu_register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
             else
-                graf_mouse(ARROW);
+                Graf.Mouse(ARROW);
                 open_window;
             end if;
             event_loop;

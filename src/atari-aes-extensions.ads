@@ -1,3 +1,6 @@
+with Atari.Aes.Objects;
+use Atari;
+
 package Atari.Aes.Extensions is
 
     type XEDITINFO is private;
@@ -52,21 +55,21 @@ package Atari.Aes.Extensions is
     type MAGX_COOKIE_ptr is access all MAGX_COOKIE;
 
     procedure objc_wdraw(
-                tree   : OBJECT_ptr;
+                tree   : Objects.Object_Ptr;
                 start  : int16;
                 depth  : int16;
                 clip   : in GRECT;
                 whandle: int16);
 
     procedure objc_wchange(
-                tree     : OBJECT_ptr;
+                tree     : Objects.Object_Ptr;
                 obj      : int16;
                 new_state: int16;
                 clip     : access GRECT;
                 whandle  : int16);
 
     function graf_wwatchbox(
-                tree      : OBJECT_ptr;
+                tree      : Objects.Object_Ptr;
                 Obj       : int16;
                 InState   : int16;
                 OutState  : int16;
@@ -74,7 +77,7 @@ package Atari.Aes.Extensions is
                return int16;
 
     function form_wbutton(
-                tree      : OBJECT_ptr;
+                tree      : Objects.Object_Ptr;
                 fo_bobject: int16;
                 fo_bclicks: int16;
                 fo_bnxtobj: out int16;
@@ -82,7 +85,7 @@ package Atari.Aes.Extensions is
                return int16;
 
     function form_wkeybd(
-                tree         : OBJECT_ptr;
+                tree         : Objects.Object_Ptr;
                 fo_kobject   : int16;
                 fo_kobnext   : int16;
                 fo_kchar     : int16;
@@ -92,7 +95,7 @@ package Atari.Aes.Extensions is
                return int16;
 
     function objc_wedit(
-                tree   : OBJECT_ptr;
+                tree   : Objects.Object_Ptr;
                 obj    : int16;
                 key    : int16;
                 idx    : in out int16;
@@ -101,7 +104,7 @@ package Atari.Aes.Extensions is
                return int16;
 
     function objc_xedit(
-                tree  : OBJECT_ptr;
+                tree  : Objects.Object_Ptr;
                 obj   : int16;
                 key   : int16;
                 xpos  : in out int16;
@@ -110,14 +113,14 @@ package Atari.Aes.Extensions is
                return int16;
 
     function form_popup(
-                tree  : OBJECT_ptr;
+                tree  : Objects.Object_Ptr;
                 x     : int16;
                 y     : int16)
                return int16;
 
     type POPUP_INIT_args is
         record
-            tree     : aliased OBJECT_ptr;
+            tree     : aliased Objects.Object_Ptr;
             scrollpos: aliased int16;
             nlines   : aliased int16;
             param    : aliased System.Address;
@@ -127,7 +130,7 @@ package Atari.Aes.Extensions is
     pragma Convention(C, init_proc_ptr);
 
     function xfrm_popup(
-                tree       : OBJECT_ptr;
+                tree       : Objects.Object_Ptr;
                 x          : int16;
                 y          : int16;
                 firstscrlob: int16;
@@ -139,7 +142,7 @@ package Atari.Aes.Extensions is
                return int16;
 
     function form_xdo(
-                tree    : OBJECT_ptr;
+                tree    : Objects.Object_Ptr;
                 startob : int16;
                 lastcrsr: out int16;
                 tabs    : XDO_INF_ptr;

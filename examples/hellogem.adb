@@ -10,6 +10,7 @@
 
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
+with Atari.Aes.Form;
 use Atari;
 
 
@@ -18,6 +19,6 @@ procedure hellogem is
 
 begin
     dummy := appl_init;
-    dummy := form_alert(1, "[1][Hello from GemAES Ada][OK]");
+    dummy := Form.Alert(1, "[1][Hello from GemAES Ada][OK]");
     appl_exit;
 end hellogem;

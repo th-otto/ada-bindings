@@ -1,4 +1,5 @@
 with Atari.Aes;
+with Atari.Aes.Objects;
 use Atari;
 
 package adaptrsc is
@@ -25,9 +26,8 @@ package adaptrsc is
 
 	procedure get_aes_info;
 
-	procedure substitute_objects(objects: Aes.AEStree_ptr; nobs: int16; flags: uint16);
+	procedure substitute_objects(objects: Aes.Objects.AEStree_ptr; nobs: int16; flags: uint16);
 
 	procedure substitute_free;
 
 end adaptrsc;
-

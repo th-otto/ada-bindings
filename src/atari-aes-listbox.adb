@@ -5,7 +5,7 @@ pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
 function Create(
-            tree     : OBJECT_ptr;
+            tree     : Objects.Object_Ptr;
             slct     : Select_Item;
             set      : Set_Item;
             items    : Listbox_Item_Ptr;
@@ -16,7 +16,7 @@ function Create(
             flags    : int16;
             pause_a  : int16;
             user_data: void_ptr;
-            dialog   : DIALOG_ptr;
+            dialog   : Wdialog.DIALOG_ptr;
             visible_b: int16;
             first_b  : int16;
             entries_b: int16;
@@ -102,7 +102,7 @@ begin
 end;
 
 
-function Get_Tree(box: Listbox_Ptr) return OBJECT_ptr is
+function Get_Tree(box: Listbox_Ptr) return Objects.Object_Ptr is
 begin
     aes_control.opcode := 174;
     aes_control.num_intin := 1;
@@ -112,7 +112,7 @@ begin
     aes_intin(0) := 1;
     aes_addrin(0) := box.all'Address;
     aes_trap;
-    return OBJECT_ptr'Deref(aes_intout(0)'Address);
+    return Objects.Object_Ptr'Deref(aes_intout(0)'Address);
 end;
 
 

@@ -1,3 +1,6 @@
+with Atari.Aes.Objects;
+use Atari;
+
 package Atari.Aes.Wdialog is
 
     type DIALOG is record null; end record;
@@ -56,7 +59,7 @@ package Atari.Aes.Wdialog is
 
     function wdlg_create(
                 handle_exit: HNDL_OBJ;
-                tree       : AEStree_ptr;
+                tree       : Objects.Aestree_Ptr;
                 user_data  : void_ptr;
                 code       : int16;
                 data       : void_ptr;
@@ -86,7 +89,7 @@ package Atari.Aes.Wdialog is
     function wdlg_get_tree(
                 dialog: DIALOG_ptr;
                 r     : out GRECT)
-               return AEStree_ptr;
+               return Objects.Aestree_Ptr;
 
     function wdlg_get_edit(
                 dialog: DIALOG_ptr;
@@ -104,7 +107,7 @@ package Atari.Aes.Wdialog is
 
     function wdlg_set_tree(
                 dialog: DIALOG_ptr;
-                tree  : AEStree_ptr)
+                tree  : Objects.Aestree_Ptr)
                return int16;
 
     function wdlg_set_size(
@@ -116,7 +119,7 @@ package Atari.Aes.Wdialog is
 	            dialog: DIALOG_ptr;
 	            g     : in GRECT;
 	            title : const_chars_ptr;
-	            tree  : AEStree_ptr;
+	            tree  : Objects.Aestree_Ptr;
 	            obj   : int16)
 	           return int16;
 
@@ -124,7 +127,7 @@ package Atari.Aes.Wdialog is
 	            dialog: DIALOG_ptr;
 	            g     : in GRECT;
 	            title : in String;
-	            tree  : AEStree_ptr;
+	            tree  : Objects.Aestree_Ptr;
 	            obj   : int16)
 	           return int16;
 
@@ -132,14 +135,14 @@ package Atari.Aes.Wdialog is
                 dialog: DIALOG_ptr;
                 g     : in GRECT;
                 title : const_chars_ptr;
-                tree  : AEStree_ptr)
+                tree  : Objects.Aestree_Ptr)
                return int16;
 
     function wdlg_set_uniconify(
                 dialog: DIALOG_ptr;
                 g     : in GRECT;
                 title : in String;
-                tree  : AEStree_ptr)
+                tree  : Objects.Aestree_Ptr)
                return int16;
 
     function wdlg_evnt(

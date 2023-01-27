@@ -59,13 +59,13 @@ begin
 end;
 
 
-function rsrc_gaddr(Index: Int16) return AEStree_ptr is
+function rsrc_gaddr(Index: Int16) return Objects.AEStree_ptr is
     treeadr: void_ptr;
 begin
 	if rsrc_gaddr(R_TREE, Index, treeadr) = 0 then
 	   return null;
 	end if;
-	return AEStree_ptr'Deref(treeadr'Address);
+	return Objects.AEStree_ptr'Deref(treeadr'Address);
 end;
 
 
@@ -83,7 +83,7 @@ begin
 end;
 
 
-function rsrc_gaddr(Index: int16) return BITBLK_ptr is
+function rsrc_gaddr(Index: int16) return Objects.BITBLK_ptr is
     bitadr: void_ptr;
 begin
 	--
@@ -93,7 +93,7 @@ begin
 	if rsrc_gaddr(R_IMAGEDATA, Index, bitadr) = 0 then
 	   return null;
 	end if;
-	return BITBLK_ptr'Deref(bitadr'Address);
+	return Objects.BITBLK_ptr'Deref(bitadr'Address);
 end;
 
 
@@ -112,7 +112,7 @@ begin
 end;
 
 
-procedure rsrc_obfix(tree: OBJECT_ptr; Index: Int16) is
+procedure rsrc_obfix(tree: Objects.Object_Ptr; Index: Int16) is
 begin
 	aes_control.opcode := 114;
 	aes_control.num_intin := 1;

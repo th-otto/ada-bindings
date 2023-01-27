@@ -11,8 +11,6 @@ package Atari.Aes.Fslx is
 
     SHOW8P3                  : constant  := 1;
 
-	subtype EVNT_ptr is Wdialog.EVNT_ptr;
-	
     type XFSL_FILTER is access function(
                 path : chars_ptr;
                 name : chars_ptr;
@@ -44,7 +42,7 @@ package Atari.Aes.Fslx is
 
     function fslx_evnt(
                 fsd      : XFSL_DIALOG_ptr;
-                events   : EVNT_ptr;
+                events   : Wdialog.EVNT_ptr;
                 path     : in out String;
                 fname    : in out String;
                 button   : out int16;

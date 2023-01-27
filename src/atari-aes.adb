@@ -2,8 +2,7 @@ pragma No_Strict_Aliasing;
 with System.Machine_Code;
 use System.Machine_Code;
 with Ada.Unchecked_Conversion;
-with Interfaces.C; use Interfaces.C;
-with Interfaces;   use Interfaces;
+with Interfaces; use Interfaces;
 
 package body Atari.Aes is
 
@@ -40,12 +39,6 @@ end;
 procedure aes_trap is
 begin
 	crystal(aes_pb'Access);
-end;
-
-
-function to_address(tree: AEStree_ptr) return void_ptr is
-begin
-	return tree.all'Address;
 end;
 
 
@@ -603,1152 +596,6 @@ begin
 end;
 
 
-function menu_bar(
-            me_tree: AEStree_ptr;
-            me_mode: int16)
-           return int16 is
-begin
-	aes_control.opcode := 30;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_mode;
-	aes_addrin(0) := to_address(me_tree);
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_icheck(
-            me_tree : in AEStree_ptr;
-            me_item : int16;
-            me_check: int16)
-           return int16 is
-begin
-	aes_control.opcode := 30;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_item;
-	aes_intin(1) := me_check;
-	aes_addrin(0) := to_address(me_tree);
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_ienable(
-            me_tree  : in AEStree_ptr;
-            me_item  : int16;
-            me_enable: int16)
-           return int16 is
-begin
-	aes_control.opcode := 32;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_item;
-	aes_intin(1) := me_enable;
-	aes_addrin(0) := to_address(me_tree);
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_tnormal(
-            me_tree  : in AEStree_ptr;
-            me_item  : int16;
-            me_normal: int16)
-           return int16 is
-begin
-	aes_control.opcode := 33;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_item;
-	aes_intin(1) := me_normal;
-	aes_addrin(0) := to_address(me_tree);
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_text(
-            me_tree: in AEStree_ptr;
-            me_item: int16;
-            me_text: const_chars_ptr)
-           return int16 is
-begin
-	aes_control.opcode := 34;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 2;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_item;
-	aes_addrin(0) := to_address(me_tree);
-	aes_addrin(1) := me_text.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_register(
-            ap_id  : int16;
-            me_text: const_chars_ptr)
-           return int16 is
-begin
-	aes_control.opcode := 35;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := ap_id;
-	aes_addrin(0) := me_text.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_unregister(
-            id    : int16)
-           return int16 is
-begin
-	aes_control.opcode := 36;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := id;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_popup(
-            me_menu : in AMENU;
-            me_xpos : int16;
-            me_ypos : int16;
-            me_mdata: out AMENU)
-           return int16 is
-begin
-	aes_control.opcode := 36;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 2;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_xpos;
-	aes_intin(1) := me_ypos;
-	aes_addrin(0) := me_menu'Address;
-	aes_addrin(1) := me_mdata'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_attach(
-            me_flag : int16;
-            me_tree : AEStree_ptr;
-            me_item : int16;
-            me_mdata: AMENU_ptr)
-           return int16 is
-begin
-	aes_control.opcode := 37;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 2;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_flag;
-	aes_intin(1) := me_item;
-	aes_addrin(0) := to_address(me_tree);
-	aes_addrin(1) := me_mdata.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_click(
-            click : int16;
-            setit : int16)
-           return int16 is
-begin
-	aes_control.opcode := 37;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := click;
-	aes_intin(1) := setit;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_istart(
-            me_flag : int16;
-            me_tree : AEStree_ptr;
-            me_imenu: int16;
-            me_item : int16)
-           return int16 is
-begin
-	aes_control.opcode := 38;
-	aes_control.num_intin := 3;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_flag;
-	aes_intin(1) := me_imenu;
-	aes_intin(2) := me_item;
-	aes_addrin(0) := to_address(me_tree);
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function menu_settings(
-            me_flag  : int16;
-            me_values: in MN_SET)
-           return int16 is
-begin
-	aes_control.opcode := 39;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := me_flag;
-	aes_addrin(0) := me_values'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-
-procedure objc_add(
-            tree  : OBJECT_ptr;
-            Parent: int16;
-            Child : int16)
-           is
-begin
-	aes_control.opcode := 40;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Parent;
-	aes_intin(1) := Child;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-end;
-
-
-function objc_delete(
-            tree      : OBJECT_ptr;
-            Obj       : int16)
-           return int16 is
-begin
-	aes_control.opcode := 41;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Obj;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-procedure objc_draw(
-            tree      : OBJECT_ptr;
-            Start     : int16;
-            Depth     : int16;
-            Cx        : int16;
-            Cy        : int16;
-            Cw        : int16;
-            Ch        : int16)
-           is
-begin
-	aes_control.opcode := 42;
-	aes_control.num_intin := 6;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Start;
-	aes_intin(1) := Depth;
-	aes_intin(2) := Cx;
-	aes_intin(3) := Cy;
-	aes_intin(4) := Cw;
-	aes_intin(5) := Ch;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-end;
-
-
-procedure objc_draw(
-            tree      : OBJECT_ptr;
-            Start     : int16;
-            Depth     : int16;
-            r         : in GRECT)
-           is
-begin
-	aes_control.opcode := 42;
-	aes_control.num_intin := 6;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Start;
-	aes_intin(1) := Depth;
-	aes_intin(2) := r.g_x;
-	aes_intin(3) := r.g_y;
-	aes_intin(4) := r.g_w;
-	aes_intin(5) := r.g_h;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-end;
-
-
-function objc_find(
-            tree      : OBJECT_ptr;
-            Start     : int16;
-            Depth     : int16;
-            Mx        : int16;
-            My        : int16)
-           return int16 is
-begin
-	aes_control.opcode := 43;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Start;
-	aes_intin(1) := Depth;
-	aes_intin(2) := Mx;
-	aes_intin(3) := My;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-procedure objc_offset(
-            tree      : OBJECT_ptr;
-            Obj       : int16;
-            X         : out int16;
-            Y         : out int16)
-           is
-begin
-	aes_control.opcode := 44;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Obj;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	X := aes_intout(1);
-	Y := aes_intout(2);
-end;
-
-
-function objc_order(
-            tree      : OBJECT_ptr;
-            Obj       : int16;
-            NewPos    : int16)
-           return int16 is
-begin
-	aes_control.opcode := 45;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Obj;
-	aes_intin(1) := NewPos;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function objc_edit(
-            tree      : OBJECT_ptr;
-            Obj       : int16;
-            Kchar     : int16;
-            Index     : in out int16;
-            Kind      : int16)
-           return int16 is
-begin
-	aes_control.opcode := 46;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 2;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Obj;
-	aes_intin(1) := Kchar;
-	aes_intin(2) := Index;
-	aes_intin(3) := Kind;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	Index := aes_intout(1);
-	return aes_intout(0);
-end;
-
-
-function objc_edit(
-            tree      : OBJECT_ptr;
-            Obj       : int16;
-            Kchar     : int16;
-            Index     : in out int16;
-            Kind      : int16;
-            r         : out GRECT)
-           return int16 is
-begin
-	aes_control.opcode := 46;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 2;
-	aes_control.num_addrin := 2;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Obj;
-	aes_intin(1) := Kchar;
-	aes_intin(2) := Index;
-	aes_intin(3) := Kind;
-	aes_addrin(0) := tree.all'Address;
-	aes_addrin(1) := r'Address;
-	aes_trap;
-	Index := aes_intout(1);
-	return aes_intout(0);
-end;
-
-
-procedure objc_change(
-            tree      : OBJECT_ptr;
-            Start     : int16;
-            Depth     : int16;
-            Cx        : int16;
-            Cy        : int16;
-            Cw        : int16;
-            Ch        : int16;
-            NewState  : int16;
-            Redraw    : int16)
-           is
-begin
-	aes_control.opcode := 47;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Start;
-	aes_intin(1) := Depth;
-	aes_intin(2) := Cx;
-	aes_intin(3) := Cy;
-	aes_intin(4) := Cw;
-	aes_intin(5) := Ch;
-	aes_intin(6) := NewState;
-	aes_intin(7) := Redraw;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-end;
-
-
-procedure objc_change(
-            tree      : OBJECT_ptr;
-            Start     : int16;
-            Depth     : int16;
-            r         : in GRECT;
-            NewState  : int16;
-            Redraw    : int16)
-           is
-begin
-	aes_control.opcode := 47;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Start;
-	aes_intin(1) := Depth;
-	aes_intin(2) := r.g_x;
-	aes_intin(3) := r.g_y;
-	aes_intin(4) := r.g_w;
-	aes_intin(5) := r.g_h;
-	aes_intin(6) := NewState;
-	aes_intin(7) := Redraw;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-end;
-
-
-function objc_sysvar(
-            mode      : int16;
-            which     : int16;
-            in1       : int16;
-            in2       : int16;
-            out1      : out int16;
-            out2      : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 48;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := mode;
-	aes_intin(1) := which;
-	aes_intin(2) := in1;
-	aes_intin(3) := in2;
-	aes_trap;
-	out1 := aes_intout(1);
-	out2 := aes_intout(2);
-	return aes_intout(0);
-end;
-
-
-function objc_xfind(
-            tree      : OBJECT_ptr;
-            Start     : int16;
-            Depth     : int16;
-            Mx        : int16;
-            My        : int16)
-           return int16 is
-begin
-	aes_control.opcode := 49;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Start;
-	aes_intin(1) := Depth;
-	aes_intin(2) := Mx;
-	aes_intin(3) := My;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-
-
-
-function form_do(
-            tree      : OBJECT_ptr;
-            StartObj  : int16)
-           return int16 is
-begin
-	aes_control.opcode := 50;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := StartObj;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function form_dial(
-            Flag      : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Sw        : int16;
-            Sh        : int16;
-            Bx        : int16;
-            By        : int16;
-            Bw        : int16;
-            Bh        : int16)
-           return int16 is
-begin
-	aes_control.opcode := 51;
-	aes_control.num_intin := 9;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Flag;
-	aes_intin(1) := Sx;
-	aes_intin(2) := Sy;
-	aes_intin(3) := Sw;
-	aes_intin(4) := Sh;
-	aes_intin(5) := Bx;
-	aes_intin(6) := By;
-	aes_intin(7) := Bw;
-	aes_intin(8) := Bh;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function form_dial(
-            Flag      : int16;
-            little    : in GRECT;
-            big       : in GRECT)
-           return int16 is
-begin
-	aes_control.opcode := 51;
-	aes_control.num_intin := 9;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Flag;
-	aes_intin(1) := little.g_x;
-	aes_intin(2) := little.g_y;
-	aes_intin(3) := little.g_w;
-	aes_intin(4) := little.g_h;
-	aes_intin(5) := big.g_x;
-	aes_intin(6) := big.g_y;
-	aes_intin(7) := big.g_w;
-	aes_intin(8) := big.g_h;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function form_alert(fo_adefbttn: int16; alertstr: chars_ptr) return int16 is
-begin
-	aes_control.opcode := 52;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := fo_adefbttn;
-	aes_addrin(0) := alertstr.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function form_alert(fo_adefbttn: int16; alertstr: String) return int16 is
-    c_str: String := alertstr & ASCII.NUL;
-    function to_address is new Ada.Unchecked_Conversion(void_ptr, chars_ptr);
-begin
-	return form_alert(fo_adefbttn, to_address(c_str'Address));
-end;
-
-
-function form_error(
-            ErrorCode : int16)
-           return int16 is
-begin
-	aes_control.opcode := 53;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := ErrorCode;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
--- form_xerr
-function form_error(
-            ErrorCode : int32;
-            filename: String)
-           return int16 is
-    c_str: String := filename & ASCII.NUL;
-begin
-	aes_control.opcode := 53;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := int16(Shift_Right(uint32(ErrorCode), 16));
-	aes_intin(1) := int16(uint32(ErrorCode) and 16#ffff#);
-	aes_addrin(0) := c_str'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-function form_center(
-            tree      : OBJECT_ptr;
-            Cx        : out int16;
-            Cy        : out int16;
-            Cw        : out int16;
-            Ch        : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 54;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 5;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	Cx := aes_intout(1);
-	Cy := aes_intout(2);
-	Cw := aes_intout(3);
-	Ch := aes_intout(4);
-	return aes_intout(0);
-end;
-
-
-function form_center(
-            tree      : OBJECT_ptr;
-            r         : out GRECT)
-           return int16 is
-begin
-	aes_control.opcode := 54;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 5;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	r.g_x := aes_intout(1);
-	r.g_y := aes_intout(2);
-	r.g_w := aes_intout(3);
-	r.g_h := aes_intout(4);
-	return aes_intout(0);
-end;
-
-
-function form_keybd(
-            tree      : OBJECT_ptr;
-            Kobject   : int16;
-            Kobnext   : int16;
-            Kchar     : int16;
-            Knxtobject: out int16;
-            Knxtchar  : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 55;
-	aes_control.num_intin := 3;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Kobject;
-	aes_intin(1) := Kobnext;
-	aes_intin(2) := Kchar;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	Knxtobject := aes_intout(1);
-	Knxtchar := aes_intout(2);
-	return aes_intout(0);
-end;
-
-
-function form_button(
-            tree      : OBJECT_ptr;
-            Bobject   : int16;
-            Bclicks   : int16;
-            Bnxtobj   : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 56;
-	aes_control.num_intin := 2;
-	aes_control.num_intout := 2;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Bobject;
-	aes_intin(1) := Bclicks;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	Bnxtobj := aes_intout(1);
-	return aes_intout(0);
-end;
-
-
-
-
-procedure graf_rubberbox(
-            Ix        : int16;
-            Iy        : int16;
-            Iw        : int16;
-            Ih        : int16;
-            Fw        : out int16;
-            Fh        : out int16)
-           is
-begin
-	aes_control.opcode := 70;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Ix;
-	aes_intin(1) := Iy;
-	aes_intin(2) := Iw;
-	aes_intin(3) := Ih;
-	aes_trap;
-	Fw := aes_intout(1);
-	Fh := aes_intout(2);
-end;
-
-
-procedure graf_rubberbox(
-            r         : in GRECT;
-            Fw        : out int16;
-            Fh        : out int16)
-           is
-begin
-	aes_control.opcode := 70;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := r.g_x;
-	aes_intin(1) := r.g_y;
-	aes_intin(2) := r.g_w;
-	aes_intin(3) := r.g_h;
-	aes_trap;
-	Fw := aes_intout(1);
-	Fh := aes_intout(2);
-end;
-
-
-procedure graf_dragbox(
-            Sw        : int16;
-            Sh        : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Bx        : int16;
-            By        : int16;
-            Bw        : int16;
-            Bh        : int16;
-            Fw        : out int16;
-            Fh        : out int16)
-           is
-begin
-	aes_control.opcode := 71;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Sx;
-	aes_intin(1) := Sy;
-	aes_intin(2) := Sw;
-	aes_intin(3) := Sh;
-	aes_intin(4) := Bx;
-	aes_intin(5) := By;
-	aes_intin(6) := Bw;
-	aes_intin(7) := Bh;
-	aes_trap;
-	Fw := aes_intout(1);
-	Fh := aes_intout(2);
-end;
-
-
-procedure graf_dragbox(
-            little    : in GRECT;
-            big       : in GRECT;
-            Fw        : out int16;
-            Fh        : out int16)
-           is
-begin
-	aes_control.opcode := 71;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := little.g_x;
-	aes_intin(1) := little.g_y;
-	aes_intin(2) := little.g_w;
-	aes_intin(3) := little.g_h;
-	aes_intin(4) := big.g_x;
-	aes_intin(5) := big.g_y;
-	aes_intin(6) := big.g_w;
-	aes_intin(7) := big.g_h;
-	aes_trap;
-	Fw := aes_intout(1);
-	Fh := aes_intout(2);
-end;
-
-
-procedure graf_movebox(
-            Sw        : int16;
-            Sh        : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Dx        : int16;
-            Dy        : int16)
-           is
-begin
-	aes_control.opcode := 72;
-	aes_control.num_intin := 6;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Sx;
-	aes_intin(1) := Sy;
-	aes_intin(2) := Sw;
-	aes_intin(3) := Sh;
-	aes_intin(4) := Dx;
-	aes_intin(5) := Dy;
-	aes_trap;
-end;
-
-
-    procedure graf_movebox(
-                r         : in grect;
-                Dx        : int16;
-                Dy        : int16)
-               is
-begin
-	aes_control.opcode := 72;
-	aes_control.num_intin := 6;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := r.g_x;
-	aes_intin(1) := r.g_y;
-	aes_intin(2) := r.g_w;
-	aes_intin(3) := r.g_h;
-	aes_intin(4) := Dx;
-	aes_intin(5) := Dy;
-	aes_trap;
-end;
-
-
-procedure graf_growbox(
-            Sx        : int16;
-            Sy        : int16;
-            Sw        : int16;
-            Sh        : int16;
-            Fx        : int16;
-            Fy        : int16;
-            Fw        : int16;
-            Fh        : int16)
-           is
-begin
-	aes_control.opcode := 73;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Sx;
-	aes_intin(1) := Sy;
-	aes_intin(2) := Sw;
-	aes_intin(3) := Sh;
-	aes_intin(4) := Fx;
-	aes_intin(5) := Fy;
-	aes_intin(6) := Fw;
-	aes_intin(7) := Fh;
-	aes_trap;
-end;
-
-
-procedure graf_growbox(
-            little    : in GRECT;
-            big       : in GRECT)
-           is
-begin
-	aes_control.opcode := 73;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := little.g_x;
-	aes_intin(1) := little.g_y;
-	aes_intin(2) := little.g_w;
-	aes_intin(3) := little.g_h;
-	aes_intin(4) := big.g_x;
-	aes_intin(5) := big.g_y;
-	aes_intin(6) := big.g_w;
-	aes_intin(7) := big.g_h;
-	aes_trap;
-end;
-
-
-procedure graf_shrinkbox(
-            Fx        : int16;
-            Fy        : int16;
-            Fw        : int16;
-            Fh        : int16;
-            Sx        : int16;
-            Sy        : int16;
-            Sw        : int16;
-            Sh        : int16)
-           is
-begin
-	aes_control.opcode := 74;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Fx;
-	aes_intin(1) := Fy;
-	aes_intin(2) := Fw;
-	aes_intin(3) := Fh;
-	aes_intin(4) := Sx;
-	aes_intin(5) := Sy;
-	aes_intin(6) := Sw;
-	aes_intin(7) := Sh;
-	aes_trap;
-end;
-
-
-procedure graf_shrinkbox(
-            big       : in GRECT;
-            little    : in GRECT)
-           is
-begin
-	aes_control.opcode := 74;
-	aes_control.num_intin := 8;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := big.g_x;
-	aes_intin(1) := big.g_y;
-	aes_intin(2) := big.g_w;
-	aes_intin(3) := big.g_h;
-	aes_intin(4) := little.g_x;
-	aes_intin(5) := little.g_y;
-	aes_intin(6) := little.g_w;
-	aes_intin(7) := little.g_h;
-	aes_trap;
-end;
-
-
-function graf_watchbox(
-            tree      : OBJECT_ptr;
-            Obj       : int16;
-            InState   : int16;
-            OutState  : int16)
-           return int16 is
-begin
-	aes_control.opcode := 75;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := 0;
-	aes_intin(1) := Obj;
-	aes_intin(2) := InState;
-	aes_intin(3) := OutState;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function graf_slidebox(
-            tree      : OBJECT_ptr;
-            Parent    : int16;
-            Obj       : int16;
-            Direction : int16)
-           return int16 is
-begin
-	aes_control.opcode := 75;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Parent;
-	aes_intin(1) := Obj;
-	aes_intin(2) := Direction;
-	aes_addrin(0) := tree.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function graf_handle(
-            Wchar     : out int16;
-            Hchar     : out int16;
-            Wbox      : out int16;
-            Hbox      : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 77;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 5;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_trap;
-	Wchar := aes_intout(1);
-	Hchar := aes_intout(2);
-	Wbox := aes_intout(3);
-	Hbox := aes_intout(4);
-	return aes_intout(0);
-end;
-
-
-function graf_handle(
-            Wchar     : out int16;
-            Hchar     : out int16;
-            Wbox      : out int16;
-            Hbox      : out int16;
-            device    : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 77;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 6;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_trap;
-	Wchar := aes_intout(1);
-	Hchar := aes_intout(2);
-	Wbox := aes_intout(3);
-	Hbox := aes_intout(4);
-	device := aes_intout(5);
-	return aes_intout(0);
-end;
-
-
-procedure graf_mouse(
-            Form       : Mouse_Type;
-            FormAddress: MFORM_const_ptr := null)
-           is
-begin
-	aes_control.opcode := 78;
-	aes_control.num_intin := 1;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := Form'Enum_Rep;
-	aes_addrin(0) := FormAddress.all'Address;
-	aes_trap;
-end;
-
-
-procedure graf_mkstate(
-            Mx         : out int16;
-            My         : out int16;
-            ButtonState: out int16;
-            KeyState   : out int16) is
-begin
-	aes_control.opcode := 79;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 5;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_trap;
-	Mx := aes_intout(1);
-	My := aes_intout(1);
-	ButtonState := aes_intout(1);
-	KeyState := aes_intout(1);
-end;
-
-
-function graf_multirubber(
-            bx        : int16;
-            by        : int16;
-            minw      : int16;
-            minh      : int16;
-            rec       : GRECT_ptr;
-            rw        : out int16;
-            rh        : out int16)
-           return int16 is
-begin
-	aes_control.opcode := 69;
-	aes_control.num_intin := 4;
-	aes_control.num_intout := 3;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_intin(0) := bx;
-	aes_intin(1) := by;
-	aes_intin(2) := minw;
-	aes_intin(3) := minh;
-	aes_addrin(0) := rec.all'Address;
-	aes_trap;
-	rw := aes_intout(1);
-	rh := aes_intout(2);
-	return aes_intout(0);
-end;
-
-
-
-
 function scrp_read(
             Scrappath : chars_ptr)
            return int16 is
@@ -1900,7 +747,7 @@ end;
 
 function wind_create(
             Parts     : int16;
-            r         : in GRECT)
+            r         : in Rectangle)
            return int16 is
 begin
 	return wind_create(Parts, r.g_x, r.g_y, r.g_w, r.g_h);
@@ -1942,8 +789,8 @@ end;
 -- wind_xcreate
 function wind_create(
             Parts     : int16;
-            r         : in GRECT;
-            ret       : out GRECT)
+            r         : in Rectangle;
+            ret       : out Rectangle)
            return int16 is
 begin
 	return wind_create(Parts, r.g_x, r.g_y, r.g_w, r.g_h, ret.g_x, ret.g_y, ret.g_w, ret.g_h);
@@ -1975,7 +822,7 @@ end;
 
 function wind_open(
             WindowHandle: int16;
-            r           : in GRECT)
+            r           : in Rectangle)
            return int16 is
 begin
 	return wind_open(WindowHandle, r.g_x, r.g_y, r.g_w, r.g_h);
@@ -2117,7 +964,7 @@ end;
 function wind_get(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            r           : out GRECT)
+            r           : out Rectangle)
            return int16 is
 begin
 	aes_control.opcode := 104;
@@ -2142,8 +989,8 @@ end;
 function wind_get(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            clip        : in GRECT;
-            r           : out GRECT)
+            clip        : in Rectangle;
+            r           : out Rectangle)
            return int16 is
 begin
 	aes_control.opcode := 104;
@@ -2212,7 +1059,7 @@ end;
 function wind_set(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            r           : in GRECT)
+            r           : in Rectangle)
            return int16 is
 begin
 	aes_control.opcode := 105;
@@ -2237,8 +1084,8 @@ end;
 function wind_set(
             WindowHandle: int16;
             What        : wind_get_set_type;
-            s           : in GRECT;
-            r           : out GRECT)
+            s           : in Rectangle;
+            r           : out Rectangle)
            return int16 is
 begin
 	aes_control.opcode := 105;
@@ -2419,8 +1266,8 @@ end;
 procedure wind_calc(
             c_Type    : int16;
             Parts     : int16;
-            c_In      : in GRECT;
-            c_Out     : out GRECT)
+            c_In      : in Rectangle;
+            c_Out     : out Rectangle)
            is
 begin
 	aes_control.opcode := 108;
@@ -2659,16 +1506,16 @@ end;
 
 
 procedure rc_copy(
-            src: in GRECT;
-            dst: out GRECT) is
+            src: in Rectangle;
+            dst: out Rectangle) is
 begin
 	dst := src;
 end;
 
 
 function rc_equal(
-            r1: in GRECT;
-            r2: in GRECT)
+            r1: in Rectangle;
+            r2: in Rectangle)
            return boolean is
 begin
 	return r1.g_x = r2.g_x and then
@@ -2679,8 +1526,8 @@ end;
 
 
 function rc_intersect(
-            src: in GRECT;
-            dst: in out GRECT)
+            src: in Rectangle;
+            dst: in out Rectangle)
            return boolean is
 	x,y,w,h:	int16;
 begin
@@ -2702,7 +1549,7 @@ end;
 
 procedure array_to_grect(
             c_array: short_array;
-            area   : out GRECT) is
+            area   : out Rectangle) is
 begin
 	area.g_x := c_array(0);
 	area.g_y := c_array(1);
@@ -2712,7 +1559,7 @@ end;
 
 
 procedure grect_to_array(
-            area   : in GRECT;
+            area   : in Rectangle;
             c_array: out short_array) is
 begin
 	c_array(0) := area.g_x;

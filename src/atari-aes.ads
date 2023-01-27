@@ -1,10 +1,5 @@
-with Interfaces.C;
-with Interfaces.C.Extensions;
-
-
 --
 -- NOT YET IMPLEMENTED:
--- lbox_*
 -- edit_*
 
 -- Geneva functions
@@ -17,10 +12,28 @@ package Atari.Aes is
     --
 
     NIL                 : constant  := -1;                      -- *< Value for no more object in object
-    DESKTOP_HANDLE      : constant  := 0;                       -- *< TODO
-    DESK                : constant  := 0;                       -- *< TODO
+    DESKTOP_HANDLE      : constant  := 0;
+    DESK                : constant  := 0;
     ROOT                : constant  := 0;                       -- *< index of the root object of a formular
-    MAX_DEPTH           : constant  := 8;                       -- max depth of search or draw *< TODO
+    MAX_DEPTH           : constant  := 8;                       -- max depth of search or draw
+
+    -- AES standard object colors
+    G_WHITE              : constant int16 := 0;
+    G_BLACK              : constant int16 := 1;
+    G_RED                : constant int16 := 2;
+    G_GREEN              : constant int16 := 3;
+    G_BLUE               : constant int16 := 4;
+    G_CYAN               : constant int16 := 5;
+    G_YELLOW             : constant int16 := 6;
+    G_MAGENTA            : constant int16 := 7;
+    G_LWHITE             : constant int16 := 8;
+    G_LBLACK             : constant int16 := 9;
+    G_LRED               : constant int16 := 10;
+    G_LGREEN             : constant int16 := 11;
+    G_LBLUE              : constant int16 := 12;
+    G_LCYAN              : constant int16 := 13;
+    G_LYELLOW            : constant int16 := 14;
+    G_LMAGENTA           : constant int16 := 15;
 
     APC_SYSTEM          : constant  := 2;
     APC_HIDE            : constant  := 10;                      -- *< Hide application -- see mt_appl_control()
@@ -160,22 +173,22 @@ package Atari.Aes is
     AP_TERM              : constant  := 50;
     AP_TFAIL             : constant  := 51;
     AP_RESCHG            : constant  := 57;                     -- *< indicates a resolution change, see #AP_TERM
-    CT_UPDATE            : constant  := 50;                     -- *< TODO
-    CT_MOVE              : constant  := 51;                     -- *< TODO
-    CT_NEWTOP            : constant  := 52;                     -- *< TODO
-    CT_KEY               : constant  := 53;                     -- *< TODO
+    CT_UPDATE            : constant  := 50;
+    CT_MOVE              : constant  := 51;
+    CT_NEWTOP            : constant  := 52;
+    CT_KEY               : constant  := 53;
     SHUT_COMPLETED       : constant  := 60;
     RESCHG_COMPLETED     : constant  := 61;
     RESCH_COMPLETED      : constant  := RESCHG_COMPLETED;
     AP_DRAGDROP          : constant  := 63;
     SH_WDRAW             : constant  := 72;
-    SC_CHANGED           : constant  := 80;                     -- *< TODO
-    PRN_CHANGED          : constant  := 82;                     -- *< TODO
-    FNT_CHANGED          : constant  := 83;                     -- *< TODO
+    SC_CHANGED           : constant  := 80;
+    PRN_CHANGED          : constant  := 82;
+    FNT_CHANGED          : constant  := 83;
     THR_EXIT             : constant  := 88;
-    PA_EXIT              : constant  := 89;                     -- *< TODO
+    PA_EXIT              : constant  := 89;
     CH_EXIT              : constant  := 90;
-    WM_M_BDROPPED        : constant  := 100;                    -- KAOS 1.4  *< TODO
+    WM_M_BDROPPED        : constant  := 100;                    -- KAOS 1.4
     SM_M_SPECIAL         : constant  := 101;
     SM_M_RES2            : constant  := 102;                    -- *< MAG!X screen manager extension
     SM_M_RES3            : constant  := 103;                    -- *< MAG!X screen manager extension
@@ -185,20 +198,20 @@ package Atari.Aes is
     SM_M_RES7            : constant  := 107;                    -- *< MAG!X screen manager extension
     SM_M_RES8            : constant  := 108;                    -- *< MAG!X screen manager extension
     SM_M_RES9            : constant  := 109;                    -- *< MAG!X screen manager extension
-    WM_SHADED            : constant  := 22360;                  -- *< TODO [WM_SHADED apid 0 win 0 0 0 0]
-    WM_UNSHADED          : constant  := 22361;                  -- *< TODO [WM_UNSHADED apid 0 win 0 0 0 0]
+    WM_SHADED            : constant  := 22360;                  -- [WM_SHADED apid 0 win 0 0 0 0]
+    WM_UNSHADED          : constant  := 22361;                  -- [WM_UNSHADED apid 0 win 0 0 0 0]
     WM_WHEEL             : constant  := 345;
 
     --  MAG!X screen manager extension
-    SMC_TIDY_UP          : constant  := 0;                      -- MagiC 2  *< TODO
-    SMC_TERMINATE        : constant  := 1;                      -- MagiC 2  *< TODO
-    SMC_SWITCH           : constant  := 2;                      -- MagiC 2  *< TODO
-    SMC_FREEZE           : constant  := 3;                      -- MagiC 2  *< TODO
-    SMC_UNFREEZE         : constant  := 4;                      -- MagiC 2  *< TODO
-    SMC_RES5             : constant  := 5;                      -- MagiC 2  *< TODO
-    SMC_UNHIDEALL        : constant  := 6;                      -- MagiC 3.1    *< TODO
-    SMC_HIDEOTHERS       : constant  := 7;                      -- MagiC 3.1    *< TODO
-    SMC_HIDEACT          : constant  := 8;                      -- MagiC 3.1    *< TODO
+    SMC_TIDY_UP          : constant  := 0;                      -- MagiC 2
+    SMC_TERMINATE        : constant  := 1;                      -- MagiC 2
+    SMC_SWITCH           : constant  := 2;                      -- MagiC 2
+    SMC_FREEZE           : constant  := 3;                      -- MagiC 2
+    SMC_UNFREEZE         : constant  := 4;                      -- MagiC 2
+    SMC_RES5             : constant  := 5;                      -- MagiC 2
+    SMC_UNHIDEALL        : constant  := 6;                      -- MagiC 3.1
+    SMC_HIDEOTHERS       : constant  := 7;                      -- MagiC 3.1
+    SMC_HIDEACT          : constant  := 8;                      -- MagiC 3.1
 
     --  evnt_mouse modes
     MO_ENTER             : constant  := 0;                      -- *< Wait for mouse to enter rectangle, see mt_evnt_mouse()
@@ -211,10 +224,10 @@ package Atari.Aes is
     MU_M2                : constant  := 16#8#;                  -- *< Wait for a mouse/rectangle event as specified, see mt_evnt_multi()
     MU_MESAG             : constant  := 16#10#;                 -- *< Wait for a message, see mt_evnt_multi()
     MU_TIMER             : constant  := 16#20#;                 -- *< Wait the specified amount of time, see mt_evnt_multi()
-    MU_WHEEL             : constant  := 16#40#;                 -- *< TODO (XaAES)
-    MU_MX                : constant  := 16#80#;                 -- *< TODO (XaAES)
-    MU_NORM_KEYBD        : constant  := 16#100#;                -- *< TODO (XaAES)
-    MU_DYNAMIC_KEYBD     : constant  := 16#200#;                -- *< TODO (XaAES)
+    MU_WHEEL             : constant  := 16#40#;                 -- (XaAES)
+    MU_MX                : constant  := 16#80#;                 -- (XaAES)
+    MU_NORM_KEYBD        : constant  := 16#100#;                -- (XaAES)
+    MU_DYNAMIC_KEYBD     : constant  := 16#200#;                -- (XaAES)
 
     FA_NOICON            : constant String := "[0]";            -- *< display no icon, see mt_form_alert()
     FA_ERROR             : constant String := "[1]";            -- *< display Exclamation icon, see mt_form_alert()
@@ -342,7 +355,7 @@ package Atari.Aes is
     NM_APTERM            : constant  := 16#1#;                  -- *< the application understands #AP_TERM messages, see mt_shel_write() and #SWM_NEWMSG
     NM_INHIBIT_HIDE      : constant  := 16#2#;                  -- *< the application won't be hidden, see mt_shel_write() and #SWM_NEWMSG
 
-    AP_AESTERM           : constant  := 52;                     -- Mode 10: N.AES komplett terminieren. *< TODO
+    AP_AESTERM           : constant  := 52;                     -- Mode 10: N.AES komplett terminieren.
 
     --  shel_write sh_wdoex parameter flags in MSB
     SW_PSETLIMIT         : constant  := 16#100#;                -- *< Initial Psetlimit() , see SHELW::psetlimit
@@ -679,105 +692,46 @@ package Atari.Aes is
     M_PREVIOUS: constant Mouse_Type := M_LAST;
 
     --  inside patterns
-    IP_HOLLOW            : constant  := 0;                      -- *< TODO
-    IP_1PATT             : constant  := 1;                      -- *< TODO
-    IP_2PATT             : constant  := 2;                      -- *< TODO
-    IP_3PATT             : constant  := 3;                      -- *< TODO
-    IP_4PATT             : constant  := 4;                      -- *< TODO
-    IP_5PATT             : constant  := 5;                      -- *< TODO
-    IP_6PATT             : constant  := 6;                      -- *< TODO
-    IP_SOLID             : constant  := 7;                      -- *< TODO
+    IP_HOLLOW            : constant  := 0;
+    IP_1PATT             : constant  := 1;
+    IP_2PATT             : constant  := 2;
+    IP_3PATT             : constant  := 3;
+    IP_4PATT             : constant  := 4;
+    IP_5PATT             : constant  := 5;
+    IP_6PATT             : constant  := 6;
+    IP_SOLID             : constant  := 7;
 
     --  font types
-    GDOS_PROP            : constant  := 0;                      -- *< TODO
-    GDOS_MONO            : constant  := 1;                      -- *< TODO
-    GDOS_BITM            : constant  := 2;                      -- *< TODO
-    IBM                  : constant  := 3;                      -- *< TODO
-    SMALL                : constant  := 5;                      -- *< TODO
+    GDOS_PROP            : constant  := 0;
+    GDOS_MONO            : constant  := 1;
+    GDOS_BITM            : constant  := 2;
+    IBM                  : constant  := 3;
+    SMALL                : constant  := 5;
 
     --  object types
-    G_BOX                : constant  := 20;                     -- *< TODO
-    G_TEXT               : constant  := 21;                     -- *< TODO
-    G_BOXTEXT            : constant  := 22;                     -- *< TODO
-    G_IMAGE              : constant  := 23;                     -- *< TODO
-    G_USERDEF            : constant  := 24;                     -- *< TODO
-    G_PROGDEF            : constant  := 24;                     -- *< TODO
-    G_IBOX               : constant  := 25;                     -- *< TODO
-    G_BUTTON             : constant  := 26;                     -- *< TODO
-    G_BOXCHAR            : constant  := 27;                     -- *< TODO
-    G_STRING             : constant  := 28;                     -- *< TODO
-    G_FTEXT              : constant  := 29;                     -- *< TODO
-    G_FBOXTEXT           : constant  := 30;                     -- *< TODO
-    G_ICON               : constant  := 31;                     -- *< TODO
-    G_TITLE              : constant  := 32;                     -- *< TODO
-    G_CICON              : constant  := 33;                     -- *< TODO
-    G_SWBUTTON           : constant  := 34;                     -- *< TODO
-    G_POPUP              : constant  := 35;                     -- *< TODO
-    G_WINTITLE           : constant  := 36;                     -- *< TODO
-    G_EDIT               : constant  := 37;                     -- *< TODO
-    G_SHORTCUT           : constant  := 38;                     -- *< TODO
+    G_BOX                : constant  := 20;
+    G_TEXT               : constant  := 21;
+    G_BOXTEXT            : constant  := 22;
+    G_IMAGE              : constant  := 23;
+    G_USERDEF            : constant  := 24;
+    G_PROGDEF            : constant  := 24;
+    G_IBOX               : constant  := 25;
+    G_BUTTON             : constant  := 26;
+    G_BOXCHAR            : constant  := 27;
+    G_STRING             : constant  := 28;
+    G_FTEXT              : constant  := 29;
+    G_FBOXTEXT           : constant  := 30;
+    G_ICON               : constant  := 31;
+    G_TITLE              : constant  := 32;
+    G_CICON              : constant  := 33;
+    G_SWBUTTON           : constant  := 34;
+    G_POPUP              : constant  := 35;
+    G_WINTITLE           : constant  := 36;
+    G_EDIT               : constant  := 37;
+    G_SHORTCUT           : constant  := 38;
     G_SLIST              : constant  := 39;
     G_EXTBOX             : constant  := 40;
     G_OBLINK             : constant  := 41;
-
-    --  object flags
-    OF_NONE              : constant  := 16#0#;                  -- *< TODO
-    OF_SELECTABLE        : constant  := 16#1#;                  -- *< TODO
-    OF_DEFAULT           : constant  := 16#2#;                  -- *< TODO
-    OF_EXIT              : constant  := 16#4#;                  -- *< TODO
-    OF_EDITABLE          : constant  := 16#8#;                  -- *< TODO
-    OF_RBUTTON           : constant  := 16#10#;                 -- *< TODO
-    OF_LASTOB            : constant  := 16#20#;                 -- *< TODO
-    OF_TOUCHEXIT         : constant  := 16#40#;                 -- *< TODO
-    OF_HIDETREE          : constant  := 16#80#;                 -- *< TODO
-    OF_INDIRECT          : constant  := 16#100#;                -- *< TODO
-    OF_FL3DIND           : constant  := 16#200#;                -- bit 9 *< TODO
-    OF_FL3DBAK           : constant  := 16#400#;                -- bit 10 *< TODO
-    OF_FL3DACT           : constant  := 16#600#;                -- *< TODO
-    OF_FL3DMASK          : constant  := 16#600#;
-    OF_SUBMENU           : constant  := 16#800#;                -- bit 11 *< TODO
-    OF_FLAG11            : constant  := 16#800#;                -- *< TODO
-    OF_FLAG12            : constant  := 16#1000#;               -- *< TODO
-    OF_FLAG13            : constant  := 16#2000#;               -- *< TODO
-    OF_FLAG14            : constant  := 16#4000#;               -- *< TODO
-    OF_FLAG15            : constant  := 16#8000#;               -- *< TODO
-
-    --  object states
-    OS_NORMAL            : constant  := 16#0#;                  -- *< TODO
-    OS_SELECTED          : constant  := 16#1#;                  -- *< TODO
-    OS_CROSSED           : constant  := 16#2#;                  -- *< TODO
-    OS_CHECKED           : constant  := 16#4#;                  -- *< TODO
-    OS_DISABLED          : constant  := 16#8#;                  -- *< TODO
-    OS_OUTLINED          : constant  := 16#10#;                 -- *< TODO
-    OS_SHADOWED          : constant  := 16#20#;                 -- *< TODO
-    OS_WHITEBAK          : constant  := 16#40#;                 -- *< TODO
-    OS_DRAW3D            : constant  := 16#80#;                 -- *< TODO
-    OS_STATE08           : constant  := 16#100#;                -- *< TODO
-    OS_STATE09           : constant  := 16#200#;                -- *< TODO
-    OS_STATE10           : constant  := 16#400#;                -- *< TODO
-    OS_STATE11           : constant  := 16#800#;                -- *< TODO
-    OS_STATE12           : constant  := 16#1000#;               -- *< TODO
-    OS_STATE13           : constant  := 16#2000#;               -- *< TODO
-    OS_STATE14           : constant  := 16#4000#;               -- *< TODO
-    OS_STATE15           : constant  := 16#8000#;               -- *< TODO
-
-    -- AES standard object colors
-    G_WHITE              : constant  := 0;                      -- *< TODO
-    G_BLACK              : constant  := 1;                      -- *< TODO
-    G_RED                : constant  := 2;                      -- *< TODO
-    G_GREEN              : constant  := 3;                      -- *< TODO
-    G_BLUE               : constant  := 4;                      -- *< TODO
-    G_CYAN               : constant  := 5;                      -- *< TODO
-    G_YELLOW             : constant  := 6;                      -- *< TODO
-    G_MAGENTA            : constant  := 7;                      -- *< TODO
-    G_LWHITE             : constant  := 8;                      -- *< TODO
-    G_LBLACK             : constant  := 9;                      -- *< TODO
-    G_LRED               : constant  := 10;                     -- *< TODO
-    G_LGREEN             : constant  := 11;                     -- *< TODO
-    G_LBLUE              : constant  := 12;                     -- *< TODO
-    G_LCYAN              : constant  := 13;                     -- *< TODO
-    G_LYELLOW            : constant  := 14;                     -- *< TODO
-    G_LMAGENTA           : constant  := 15;                     -- *< TODO
 
     --  editable text field definitions
     ED_START             : constant  := 0;                      -- *< Reserved. Do not use, see mt_objc_edit()
@@ -810,29 +764,9 @@ package Atari.Aes is
     ED_CHGTMPLPTR        : constant  := 205;
 
     --  editable text justification
-    TE_LEFT              : constant  := 0;                      -- *< TODO
-    TE_RIGHT             : constant  := 1;                      -- *< TODO
-    TE_CNTR              : constant  := 2;                      -- *< TODO
-
-    NO_DRAW              : constant  := 0;                      -- *< object will not be redrawn, see mt_objc_change()
-    REDRAW               : constant  := 1;                      -- *< object will be redrawn, see mt_objc_change()
-
-    OO_LAST              : constant  := -1;                     -- *< make object the last child, see mt_objc_order()
-    OO_FIRST             : constant  := 0;                      -- *< make object the first child, see mt_objc_order()
-
-    --  objc_sysvar modes
-    SV_INQUIRE           : constant  := 0;                      -- *< inquire sysvar data, see mt_objc_sysvar()
-    SV_SET               : constant  := 1;                      -- *< set sysvar data, see mt_objc_sysvar()
-
-    --  the objc_sysvar ob_swhich values
-    LK3DIND              : constant  := 1;                      -- *< text of indicator object moves when selected, see mt_objc_sysvar()
-    LK3DACT              : constant  := 2;                      -- *< text of activator object moves when selected, see mt_objc_sysvar()
-    INDBUTCOL            : constant  := 3;                      -- *< default color for indicator objects, see mt_objc_sysvar()
-    ACTBUTCOL            : constant  := 4;                      -- *< default color for activator objects, see mt_objc_sysvar()
-    BACKGRCOL            : constant  := 5;                      -- *< default color for background objects, see mt_objc_sysvar()
-    AD3DVAL              : constant  := 6;                      -- *< number of extra pixels to accomodate 3D effects, see mt_objc_sysvar()
-    MX_ENABLE3D          : constant  := 10;                     -- *< enable or disable the 3D look (MagiC 3), see mt_objc_sysvar()
-    MENUCOL              : constant  := 11;                     -- *< TO BE COMPLETED (MagiC 6), see mt_objc_sysvar()
+    TE_LEFT              : constant  := 0;
+    TE_RIGHT             : constant  := 1;
+    TE_CNTR              : constant  := 2;
 
     -- AP_DRAGDROP return codes
     DD_OK        : constant  := 0;
@@ -921,24 +855,14 @@ package Atari.Aes is
             wasgr  : aliased int16;
         end record;
 
-    type GRECT is
+    type Rectangle is
         record
             g_x: aliased int16;
             g_y: aliased int16;
             g_w: aliased int16;
             g_h: aliased int16;
         end record;
-    type GRECT_ptr is access all GRECT;
-    type GRECT_const_ptr is access constant GRECT;
-
-    type OBJC_COLORWORD is
-        record
-            borderc: Interfaces.C.Extensions.Unsigned_4;
-            textc  : Interfaces.C.Extensions.Unsigned_4;
-            opaque : Interfaces.C.Extensions.Unsigned_1;
-            pattern: Interfaces.C.Extensions.Unsigned_3;
-            fillc  : Interfaces.C.Extensions.Unsigned_4;
-        end record;
+    type Rectangle_ptr is access all Rectangle;
 
     type RSHDR is
         record
@@ -987,20 +911,6 @@ package Atari.Aes is
         end record;
     type RSHXDR_ptr is access all RSXHDR;
 
-    type OBJECT;
-    type OBJECT_ptr is access all OBJECT;
-    type OBJECT_ptr_ptr is access all OBJECT_ptr;
-
-    type AMENU is
-        record
-            mn_tree    : aliased OBJECT_ptr;
-            mn_menu    : aliased int16;
-            mn_item    : aliased int16;
-            mn_scroll  : aliased int16;
-            mn_keystate: aliased int16;
-        end record;
-    type AMENU_ptr is access all AMENU;
-
     type MOBLK is
         record
             m_out: aliased int16;
@@ -1025,9 +935,9 @@ package Atari.Aes is
             emi_bmask  : aliased uint16;
             emi_bstate : aliased uint16;
             emi_m1leave: aliased int16;
-            emi_m1     : aliased GRECT;
+            emi_m1     : aliased Rectangle;
             emi_m2leave: aliased int16;
-            emi_m2     : aliased GRECT;
+            emi_m2     : aliased Rectangle;
             emi_tlow   : aliased int16;
             emi_thigh  : aliased int16;
         end record;
@@ -1091,167 +1001,6 @@ package Atari.Aes is
         end record;
 
 
-    type BFOBSPEC is
-        record
-            character  : Interfaces.C.Extensions.Unsigned_8;
-            framesize  : Interfaces.C.signed_char;
-            framecol   : Interfaces.C.Extensions.Unsigned_4;
-            textcol    : Interfaces.C.Extensions.Unsigned_4;
-            textmode   : Interfaces.C.Extensions.Unsigned_1;
-            fillpattern: Interfaces.C.Extensions.Unsigned_3;
-            interiorcol: Interfaces.C.Extensions.Unsigned_4;
-        end record
-        with Pack => True, Alignment => 2;
-
-
-    type PARMBLK is
-        record
-            pb_tree     : aliased OBJECT_ptr;
-            pb_obj      : aliased int16;
-            pb_prevstate: aliased int16;
-            pb_currstate: aliased int16;
-            pb_x        : aliased int16;
-            pb_y        : aliased int16;
-            pb_w        : aliased int16;
-            pb_h        : aliased int16;
-            pb_xc       : aliased int16;
-            pb_yc       : aliased int16;
-            pb_wc       : aliased int16;
-            pb_hc       : aliased int16;
-            pb_parm     : aliased intptr;
-        end record;
-	type PARMBLK_ptr is access all PARMBLK;
-
-    type ub_code_func_ptr is access function(
-               parmblock: PARMBLK_ptr)
-               return int16;
-    pragma Convention(C, ub_code_func_ptr);
-
-    type USERBLK is
-        record
-            ub_code: aliased ub_code_func_ptr;
-            ub_parm: aliased intptr;
-        end record;
-    type USERBLK_ptr is access all USERBLK;
-
-    type TEDINFO is
-        record
-            te_ptext    : aliased chars_ptr;
-            te_ptmplt   : aliased chars_ptr;
-            te_pvalid   : aliased chars_ptr;
-            te_font     : aliased int16;
-            te_fontid   : aliased int16;
-            te_just     : aliased int16;
-            te_color    : aliased int16;
-            te_fontsize : aliased int16;
-            te_thickness: aliased int16;
-            te_txtlen   : aliased int16;
-            te_tmplen   : aliased int16;
-        end record;
-    type TEDINFO_ptr is access all TEDINFO;
-
-    type BITBLK is
-        record
-            bi_pdata: aliased void_ptr;
-            bi_wb   : aliased int16;
-            bi_hl   : aliased int16;
-            bi_x    : aliased int16;
-            bi_y    : aliased int16;
-            bi_color: aliased int16;
-        end record;
-    type BITBLK_ptr is access all BITBLK;
-
-
-    type ICONBLK is
-        record
-            ib_pmask: aliased void_ptr;
-            ib_pdata: aliased void_ptr;
-            ib_ptext: aliased chars_ptr;
-            ib_char : aliased int16;
-            ib_xchar: aliased int16;
-            ib_ychar: aliased int16;
-            ib_xicon: aliased int16;
-            ib_yicon: aliased int16;
-            ib_wicon: aliased int16;
-            ib_hicon: aliased int16;
-            ib_xtext: aliased int16;
-            ib_ytext: aliased int16;
-            ib_wtext: aliased int16;
-            ib_htext: aliased int16;
-        end record;
-    type ICONBLK_ptr is access all ICONBLK;
-
-
-    type CICON;
-    type CICON_ptr is access all CICON;
-    type CICON is
-        record
-            num_planes: aliased int16;
-            col_data  : aliased void_ptr;
-            col_mask  : aliased void_ptr;
-            sel_data  : aliased void_ptr;
-            sel_mask  : aliased void_ptr;
-            next_res  : aliased CICON_ptr;
-        end record;
-
-    type CICONBLK is
-        record
-            monoblk : aliased ICONBLK;
-            mainlist: aliased CICON_ptr;
-        end record;
-    type CICONBLK_ptr is access all CICONBLK;
-
-
-    type OBSPEC;
-    type OBSPEC_ptr is access all OBSPEC;
-    type OBSPEC (Which: int16 := 0) is
-        record
-            case Which is
-                when OF_INDIRECT =>
-                    indirect   : aliased OBSPEC_ptr;
-                when G_BOX | G_IBOX | G_BOXCHAR =>
-                    obspec     : aliased BFOBSPEC;
-                when G_BOXTEXT | G_TEXT | G_FTEXT | G_FBOXTEXT =>
-                    tedinfo    : aliased TEDINFO_ptr;
-                when G_IMAGE =>
-                    bitblk     : aliased BITBLK_ptr;
-                when G_ICON =>
-                    iconblk    : aliased ICONBLK_ptr;
-                when G_CICON =>
-                    ciconblk   : aliased CICONBLK_ptr;
-                when G_USERDEF =>
-                    userblk    : aliased USERBLK_ptr;
-                when G_BUTTON | G_STRING | G_TITLE | G_SHORTCUT =>
-                    free_string: aliased chars_ptr;
-                when others =>
-                    index      : aliased intptr;
-            end case;
-        end record;
-    pragma Convention(C, OBSPEC);
-    pragma Unchecked_Union(OBSPEC);
-
-
-    type OBJECT is
-        record
-            ob_next  : aliased int16;
-            ob_head  : aliased int16;
-            ob_tail  : aliased int16;
-            ob_type  : aliased uint16;
-            ob_flags : aliased uint16;
-            ob_state : aliased uint16;
-            ob_spec  : OBSPEC;
-            ob_x     : aliased int16;
-            ob_y     : aliased int16;
-            ob_width : aliased int16;
-            ob_height: aliased int16;
-        end record
-        with Convention => C;
-    type OBJECT_array is array(int16 range <>) of aliased OBJECT;
-    subtype AEStree is OBJECT_array(0..2339);
-    type AEStree_ptr is access all AEStree;
-    type AEStree_ptr_ptr is access all AEStree_ptr;
-
-
     type aes_msg_simple is
         record
             msgtype: int16;
@@ -1266,7 +1015,7 @@ package Atari.Aes is
             from: int16;
             size: int16;
             handle: int16;
-            rect: GRECT;
+            rect: Rectangle;
         end record;
     type aes_msg_select is
         record
@@ -1303,6 +1052,11 @@ package Atari.Aes is
 
     procedure crystal(pb: AESPB_ptr) with Inline;
     procedure aes_trap with Inline;
+
+
+    --  old C-style names
+	subtype GRECT is Rectangle;
+
 
     function appl_init return int16;
     procedure appl_exit;
@@ -1442,367 +1196,6 @@ package Atari.Aes is
                return int16;
 
 
-    function menu_bar(
-                me_tree: in AEStree_ptr;
-                me_mode: int16)
-               return int16;
-
-    function menu_icheck(
-                me_tree : in AEStree_ptr;
-                me_item : int16;
-                me_check: int16)
-               return int16;
-
-    function menu_ienable(
-                me_tree  : in AEStree_ptr;
-                me_item  : int16;
-                me_enable: int16)
-               return int16;
-
-    function menu_tnormal(
-                me_tree  : in AEStree_ptr;
-                me_item  : int16;
-                me_normal: int16)
-               return int16;
-
-    function menu_text(
-                me_tree: in AEStree_ptr;
-                me_item: int16;
-                me_text: const_chars_ptr)
-               return int16;
-
-    function menu_register(
-                ap_id  : int16;
-                me_text: const_chars_ptr)
-               return int16;
-
-    function menu_unregister(
-                id    : int16)
-               return int16;
-
-    function menu_popup(
-                me_menu : in AMENU;
-                me_xpos : int16;
-                me_ypos : int16;
-                me_mdata: out AMENU)
-               return int16;
-
-    function menu_attach(
-                me_flag : int16;
-                me_tree : in AEStree_ptr;
-                me_item : int16;
-                me_mdata: AMENU_ptr)
-               return int16;
-
-    function menu_click(
-                click : int16;
-                setit : int16)
-               return int16;
-
-    function menu_istart(
-                me_flag : int16;
-                me_tree : in AEStree_ptr;
-                me_imenu: int16;
-                me_item : int16)
-               return int16;
-
-    function menu_settings(
-                me_flag  : int16;
-                me_values: in MN_SET)
-               return int16;
-
-
-
-    procedure objc_add(
-                tree  : OBJECT_ptr;
-                Parent: int16;
-                Child : int16);
-
-    function objc_delete(
-                tree      : OBJECT_ptr;
-                Obj       : int16)
-               return int16;
-
-    procedure objc_draw(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Cx        : int16;
-                Cy        : int16;
-                Cw        : int16;
-                Ch        : int16);
-
-    procedure objc_draw(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                r         : in GRECT);
-
-    function objc_find(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Mx        : int16;
-                My        : int16)
-               return int16;
-
-    procedure objc_offset(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                X         : out int16;
-                Y         : out int16);
-
-    function objc_order(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                NewPos    : int16)
-               return int16;
-
-    function objc_edit(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                Kchar     : int16;
-                Index     : in out int16;
-                Kind      : int16)
-               return int16;
-
-    function objc_edit(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                Kchar     : int16;
-                Index     : in out int16;
-                Kind      : int16;
-                r         : out GRECT)
-               return int16;
-
-    procedure objc_change(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Cx        : int16;
-                Cy        : int16;
-                Cw        : int16;
-                Ch        : int16;
-                NewState  : int16;
-                Redraw    : int16);
-
-    procedure objc_change(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                r         : in GRECT;
-                NewState  : int16;
-                Redraw    : int16);
-
-    function objc_sysvar(
-                mode      : int16;
-                which     : int16;
-                in1       : int16;
-                in2       : int16;
-                out1      : out int16;
-                out2      : out int16)
-               return int16;
-
-    function objc_xfind(
-                tree      : OBJECT_ptr;
-                Start     : int16;
-                Depth     : int16;
-                Mx        : int16;
-                My        : int16)
-               return int16;
-
-
-
-
-    function form_do(
-                tree      : OBJECT_ptr;
-                StartObj  : int16)
-               return int16;
-
-    function form_dial(
-                Flag      : int16;
-                Sx        : int16;
-                Sy        : int16;
-                Sw        : int16;
-                Sh        : int16;
-                Bx        : int16;
-                By        : int16;
-                Bw        : int16;
-                Bh        : int16)
-               return int16;
-
-    function form_dial(
-                Flag      : int16;
-                little    : in GRECT;
-                big       : in GRECT)
-               return int16;
-
-    function form_alert(fo_adefbttn: int16; alertstr: String) return int16;
-    function form_alert(fo_adefbttn: int16; alertstr: chars_ptr) return int16;
-
-    function form_error(
-                ErrorCode : int16)
-               return int16;
-
-    function form_error(
-                ErrorCode : int32;
-                filename: String)
-               return int16;
-
-    function form_center(
-                tree      : OBJECT_ptr;
-                Cx        : out int16;
-                Cy        : out int16;
-                Cw        : out int16;
-                Ch        : out int16)
-               return int16;
-
-    function form_center(
-                tree      : OBJECT_ptr;
-                r         : out GRECT)
-               return int16;
-
-    function form_keybd(
-                tree      : OBJECT_ptr;
-                Kobject   : int16;
-                Kobnext   : int16;
-                Kchar     : int16;
-                Knxtobject: out int16;
-                Knxtchar  : out int16)
-               return int16;
-
-    function form_button(
-                tree      : OBJECT_ptr;
-                Bobject   : int16;
-                Bclicks   : int16;
-                Bnxtobj   : out int16)
-               return int16;
-
-
-
-
-
-    procedure graf_rubberbox(
-                Ix        : int16;
-                Iy        : int16;
-                Iw        : int16;
-                Ih        : int16;
-                Fw        : out int16;
-                Fh        : out int16);
-
-    procedure graf_rubberbox(
-                r         : in GRECT;
-                Fw        : out int16;
-                Fh        : out int16);
-
-    procedure graf_dragbox(
-                Sw        : int16;
-                Sh        : int16;
-                Sx        : int16;
-                Sy        : int16;
-                Bx        : int16;
-                By        : int16;
-                Bw        : int16;
-                Bh        : int16;
-                Fw        : out int16;
-                Fh        : out int16);
-
-    procedure graf_dragbox(
-                little    : in GRECT;
-                big       : in GRECT;
-                Fw        : out int16;
-                Fh        : out int16);
-
-    procedure graf_movebox(
-                Sw        : int16;
-                Sh        : int16;
-                Sx        : int16;
-                Sy        : int16;
-                Dx        : int16;
-                Dy        : int16);
-
-    procedure graf_movebox(
-                r         : in grect;
-                Dx        : int16;
-                Dy        : int16);
-
-    procedure graf_growbox(
-                Sx        : int16;
-                Sy        : int16;
-                Sw        : int16;
-                Sh        : int16;
-                Fx        : int16;
-                Fy        : int16;
-                Fw        : int16;
-                Fh        : int16);
-
-    procedure graf_growbox(
-                little    : in GRECT;
-                big       : in GRECT);
-
-    procedure graf_shrinkbox(
-                Fx        : int16;
-                Fy        : int16;
-                Fw        : int16;
-                Fh        : int16;
-                Sx        : int16;
-                Sy        : int16;
-                Sw        : int16;
-                Sh        : int16);
-
-    procedure graf_shrinkbox(
-                big       : in GRECT;
-                little    : in GRECT);
-
-    function graf_watchbox(
-                tree      : OBJECT_ptr;
-                Obj       : int16;
-                InState   : int16;
-                OutState  : int16)
-               return int16;
-
-    function graf_slidebox(
-                tree      : OBJECT_ptr;
-                Parent    : int16;
-                Obj       : int16;
-                Direction : int16)
-               return int16;
-
-    function graf_multirubber(
-                bx        : int16;
-                by        : int16;
-                minw      : int16;
-                minh      : int16;
-                rec       : GRECT_ptr;
-                rw        : out int16;
-                rh        : out int16)
-               return int16;
-
-    function graf_handle(
-                Wchar     : out int16;
-                Hchar     : out int16;
-                Wbox      : out int16;
-                Hbox      : out int16)
-               return int16;
-
-    function graf_handle(
-                Wchar     : out int16;
-                Hchar     : out int16;
-                Wbox      : out int16;
-                Hbox      : out int16;
-                device    : out int16)
-               return int16;
-
-    procedure graf_mouse(
-                Form       : Mouse_Type;
-                FormAddress: MFORM_const_ptr := null);
-
-    procedure graf_mkstate(
-                Mx         : out int16;
-                My         : out int16;
-                ButtonState: out int16;
-                KeyState   : out int16);
-
 
 
 
@@ -1861,7 +1254,7 @@ package Atari.Aes is
 
     function wind_create(
                 Parts     : int16;
-                r         : in GRECT)
+                r         : in Rectangle)
                return int16;
 
     -- wind_xcreate
@@ -1880,8 +1273,8 @@ package Atari.Aes is
     -- wind_xcreate
     function wind_create(
                 Parts     : int16;
-                r         : in GRECT;
-                ret       : out GRECT)
+                r         : in Rectangle;
+                ret       : out Rectangle)
                return int16;
 
     function wind_open(
@@ -1894,7 +1287,7 @@ package Atari.Aes is
 
     function wind_open(
                 WindowHandle: int16;
-                r           : in GRECT)
+                r           : in Rectangle)
                return int16;
 
     function wind_close(
@@ -1917,14 +1310,14 @@ package Atari.Aes is
     function wind_get(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                r           : out GRECT)
+                r           : out Rectangle)
                return int16;
 
     function wind_get(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                clip        : in GRECT;
-                r           : out GRECT)
+                clip        : in Rectangle;
+                r           : out Rectangle)
                return int16;
 
     function wind_get(
@@ -1951,14 +1344,14 @@ package Atari.Aes is
     function wind_set(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                r           : in GRECT)
+                r           : in Rectangle)
                return int16;
 
     function wind_set(
                 WindowHandle: int16;
                 What        : wind_get_set_type;
-                s           : in GRECT;
-                r           : out GRECT)
+                s           : in Rectangle;
+                r           : out Rectangle)
                return int16;
 
     function wind_set(
@@ -2004,8 +1397,8 @@ package Atari.Aes is
     procedure wind_calc(
                 c_Type    : int16;
                 Parts     : int16;
-                c_In      : in GRECT;
-                c_Out     : out GRECT);
+                c_In      : in Rectangle;
+                c_Out     : out Rectangle);
 
     procedure wind_new;
 
@@ -2066,25 +1459,25 @@ package Atari.Aes is
 
 
     procedure rc_copy(
-                src: in GRECT;
-                dst: out GRECT);
+                src: in Rectangle;
+                dst: out Rectangle);
 
     function rc_equal(
-                r1: in GRECT;
-                r2: in GRECT)
+                r1: in Rectangle;
+                r2: in Rectangle)
                return boolean;
 
     function rc_intersect(
-                src: in GRECT;
-                dst: in out GRECT)
+                src: in Rectangle;
+                dst: in out Rectangle)
                return boolean;
 
     procedure array_to_grect(
                 c_array: short_array;
-                area   : out GRECT);
+                area   : out Rectangle);
 
     procedure grect_to_array(
-                area   : in GRECT;
+                area   : in Rectangle;
                 c_array: out short_array);
 
     function Is_Application return boolean with inline;

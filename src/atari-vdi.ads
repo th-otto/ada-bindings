@@ -294,10 +294,8 @@ package Atari.Vdi is
 	vdi_ptsout: aliased VDIPtsOut;
 
 
-    procedure vdi(pb: VDIPB_ptr)
-      with Inline;
-	procedure vdi_trap
-	  with Inline;
+    procedure vdicall(pb: VDIPB_ptr) with Inline;
+	procedure vdi_trap with Inline;
 
 
     procedure v_opnwk(
