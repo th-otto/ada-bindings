@@ -22,15 +22,15 @@ package Atari is
     type short_array is array(Integer range <>) of aliased int16;
     type short_array_ptr is access all short_array;
 
-	type chars_ptr is access all Character;
-	for chars_ptr'Size use Standard'Address_Size;
-	pragma No_Strict_Aliasing (chars_ptr);
+    type chars_ptr is access all Character;
+    for chars_ptr'Size use Standard'Address_Size;
+    pragma No_Strict_Aliasing (chars_ptr);
 
     type long_array is array(Integer range <>) of aliased int32;
 
     type const_chars_ptr is access constant Character;
-	for const_chars_ptr'Size use Standard'Address_Size;
-	pragma No_Strict_Aliasing (const_chars_ptr);
+    for const_chars_ptr'Size use Standard'Address_Size;
+    pragma No_Strict_Aliasing (const_chars_ptr);
     type chars_ptr_array is array (integer range <>) of aliased chars_ptr;
 
     type void_ptr_ptr is access void_ptr;

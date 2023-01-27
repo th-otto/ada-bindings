@@ -8,6 +8,7 @@ pragma Suppress (Range_Check);
 pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
+
 function rsrc_load(Name: const_chars_ptr) return Int16 is
 begin
 	aes_control.opcode := 110;
@@ -26,7 +27,7 @@ function rsrc_load(Name: String) return Int16 is
     c_str: String := Name & ASCII.NUL;
     function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
 begin
-	return rsrc_load(to_address(c_str'Address));
+	return rsrc_load(to_address(c_str(c_str'First)'Address));
 end;
 
 
@@ -60,21 +61,16 @@ end;
 
 function rsrc_gaddr(Index: Int16) return AEStree_ptr is
     treeadr: void_ptr;
-    treeptr: AEStree_ptr;
-    function to_address is new Ada.Unchecked_Conversion(void_ptr, AEStree_ptr);
 begin
 	if rsrc_gaddr(R_TREE, Index, treeadr) = 0 then
 	   return null;
 	end if;
-	treeptr := to_address(treeadr);
-	return treeptr;
+	return AEStree_ptr'Deref(treeadr'Address);
 end;
 
 
 function rsrc_gaddr(Index: Int16) return const_chars_ptr is
     stradr: void_ptr;
-    strptr: const_chars_ptr;
-    function to_address is new Ada.Unchecked_Conversion(void_ptr, const_chars_ptr);
 begin
 	--
 	-- Note: R_FRSTR returns the address of the string pointer,
@@ -83,15 +79,12 @@ begin
 	if rsrc_gaddr(R_STRING, Index, stradr) = 0 then
 	   return null;
 	end if;
-	strptr := to_address(stradr);
-	return strptr;
+	return const_chars_ptr'Deref(stradr'Address);
 end;
 
 
 function rsrc_gaddr(Index: int16) return BITBLK_ptr is
     bitadr: void_ptr;
-    bitptr: BITBLK_ptr;
-    function to_address is new Ada.Unchecked_Conversion(void_ptr, BITBLK_ptr);
 begin
 	--
 	-- Note: R_FRIMG returns the address of the BITBLK pointer,
@@ -100,8 +93,7 @@ begin
 	if rsrc_gaddr(R_IMAGEDATA, Index, bitadr) = 0 then
 	   return null;
 	end if;
-	bitptr := to_address(bitadr);
-	return bitptr;
+	return BITBLK_ptr'Deref(bitadr'Address);
 end;
 
 
@@ -121,7 +113,6 @@ end;
 
 
 procedure rsrc_obfix(tree: OBJECT_ptr; Index: Int16) is
-    function to_address is new Ada.Unchecked_Conversion(OBJECT_ptr, void_ptr);
 begin
 	aes_control.opcode := 114;
 	aes_control.num_intin := 1;
@@ -129,7 +120,7 @@ begin
 	aes_control.num_addrin := 1;
 	aes_control.num_addrout := 0;
 	aes_intin(0) := Index;
-	aes_addrin(0) := to_address(tree);
+	aes_addrin(0) := tree.all'Address;
 	aes_trap;
 end;
 
