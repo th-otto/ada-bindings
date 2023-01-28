@@ -2,6 +2,31 @@ with Interfaces.C.Extensions;
 
 package Atari.Aes.Objects is
 
+    --  object types
+    G_BOX                : constant  := 20;
+    G_TEXT               : constant  := 21;
+    G_BOXTEXT            : constant  := 22;
+    G_IMAGE              : constant  := 23;
+    G_USERDEF            : constant  := 24;
+    G_PROGDEF            : constant  := 24;
+    G_IBOX               : constant  := 25;
+    G_BUTTON             : constant  := 26;
+    G_BOXCHAR            : constant  := 27;
+    G_STRING             : constant  := 28;
+    G_FTEXT              : constant  := 29;
+    G_FBOXTEXT           : constant  := 30;
+    G_ICON               : constant  := 31;
+    G_TITLE              : constant  := 32;
+    G_CICON              : constant  := 33;
+    G_SWBUTTON           : constant  := 34;
+    G_POPUP              : constant  := 35;
+    G_WINTITLE           : constant  := 36;
+    G_EDIT               : constant  := 37;
+    G_SHORTCUT           : constant  := 38;
+    G_SLIST              : constant  := 39;
+    G_EXTBOX             : constant  := 40;
+    G_OBLINK             : constant  := 41;
+
     --  object flags
     OF_NONE              : constant  := 16#0#;
     OF_SELECTABLE        : constant  := 16#1#;
@@ -43,6 +68,13 @@ package Atari.Aes.Objects is
     OS_STATE14           : constant  := 16#4000#;
     OS_STATE15           : constant  := 16#8000#;
 
+    --  font types
+    GDOS_PROP            : constant  := 0;
+    GDOS_MONO            : constant  := 1;
+    GDOS_BITM            : constant  := 2;
+    IBM                  : constant  := 3;
+    SMALL                : constant  := 5;
+
     NO_DRAW              : constant  := 0;                      -- *< object will not be redrawn, see mt_objc_change()
     REDRAW               : constant  := 1;                      -- *< object will be redrawn, see mt_objc_change()
 
@@ -62,6 +94,41 @@ package Atari.Aes.Objects is
     AD3DVAL              : constant  := 6;                      -- *< number of extra pixels to accomodate 3D effects, see mt_objc_sysvar()
     MX_ENABLE3D          : constant  := 10;                     -- *< enable or disable the 3D look (MagiC 3), see mt_objc_sysvar()
     MENUCOL              : constant  := 11;                     -- *< TO BE COMPLETED (MagiC 6), see mt_objc_sysvar()
+
+    --  editable text field definitions
+    ED_START             : constant  := 0;                      -- *< Reserved. Do not use, see mt_objc_edit()
+    ED_INIT              : constant  := 1;                      -- *< turn ON the cursor, see mt_objc_edit()
+    ED_CHAR              : constant  := 2;                      -- *< insert a character in the editable field, see mt_objc_ecit()
+    ED_END               : constant  := 3;                      -- *< turn OFF the cursor, see mt_objc_edit()
+    EDSTART              : constant  := 0;                      -- *< alias
+    EDINIT               : constant  := 1;                      -- *< alias
+    EDCHAR               : constant  := 2;                      -- *< alias
+    EDEND                : constant  := 3;                      -- *< alias
+    ED_DISABLE           : constant  := 5;
+    ED_ENABLE            : constant  := 6;
+    ED_CRSRON            : constant  := 7;
+    ED_CRSROFF           : constant  := 8;
+    ED_MARK              : constant  := 9;
+    ED_STRING            : constant  := 10;
+    ED_SETPTEXT          : constant  := 11;
+    ED_SETPTMPLT         : constant  := 12;
+    ED_SETPVALID         : constant  := 13;
+    ED_GETPTEXT          : constant  := 14;
+    ED_GETPTMPLT         : constant  := 15;
+    ED_GETPVALID         : constant  := 16;
+    ED_CRSR              : constant  := 100;                    -- *< TO BE COMPLETED (MagiC), see mt_objc_edit()
+    ED_DRAW              : constant  := 103;                    -- *< TO BE COMPLETED (MagiC), see mt_objc_edit()
+    ED_REDRAW            : constant  := 200;                    -- XaAES only
+    ED_XINIT             : constant  := 201;
+    ED_XCHAR             : constant  := 202;
+    ED_XEND              : constant  := 203;                    -- Redraw cursor, XaAES only
+    ED_CHGTEXTPTR        : constant  := 204;
+    ED_CHGTMPLPTR        : constant  := 205;
+
+    --  editable text justification
+    TE_LEFT              : constant  := 0;
+    TE_RIGHT             : constant  := 1;
+    TE_CNTR              : constant  := 2;
 
     type OBJC_COLORWORD is
         record

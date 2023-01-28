@@ -3,6 +3,30 @@ use Atari;
 
 package Atari.Aes.Form is
 
+    FA_NOICON            : constant String := "[0]";            -- *< display no icon, see mt_form_alert()
+    FA_ERROR             : constant String := "[1]";            -- *< display Exclamation icon, see mt_form_alert()
+    FA_QUESTION          : constant String := "[2]";            -- *< display Question icon, see mt_form_alert()
+    FA_STOP              : constant String := "[3]";            -- *< display Stop icon, see mt_form_alert()
+    FA_INFO              : constant String := "[4]";            -- *< display Info icon, see mt_form_alert()
+    FA_DISK              : constant String := "[5]";            -- *< display Disk icon, see mt_form_alert()
+
+    --  Form dialog space actions, as used by form_dial()
+    FMD_START            : constant  := 0;                      -- *< reserves the screen space for a dialog, see mt_form_dial()
+    FMD_GROW             : constant  := 1;                      -- *< draws an expanding box, see mt_form_dial()
+    FMD_SHRINK           : constant  := 2;                      -- *< draws a shrinking box, see mt_form_dial()
+    FMD_FINISH           : constant  := 3;                      -- *< releases the screen space for a dialog, see mt_form_dial()
+
+    FERR_FILENOTFOUND    : constant  := 2;                      -- *< File Not Found (GEMDOS error -33), see mt_form_error()
+    FERR_PATHNOTFOUND    : constant  := 3;                      -- *< Path Not Found (GEMDOS error -34), see mt_form_error()
+    FERR_NOHANDLES       : constant  := 4;                      -- *< No More File Handles (GEMDOS error -35), see mt_form_error()
+    FERR_ACCESSDENIED    : constant  := 5;                      -- *< Access Denied (GEMDOS error -36), see mt_form_error()
+    FERR_LOWMEM          : constant  := 8;                      -- *< Insufficient Memory (GEMDOS error -39), see mt_form_error()
+    FERR_BADENVIRON      : constant  := 10;                     -- *< Invalid Environment (GEMDOS error -41), see mt_form_error()
+    FERR_BADFORMAT       : constant  := 11;                     -- *< Invalid Format (GEMDOS error -42)
+    FERR_BADDRIVE        : constant  := 15;                     -- *< Invalid Drive Specification (GEMDOS error -46), see mt_form_error()
+    FERR_DELETEDIR       : constant  := 16;                     -- *< Attempt To Delete Working Directory (GEMDOS error -47), see mt_form_error()
+    FERR_NOFILES         : constant  := 18;                     -- *< No More Files (GEMDOS error -49), see mt_form_error()
+
     function Run(
                 tree      : Objects.Object_Ptr;
                 StartObj  : int16)

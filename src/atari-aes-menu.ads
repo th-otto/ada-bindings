@@ -3,6 +3,47 @@ use Atari;
 
 package Atari.Aes.Menu is
 
+    --  menu_attach modes
+    ME_INQUIRE           : constant  := 0;                      -- *< inquire information on a sub-menu attached, see mt_menu_attach()
+    ME_ATTACH            : constant  := 1;                      -- *< attach or change a sub-menu, see mt_menu_attach()
+    ME_REMOVE            : constant  := 2;                      -- *< remove a sub-menu. see mt_menu_attach()
+
+    --  menu_attach attributes
+    SCROLL_NO            : constant  := 0;                      -- *< the menu will not scroll, see MENU::mn_scroll structure
+    SCROLL_YES           : constant  := 1;                      -- *< menu may scroll if it is too high, see MENU::mn_scroll structure
+
+    --  Menu definitions as used by menu_bar()
+    MENU_INQUIRE         : constant  := -1;                     -- *< inquire the AES application ID of the process which own the displayed menu, see mt_menu_bar()
+    MENU_REMOVE          : constant  := 0;                      -- *< remove a menu bar, see mt_menu_bar()
+    MENU_INSTALL         : constant  := 1;                      -- *< install a menu bar, see mt_menu_bar()
+    MENU_GETMODE         : constant  := 3;                      -- *< Get the menu bar mode, see mt_menu_bar()
+    MENU_SETMODE         : constant  := 4;                      -- *< Set the menu bar mode, see mt_menu_bar()
+    MENU_UPDATE          : constant  := 5;                      -- *< Update the system part of the menu bar, see mt_menu_bar()
+    MENU_INSTL           : constant  := 100;                    -- *< Install a menu without switching the top application (Magic), see mt_menu_bar()
+    MENU_HIDDEN          : constant  := 16#1#;                  -- *< menu bar only visible when needed, see #MENU_GETMODE or #MENU_SETMODE
+    MENU_PULLDOWN        : constant  := 16#2#;                  -- *< Pulldown-Menus, see #MENU_GETMODE or #MENU_SETMODE
+    MENU_SHADOWED        : constant  := 16#4#;                  -- *< menu bar with shadows, see #MENU_GETMODE or #MENU_SETMODE
+
+    UNCHECK              : constant  := 0;                      -- *< remove the check mark of a menu item, see mt_menu_icheck()
+    CHECK                : constant  := 1;                      -- *< set a check mark of a menu item, see mt_menu_icheck()
+
+    DISABLE              : constant  := 0;                      -- *< disable a menu item, see mt_menu_ienable()
+    ENABLE               : constant  := 1;                      -- *< enable a menu item, see mt_menu_ienable()
+
+    MIS_GETALIGN         : constant  := 0;                      -- *< get the alignment of a parent menu item with a sub-menu item, see mt_menu_istart()
+    MIS_SETALIGN         : constant  := 1;                      -- *< set the alignment of a parent menu item with a sub-menu item, see mt_menu_istart()
+
+    --  menu_popup modes
+    SCROLL_LISTBOX       : constant  := -1;                     -- *< display a drop-down list (with slider) instead of popup menu, see MENU::mn_scroll
+
+    REG_NEWNAME          : constant  := -1;                     -- *< register your application with a new name, see mt_menu_register()
+
+    MN_INQUIRE           : constant  := 0;                      -- *< inquire the current menu settings, see mt_menu_settings()
+    MN_CHANGE            : constant  := 1;                      -- *< set the menu settings, see mt_menu_settings()
+
+    HIGHLIGHT            : constant  := 0;                      -- *< display the title in reverse mode, see mt_menu_tnormal()
+    UNHIGHLIGHT          : constant  := 1;                      -- *< display the title in normal mode, see mt_menu_tnormal()
+
     type AMENU is
         record
             mn_tree    : aliased Objects.OBJECT_ptr;

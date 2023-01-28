@@ -1,6 +1,5 @@
 --
 -- NOT YET IMPLEMENTED:
--- edit_*
 
 -- Geneva functions
 
@@ -132,73 +131,8 @@ package Atari.Aes is
     MU_NORM_KEYBD        : constant  := 16#100#;                -- (XaAES)
     MU_DYNAMIC_KEYBD     : constant  := 16#200#;                -- (XaAES)
 
-    FA_NOICON            : constant String := "[0]";            -- *< display no icon, see mt_form_alert()
-    FA_ERROR             : constant String := "[1]";            -- *< display Exclamation icon, see mt_form_alert()
-    FA_QUESTION          : constant String := "[2]";            -- *< display Question icon, see mt_form_alert()
-    FA_STOP              : constant String := "[3]";            -- *< display Stop icon, see mt_form_alert()
-    FA_INFO              : constant String := "[4]";            -- *< display Info icon, see mt_form_alert()
-    FA_DISK              : constant String := "[5]";            -- *< display Disk icon, see mt_form_alert()
-
-    --  Form dialog space actions, as used by form_dial()
-    FMD_START            : constant  := 0;                      -- *< reserves the screen space for a dialog, see mt_form_dial()
-    FMD_GROW             : constant  := 1;                      -- *< draws an expanding box, see mt_form_dial()
-    FMD_SHRINK           : constant  := 2;                      -- *< draws a shrinking box, see mt_form_dial()
-    FMD_FINISH           : constant  := 3;                      -- *< releases the screen space for a dialog, see mt_form_dial()
-
-    FERR_FILENOTFOUND    : constant  := 2;                      -- *< File Not Found (GEMDOS error -33), see mt_form_error()
-    FERR_PATHNOTFOUND    : constant  := 3;                      -- *< Path Not Found (GEMDOS error -34), see mt_form_error()
-    FERR_NOHANDLES       : constant  := 4;                      -- *< No More File Handles (GEMDOS error -35), see mt_form_error()
-    FERR_ACCESSDENIED    : constant  := 5;                      -- *< Access Denied (GEMDOS error -36), see mt_form_error()
-    FERR_LOWMEM          : constant  := 8;                      -- *< Insufficient Memory (GEMDOS error -39), see mt_form_error()
-    FERR_BADENVIRON      : constant  := 10;                     -- *< Invalid Environment (GEMDOS error -41), see mt_form_error()
-    FERR_BADFORMAT       : constant  := 11;                     -- *< Invalid Format (GEMDOS error -42)
-    FERR_BADDRIVE        : constant  := 15;                     -- *< Invalid Drive Specification (GEMDOS error -46), see mt_form_error()
-    FERR_DELETEDIR       : constant  := 16;                     -- *< Attempt To Delete Working Directory (GEMDOS error -47), see mt_form_error()
-    FERR_NOFILES         : constant  := 18;                     -- *< No More Files (GEMDOS error -49), see mt_form_error()
-
     FSEL_CANCEL          : constant  := 0;                      -- *< the fileselector has been closed by using the CANCEL button, see mt_fsel_exinput()
     FSEL_OK              : constant  := 1;                      -- *< the fileselector has been closed by using the OK button, see mt_fsel_exinput()
-
-    --  menu_attach modes
-    ME_INQUIRE           : constant  := 0;                      -- *< inquire information on a sub-menu attached, see mt_menu_attach()
-    ME_ATTACH            : constant  := 1;                      -- *< attach or change a sub-menu, see mt_menu_attach()
-    ME_REMOVE            : constant  := 2;                      -- *< remove a sub-menu. see mt_menu_attach()
-
-    --  menu_attach attributes
-    SCROLL_NO            : constant  := 0;                      -- *< the menu will not scroll, see MENU::mn_scroll structure
-    SCROLL_YES           : constant  := 1;                      -- *< menu may scroll if it is too high, see MENU::mn_scroll structure
-
-    --  Menu definitions as used by menu_bar()
-    MENU_INQUIRE         : constant  := -1;                     -- *< inquire the AES application ID of the process which own the displayed menu, see mt_menu_bar()
-    MENU_REMOVE          : constant  := 0;                      -- *< remove a menu bar, see mt_menu_bar()
-    MENU_INSTALL         : constant  := 1;                      -- *< install a menu bar, see mt_menu_bar()
-    MENU_GETMODE         : constant  := 3;                      -- *< Get the menu bar mode, see mt_menu_bar()
-    MENU_SETMODE         : constant  := 4;                      -- *< Set the menu bar mode, see mt_menu_bar()
-    MENU_UPDATE          : constant  := 5;                      -- *< Update the system part of the menu bar, see mt_menu_bar()
-    MENU_INSTL           : constant  := 100;                    -- *< Install a menu without switching the top application (Magic), see mt_menu_bar()
-    MENU_HIDDEN          : constant  := 16#1#;                  -- *< menu bar only visible when needed, see #MENU_GETMODE or #MENU_SETMODE
-    MENU_PULLDOWN        : constant  := 16#2#;                  -- *< Pulldown-Menus, see #MENU_GETMODE or #MENU_SETMODE
-    MENU_SHADOWED        : constant  := 16#4#;                  -- *< menu bar with shadows, see #MENU_GETMODE or #MENU_SETMODE
-
-    UNCHECK              : constant  := 0;                      -- *< remove the check mark of a menu item, see mt_menu_icheck()
-    CHECK                : constant  := 1;                      -- *< set a check mark of a menu item, see mt_menu_icheck()
-
-    DISABLE              : constant  := 0;                      -- *< disable a menu item, see mt_menu_ienable()
-    ENABLE               : constant  := 1;                      -- *< enable a menu item, see mt_menu_ienable()
-
-    MIS_GETALIGN         : constant  := 0;                      -- *< get the alignment of a parent menu item with a sub-menu item, see mt_menu_istart()
-    MIS_SETALIGN         : constant  := 1;                      -- *< set the alignment of a parent menu item with a sub-menu item, see mt_menu_istart()
-
-    --  menu_popup modes
-    SCROLL_LISTBOX       : constant  := -1;                     -- *< display a drop-down list (with slider) instead of popup menu, see MENU::mn_scroll
-
-    REG_NEWNAME          : constant  := -1;                     -- *< register your application with a new name, see mt_menu_register()
-
-    MN_INQUIRE           : constant  := 0;                      -- *< inquire the current menu settings, see mt_menu_settings()
-    MN_CHANGE            : constant  := 1;                      -- *< set the menu settings, see mt_menu_settings()
-
-    HIGHLIGHT            : constant  := 0;                      -- *< display the title in reverse mode, see mt_menu_tnormal()
-    UNHIGHLIGHT          : constant  := 1;                      -- *< display the title in normal mode, see mt_menu_tnormal()
 
     SHEL_BUFSIZE         : constant  := -1;                     -- *< return the size of AES shell buffer, see mt_shel_read()
 
@@ -603,73 +537,6 @@ package Atari.Aes is
     IP_5PATT             : constant  := 5;
     IP_6PATT             : constant  := 6;
     IP_SOLID             : constant  := 7;
-
-    --  font types
-    GDOS_PROP            : constant  := 0;
-    GDOS_MONO            : constant  := 1;
-    GDOS_BITM            : constant  := 2;
-    IBM                  : constant  := 3;
-    SMALL                : constant  := 5;
-
-    --  object types
-    G_BOX                : constant  := 20;
-    G_TEXT               : constant  := 21;
-    G_BOXTEXT            : constant  := 22;
-    G_IMAGE              : constant  := 23;
-    G_USERDEF            : constant  := 24;
-    G_PROGDEF            : constant  := 24;
-    G_IBOX               : constant  := 25;
-    G_BUTTON             : constant  := 26;
-    G_BOXCHAR            : constant  := 27;
-    G_STRING             : constant  := 28;
-    G_FTEXT              : constant  := 29;
-    G_FBOXTEXT           : constant  := 30;
-    G_ICON               : constant  := 31;
-    G_TITLE              : constant  := 32;
-    G_CICON              : constant  := 33;
-    G_SWBUTTON           : constant  := 34;
-    G_POPUP              : constant  := 35;
-    G_WINTITLE           : constant  := 36;
-    G_EDIT               : constant  := 37;
-    G_SHORTCUT           : constant  := 38;
-    G_SLIST              : constant  := 39;
-    G_EXTBOX             : constant  := 40;
-    G_OBLINK             : constant  := 41;
-
-    --  editable text field definitions
-    ED_START             : constant  := 0;                      -- *< Reserved. Do not use, see mt_objc_edit()
-    ED_INIT              : constant  := 1;                      -- *< turn ON the cursor, see mt_objc_edit()
-    ED_CHAR              : constant  := 2;                      -- *< insert a character in the editable field, see mt_objc_ecit()
-    ED_END               : constant  := 3;                      -- *< turn OFF the cursor, see mt_objc_edit()
-    EDSTART              : constant  := 0;                      -- *< alias
-    EDINIT               : constant  := 1;                      -- *< alias
-    EDCHAR               : constant  := 2;                      -- *< alias
-    EDEND                : constant  := 3;                      -- *< alias
-    ED_DISABLE           : constant  := 5;
-    ED_ENABLE            : constant  := 6;
-    ED_CRSRON            : constant  := 7;
-    ED_CRSROFF           : constant  := 8;
-    ED_MARK              : constant  := 9;
-    ED_STRING            : constant  := 10;
-    ED_SETPTEXT          : constant  := 11;
-    ED_SETPTMPLT         : constant  := 12;
-    ED_SETPVALID         : constant  := 13;
-    ED_GETPTEXT          : constant  := 14;
-    ED_GETPTMPLT         : constant  := 15;
-    ED_GETPVALID         : constant  := 16;
-    ED_CRSR              : constant  := 100;                    -- *< TO BE COMPLETED (MagiC), see mt_objc_edit()
-    ED_DRAW              : constant  := 103;                    -- *< TO BE COMPLETED (MagiC), see mt_objc_edit()
-    ED_REDRAW            : constant  := 200;                    -- XaAES only
-    ED_XINIT             : constant  := 201;
-    ED_XCHAR             : constant  := 202;
-    ED_XEND              : constant  := 203;                    -- Redraw cursor, XaAES only
-    ED_CHGTEXTPTR        : constant  := 204;
-    ED_CHGTMPLPTR        : constant  := 205;
-
-    --  editable text justification
-    TE_LEFT              : constant  := 0;
-    TE_RIGHT             : constant  := 1;
-    TE_CNTR              : constant  := 2;
 
     -- AP_DRAGDROP return codes
     DD_OK        : constant  := 0;
