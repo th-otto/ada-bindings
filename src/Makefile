@@ -16,7 +16,7 @@ OBJS = \
 	atari-aes-filesel.ali \
 	atari-aes-window.ali \
 	atari-aes-resource.o \
-	atari-aes-shell.ali \
+	atari-aes-shell.o \
 	atari-aes-extensions.o \
 	atari-aes-wdialog.o \
 	atari-aes-fslx.o \
@@ -71,7 +71,7 @@ atari-aes-window.ali: atari-aes-window.ads atari-aes.ads atari.ads
 atari-aes-resource.o: atari-aes-resource.adb atari-aes-resource.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-shell.ali: atari-aes-shell.ads atari-aes.ads atari.ads
+atari-aes-shell.o: atari-aes-shell.adb atari-aes-shell.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-extensions.o: atari-aes-extensions.adb atari-aes-extensions.ads atari-aes.ads atari.ads

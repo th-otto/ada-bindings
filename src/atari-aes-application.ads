@@ -113,6 +113,17 @@ package Atari.Aes.Application is
         msgbuf: short_ptr;
     end record;
 
+    --  MAG!X screen manager extension
+    SMC_TIDY_UP          : constant  := 0;                      -- MagiC 2
+    SMC_TERMINATE        : constant  := 1;                      -- MagiC 2
+    SMC_SWITCH           : constant  := 2;                      -- MagiC 2
+    SMC_FREEZE           : constant  := 3;                      -- MagiC 2
+    SMC_UNFREEZE         : constant  := 4;                      -- MagiC 2
+    SMC_RES5             : constant  := 5;                      -- MagiC 2
+    SMC_UNHIDEALL        : constant  := 6;                      -- MagiC 3.1
+    SMC_HIDEOTHERS       : constant  := 7;                      -- MagiC 3.1
+    SMC_HIDEACT          : constant  := 8;                      -- MagiC 3.1
+
 
     function Version return int16 with Inline;
     function Num_Apps return int16 with Inline;
