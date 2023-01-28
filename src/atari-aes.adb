@@ -277,50 +277,6 @@ begin
 end;
 
 
-function scrp_read(
-            Scrappath : chars_ptr)
-           return int16 is
-begin
-	aes_control.opcode := 80;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_addrin(0) := Scrappath.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function scrp_write(
-            Scrappath : const_chars_ptr)
-           return int16 is
-begin
-	aes_control.opcode := 81;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 1;
-	aes_control.num_addrout := 0;
-	aes_addrin(0) := Scrappath.all'Address;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-function scrp_clear return int16 is
-begin
-	aes_control.opcode := 82;
-	aes_control.num_intin := 0;
-	aes_control.num_intout := 1;
-	aes_control.num_addrin := 0;
-	aes_control.num_addrout := 0;
-	aes_trap;
-	return aes_intout(0);
-end;
-
-
-
-
 function fsel_input(
             path       : chars_ptr;
             file       : chars_ptr;

@@ -123,15 +123,6 @@ package Atari.Aes is
     FSEL_CANCEL          : constant  := 0;                      -- *< the fileselector has been closed by using the CANCEL button, see mt_fsel_exinput()
     FSEL_OK              : constant  := 1;                      -- *< the fileselector has been closed by using the OK button, see mt_fsel_exinput()
 
-    --  scrp_read return values
-    SCRAP_CSV            : constant  := 16#1#;                  -- *< clipboard has a scrap.csv file, see mt_scrap_read()
-    SCRAP_TXT            : constant  := 16#2#;                  -- *< clipboard has a scrap.txt file, see mt_scrap_read()
-    SCRAP_GEM            : constant  := 16#4#;                  -- *< clipboard has a scrap.gem file, see mt_scrap_read()
-    SCRAP_IMG            : constant  := 16#8#;                  -- *< clipboard has a scrap.img file, see mt_scrap_read()
-    SCRAP_DCA            : constant  := 16#10#;                 -- *< clipboard has a scrap.dca file, see mt_scrap_read()
-    SCRAP_DIF            : constant  := 16#20#;                 -- *< clipboard has a scrap.dif file, see mt_scrap_read()
-    SCRAP_USR            : constant  := 16#8000#;               -- *< clipboard has a scrap.usr file, see mt_scrap_read()
-
     --  kinds, as used by wind_create()
     NAME                 : constant  := 16#1#;                  -- *< Window has a title bar
     CLOSER               : constant  := 16#2#;                  -- *< Window has a close box
@@ -695,17 +686,6 @@ package Atari.Aes is
 
 
 
-
-
-    function scrp_read(
-                Scrappath : chars_ptr)
-               return int16;
-
-    function scrp_write(
-                Scrappath : const_chars_ptr)
-               return int16;
-
-    function scrp_clear return int16;
 
 
 
