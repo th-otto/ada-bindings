@@ -13,7 +13,7 @@ OBJS = \
 	atari-aes-form.o \
 	atari-aes-graf.o \
 	atari-aes-clipboard.o \
-	atari-aes-filesel.ali \
+	atari-aes-filesel.o \
 	atari-aes-window.ali \
 	atari-aes-resource.o \
 	atari-aes-shell.o \
@@ -62,7 +62,7 @@ atari-aes-graf.o: atari-aes-graf.adb atari-aes-graf.ads atari-aes.ads atari.ads
 atari-aes-clipboard.o: atari-aes-clipboard.adb atari-aes-clipboard.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-filesel.ali: atari-aes-filesel.ads atari-aes.ads atari.ads
+atari-aes-filesel.o: atari-aes-filesel.adb atari-aes-filesel.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-window.ali: atari-aes-window.ads atari-aes.ads atari.ads

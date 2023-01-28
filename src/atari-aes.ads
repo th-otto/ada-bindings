@@ -120,9 +120,6 @@ package Atari.Aes is
     MU_NORM_KEYBD        : constant  := 16#100#;                -- (XaAES)
     MU_DYNAMIC_KEYBD     : constant  := 16#200#;                -- (XaAES)
 
-    FSEL_CANCEL          : constant  := 0;                      -- *< the fileselector has been closed by using the CANCEL button, see mt_fsel_exinput()
-    FSEL_OK              : constant  := 1;                      -- *< the fileselector has been closed by using the OK button, see mt_fsel_exinput()
-
     --  kinds, as used by wind_create()
     NAME                 : constant  := 16#1#;                  -- *< Window has a title bar
     CLOSER               : constant  := 16#2#;                  -- *< Window has a close box
@@ -685,34 +682,6 @@ package Atari.Aes is
                return int16;
 
 
-
-
-
-
-    function fsel_input(
-                path       : chars_ptr;
-                file       : chars_ptr;
-                exit_button: out int16)
-               return int16;
-
-    function fsel_exinput(
-                path       : chars_ptr;
-                file       : chars_ptr;
-                exit_button: out int16;
-                title      : const_chars_ptr)
-               return int16;
-
-    --  callback function used by BoxKite file selector. See fsel_boxinput()
-    type FSEL_CALLBACK is access procedure(msg: access int16);
-    pragma Convention(C, FSEL_CALLBACK);
-
-    function fsel_boxinput(
-                path       : chars_ptr;
-                file       : chars_ptr;
-                exit_button: out int16;
-                title      : const_chars_ptr;
-                callback   : FSEL_CALLBACK)
-               return int16;
 
 
 
