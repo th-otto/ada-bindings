@@ -106,7 +106,7 @@ end;
 
 function Write(
             ap_id     : int16;
-            ap_pbuff  : Message_Buffer)
+            ap_pbuff  : Event.Message_Buffer)
            return int16 is
 begin
 	return Write(ap_id, 16, ap_pbuff'Address);

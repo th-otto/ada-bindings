@@ -49,7 +49,7 @@ begin
 end;
 
 
-procedure Update(box: Listbox_Ptr; rect: in GRECT) is
+procedure Update(box: Listbox_Ptr; rect: in Rectangle) is
 begin
     aes_control.opcode := 171;
     aes_control.num_intin := 0;
@@ -272,7 +272,7 @@ begin
 end;
 
 
-procedure Set_A_Slider(box: Listbox_Ptr; first: int16; rect: in GRECT) is
+procedure Set_A_Slider(box: Listbox_Ptr; first: int16; rect: in Rectangle) is
 begin
     aes_control.opcode := 175;
     aes_control.num_intin := 2;
@@ -327,7 +327,7 @@ begin
 end;
 
 
-procedure A_Scroll_To(box: Listbox_Ptr; first: int16; box_rect: in GRECT; slider_rect: in GRECT) is
+procedure A_Scroll_To(box: Listbox_Ptr; first: int16; box_rect: in Rectangle; slider_rect: in Rectangle) is
 begin
     aes_control.opcode := 175;
     aes_control.num_intin := 2;
@@ -343,7 +343,7 @@ begin
 end;
 
 
-procedure Set_B_Slider(box: Listbox_Ptr; first: int16; rect: in GRECT) is
+procedure Set_B_Slider(box: Listbox_Ptr; first: int16; rect: in Rectangle) is
 begin
     aes_control.opcode := 175;
     aes_control.num_intin := 2;
@@ -372,7 +372,7 @@ begin
 end;
 
 
-procedure B_Scroll_To(box: Listbox_Ptr; first: int16; box_rect: in GRECT; slider_rect: in GRECT) is
+procedure B_Scroll_To(box: Listbox_Ptr; first: int16; box_rect: in Rectangle; slider_rect: in Rectangle) is
 begin
     aes_control.opcode := 175;
     aes_control.num_intin := 2;

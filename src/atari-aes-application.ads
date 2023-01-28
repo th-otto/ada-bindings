@@ -1,3 +1,5 @@
+with Atari.Aes.Event;
+
 package Atari.Aes.Application is
 
     APC_SYSTEM          : constant  := 2;
@@ -146,7 +148,7 @@ package Atari.Aes.Application is
                return int16;
     function Write(
                 ap_id     : int16;
-                ap_pbuff  : Message_Buffer)
+                ap_pbuff  : Event.Message_Buffer)
                return int16;
     function Find(name: const_chars_ptr) return int16;
     function Find(name: in String) return int16;
@@ -212,7 +214,7 @@ package Atari.Aes.Application is
                return int16 renames Write;
     function appl_write(
                 ap_id     : int16;
-                ap_pbuff  : Message_Buffer)
+                ap_pbuff  : Event.Message_Buffer)
                return int16 renames Write;
     function appl_find(name: const_chars_ptr) return int16 renames Find;
     function appl_find(name: in String) return int16 renames Find;

@@ -17,6 +17,8 @@ with Atari.Aes.Objects; use Atari.Aes.Objects;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
 with Atari.Aes.Form;
+with Atari.Aes.Event;
+with Atari.Aes.Window;
 use Atari;
 with Interfaces; use Interfaces;
 with Text_IO;
@@ -29,7 +31,7 @@ Pragma Unreferenced(Text_IO);
 
 procedure wdlgdemo is
     use ASCII;
-    PARTS: constant int16 := NAME or CLOSER or MOVER;
+    PARTS: constant int16 := Window.NAME or Window.CLOSER or Window.MOVER;
 
     dialog: Wdialog.DIALOG_ptr;
     menu_id: int16;
@@ -70,7 +72,7 @@ procedure wdlgdemo is
                 dummy := Wdialog.wdlg_open(dialog, title(title'First)'Unchecked_Access, PARTS, -1, -1, 0, System.Null_Address);
             end if;
         else
-            dummy := wind_set(Wdialog.wdlg_get_handle(dialog), WF_TOP);
+            dummy := Window.Set(Wdialog.wdlg_get_handle(dialog), Window.WF_TOP);
         end if;
     end;
 
@@ -83,18 +85,18 @@ procedure wdlgdemo is
         end if;
     end;
 
-    function handle_message(pipe: Message_Buffer) return boolean is
+    function handle_message(pipe: Event.Message_Buffer) return boolean is
         dummy2: int16;
     begin
         -- Text_IO.Put_Line("got message " & pipe(0)'image);
         case pipe.simple.msgtype is
-            when AC_OPEN =>
+            when Event.AC_OPEN =>
                 if pipe.simple.menu_id = menu_id then
                     open_window;
                 end if;
-            when AC_CLOSE =>
+            when Event.AC_CLOSE =>
                 dialog := null;
-            when AP_TERM =>
+            when Event.AP_TERM =>
                 return true;
             when others =>
                 null;
@@ -103,7 +105,7 @@ procedure wdlgdemo is
     end;
 
     function event_loop return boolean is
-        event: aliased Wdialog.EVNT;
+        event_rec: aliased Wdialog.EVNT;
         events: int16;
         quit: boolean;
     begin
@@ -111,22 +113,22 @@ procedure wdlgdemo is
         
         loop
             if dialog = null then
-                events := MU_MESAG;
+                events := Event.MU_MESAG;
             else
-                events := MU_MESAG or MU_BUTTON or MU_KEYBD;
+                events := Event.MU_MESAG or Event.MU_BUTTON or Event.MU_KEYBD;
             end if;
-            event.mwhich := evnt_multi(events,
+            event_rec.mwhich := Event.Multi(events,
                 2, 1, 1,
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0,
-                event.msg,
+                event_rec.msg,
                 0,
-                event.mx, event.my, event.mbutton, event.kstate, event.key, event.mclicks);
-            if (event.mwhich and MU_MESAG) /= 0 then
-                quit := handle_message(event.msg);
+                event_rec.mx, event_rec.my, event_rec.mbutton, event_rec.kstate, event_rec.key, event_rec.mclicks);
+            if (event_rec.mwhich and Event.MU_MESAG) /= 0 then
+                quit := handle_message(event_rec.msg);
             end if;
             if not quit and then dialog /= null then
-                quit := Wdialog.wdlg_evnt(dialog, event'Unchecked_Access) = 0;
+                quit := Wdialog.wdlg_evnt(dialog, event_rec'Unchecked_Access) = 0;
             end if;
             if quit then
                 close_window;

@@ -16,6 +16,8 @@ use Atari;
 with Atari.Aes.Application;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
+with Atari.Aes.Event;
+with Atari.Aes.Window;
 with Interfaces; use Interfaces;
 with Ada.Numerics; use Ada.Numerics;
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
@@ -29,7 +31,7 @@ procedure clock is
 pragma Suppress (Overflow_Check);
 
     type draw_what is (DRAW_ALL, DRAW_TIME);
-    PARTS: constant int16 := NAME or CLOSER or MOVER or SIZER;
+    PARTS: constant int16 := Window.NAME or Window.CLOSER or Window.MOVER or Window.SIZER;
     phys_handle: VdiHdl;
     whandle: int16;
     vdi_handle: aliased VdiHdl;
@@ -80,21 +82,21 @@ pragma Suppress (Overflow_Check);
         desk: GRECT;
     begin
         if whandle <= 0 then
-            dummy := wind_get(0, WF_WORKXYWH, desk);
-            whandle := wind_create(PARTS, desk);
+            dummy := Window.Get(0, Window.WF_WORKXYWH, desk);
+            whandle := Window.Create(PARTS, desk);
             if whandle<=0 then
                 return;
             end if;
-            dummy := wind_set(whandle, WF_NAME, title(title'First)'Unchecked_Access);
+            dummy := Window.Set(whandle, Window.WF_NAME, title(title'First)'Unchecked_Access);
             if wx = -1 then
-                wind_calc(WC_BORDER, PARTS, 100, 100, 170, 170,
+                Window.Calc(Window.WC_BORDER, PARTS, 100, 100, 170, 170,
                     calc.g_x, calc.g_y, calc.g_w, calc.g_h);
                 wx := (max_x - calc.g_w) / 2;
                 wy := 16 + (max_y - calc.g_h) / 2;
             end if;
-            dummy := wind_open(whandle, wx, wy, 170, 170);
+            dummy := Window.Open(whandle, wx, wy, 170, 170);
         else
-            dummy := wind_set(whandle, WF_TOP);
+            dummy := Window.Set(whandle, Window.WF_TOP);
         end if;
     end;
 
@@ -102,8 +104,8 @@ pragma Suppress (Overflow_Check);
     begin
         if whandle > 0
         then
-            dummy := wind_close(whandle);
-            dummy := wind_delete(whandle);
+            dummy := Window.Close(whandle);
+            dummy := Window.Delete(whandle);
             whandle := 0;
         end if;
     end;
@@ -193,7 +195,7 @@ pragma Suppress (Overflow_Check);
         end if;
         mouse_off;
         dummy := vswr_mode(vdi_handle, MD_REPLACE);
-        dummy := wind_get(whandle, WF_WORKXYWH, work);
+        dummy := Window.Get(whandle, Window.WF_WORKXYWH, work);
 
         secdiff := work.g_w;
         if work.g_h < work.g_w then
@@ -208,11 +210,11 @@ pragma Suppress (Overflow_Check);
             second := second + 1;
         end if;
 
-        dummy := wind_get(whandle, WF_FIRSTXYWH, box);
+        dummy := Window.get(whandle, Window.WF_FIRSTXYWH, box);
         loop
             exit when box.g_w <= 0 or else box.g_h <= 0;
             grect_to_array(box, clip);
-            dummy := wind_get(whandle, WF_NEXTXYWH, box);
+            dummy := Window.Get(whandle, Window.WF_NEXTXYWH, box);
             vs_clip(vdi_handle, 1, clip);
             case what is
             when DRAW_ALL =>
@@ -230,7 +232,7 @@ pragma Suppress (Overflow_Check);
             when DRAW_TIME =>
                 showtime;
             end case;
-            dummy := wind_get(whandle, WF_NEXTXYWH, box);
+            dummy := Window.Get(whandle, Window.WF_NEXTXYWH, box);
         end loop;
         oldsecond := second;
         oldminute := minute;
@@ -238,34 +240,34 @@ pragma Suppress (Overflow_Check);
         mouse_on;
     end;
 
-    function handle_message(msg: in out Message_Buffer) return boolean is
+    function handle_message(msg: in out Event.Message_Buffer) return boolean is
         dummy2: int16;
     begin
         -- Text_IO.Put_Line("got message " & msg.simple.msgtype'image);
         case msg.simple.msgtype is
-            when WM_REDRAW =>
+            when Event.WM_REDRAW =>
                 redrawwindow(DRAW_ALL);
-            when WM_TOPPED =>
+            when Event.WM_TOPPED =>
                 if msg.simple.handle = whandle then
-                    dummy := wind_set(whandle, WF_TOP);
+                    dummy := Window.set(whandle, Window.WF_TOP);
                 end if;
-            when WM_CLOSED =>
+            when Event.WM_CLOSED =>
                 if msg.simple.handle = whandle then
-                    dummy := wind_get(whandle, WF_CURRXYWH, wx, wy, dummy, dummy2);
+                    dummy := Window.Get(whandle, Window.WF_CURRXYWH, wx, wy, dummy, dummy2);
                     close_window;
                 end if;
                 if Application.Is_Application then
                     return true;
                 end if;
-            when AP_TERM =>
+            when Event.AP_TERM =>
                 close_window;
                 return true;
-            when WM_MOVED =>
+            when Event.WM_MOVED =>
                 if msg.simple.handle = whandle then
-                    dummy := wind_set(whandle, WF_CURRXYWH, msg.rect.rect);
+                    dummy := Window.Set(whandle, Window.WF_CURRXYWH, msg.rect.rect);
                     redrawwindow(DRAW_ALL);
                 end if;
-            when WM_SIZED =>
+            when Event.WM_SIZED =>
                 if msg.simple.handle = whandle then
                     if msg.rect.rect.g_w < 100 then
                         msg.rect.rect.g_w := 100;
@@ -273,18 +275,18 @@ pragma Suppress (Overflow_Check);
                     if msg.rect.rect.g_h < 100 then
                         msg.rect.rect.g_h := 100;
                     end if;
-                    dummy := wind_set(whandle, WF_CURRXYWH, msg.rect.rect);
-                    dummy := wind_get(whandle, WF_WORKXYWH, msg.rect.rect);
-                    msg.simple.msgtype := WM_REDRAW;
+                    dummy := Window.Set(whandle, Window.WF_CURRXYWH, msg.rect.rect);
+                    dummy := Window.Get(whandle, Window.WF_WORKXYWH, msg.rect.rect);
+                    msg.simple.msgtype := Event.WM_REDRAW;
                     msg.simple.from := Application.Id;
                     msg.simple.size := 0;
                     dummy := Application.Write(Application.Id, msg);
                 end if;
-            when AC_OPEN =>
+            when Event.AC_OPEN =>
                 if msg.simple.menu_id = menu_id then
                     open_window;
                 end if;
-            when AC_CLOSE =>
+            when Event.AC_CLOSE =>
                 whandle := 0;
             when others =>
                 null;
@@ -295,33 +297,32 @@ pragma Suppress (Overflow_Check);
     procedure event_loop is
         x, y, key, clicks: int16;
         kstate, state: int16;
-        event: int16;
         quit: boolean;
-        msg: Message_Buffer;
+        msg: Event.Message_Buffer;
         events: int16;
     begin
         quit := false;
 
         loop
             if whandle > 0 then
-                events := MU_MESAG or MU_TIMER;
+                events := Event.MU_MESAG or Event.MU_TIMER;
             else
-                events := MU_MESAG;
+                events := Event.MU_MESAG;
             end if;
-            event := evnt_multi(events, 258, 3, 0,
+            events := Event.Multi(events, 258, 3, 0,
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0,
                 msg,
                 1000,
                 x, y, state, kstate, key, clicks);
-            dummy := wind_update(BEG_UPDATE);
-            if (event and MU_MESAG) /= 0 then
+            dummy := Window.Update(Window.BEG_UPDATE);
+            if (events and Event.MU_MESAG) /= 0 then
                 quit := handle_message(msg);
             end if;
-            if (event and MU_TIMER) /= 0 then
+            if (events and Event.MU_TIMER) /= 0 then
                 redrawwindow(DRAW_TIME);
             end if;
-            dummy := wind_update(END_UPDATE);
+            dummy := Window.Update(Window.END_UPDATE);
             exit when quit;
         end loop;
     end;

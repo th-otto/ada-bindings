@@ -11,7 +11,7 @@ procedure objc_wdraw(
             tree      : Objects.Object_Ptr;
             Start     : int16;
             Depth     : int16;
-            clip      : in GRECT;
+            clip      : in Rectangle;
             whandle   : int16)
            is
     function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
@@ -34,7 +34,7 @@ procedure objc_wchange(
             tree     : Objects.Object_Ptr;
             obj      : int16;
             new_state: int16;
-            clip     : access GRECT;
+            clip     : access Rectangle;
             whandle  : int16) is
     function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
@@ -161,7 +161,7 @@ function objc_xedit(
             key   : int16;
             xpos  : in out int16;
             subfn : int16;
-            r     : in GRECT)
+            r     : in Rectangle)
            return int16 is
     function to_address is new Ada.Unchecked_Conversion(Objects.Object_Ptr, System.Address);
 begin
@@ -300,8 +300,8 @@ end;
 
 function form_xdial(
             fo_diflag : int16;
-            fo_dilittl: in GRECT;
-            fo_dibig  : in GRECT;
+            fo_dilittl: in Rectangle;
+            fo_dibig  : in Rectangle;
             flydial   : void_ptr_ptr)
            return int16 is
     function to_address is new Ada.Unchecked_Conversion(void_ptr_ptr, System.Address);

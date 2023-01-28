@@ -7,14 +7,14 @@ OBJS = \
 	atari.o \
 	atari-aes.o \
 	atari-aes-application.o \
-	atari-aes-event.ali \
+	atari-aes-event.o \
 	atari-aes-menu.o \
 	atari-aes-objects.o \
 	atari-aes-form.o \
 	atari-aes-graf.o \
 	atari-aes-clipboard.o \
 	atari-aes-filesel.o \
-	atari-aes-window.ali \
+	atari-aes-window.o \
 	atari-aes-resource.o \
 	atari-aes-shell.o \
 	atari-aes-extensions.o \
@@ -44,7 +44,7 @@ atari-aes.o: atari-aes.adb atari-aes.ads atari.ads
 atari-aes-application.o: atari-aes-application.adb atari-aes-application.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-event.ali: atari-aes-event.ads atari-aes.ads atari.ads
+atari-aes-event.o: atari-aes-event.adb atari-aes-event.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-menu.o: atari-aes-menu.adb atari-aes-menu.ads atari-aes.ads atari.ads
@@ -65,7 +65,7 @@ atari-aes-clipboard.o: atari-aes-clipboard.adb atari-aes-clipboard.ads atari-aes
 atari-aes-filesel.o: atari-aes-filesel.adb atari-aes-filesel.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-window.ali: atari-aes-window.ads atari-aes.ads atari.ads
+atari-aes-window.o: atari-aes-window.adb atari-aes-window.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-resource.o: atari-aes-resource.adb atari-aes-resource.ads atari-aes.ads atari.ads

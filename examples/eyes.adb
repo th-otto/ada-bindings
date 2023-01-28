@@ -13,6 +13,8 @@ with Atari.Aes; use Atari.Aes;
 with Atari.Aes.Application;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
+with Atari.Aes.Event;
+with Atari.Aes.Window;
 with Atari.Vdi; use Atari.Vdi;
 use Atari;
 with Interfaces; use Interfaces;
@@ -26,7 +28,7 @@ Pragma Unreferenced(Text_IO);
 procedure eyes is
     use ASCII;
     type draw_what is (DRAW_ALL, EYES);
-    PARTS: constant int16 := NAME or CLOSER or MOVER;
+    PARTS: constant int16 := Window.NAME or Window.CLOSER or Window.MOVER;
 
     phys_handle: VdiHdl;
     whandle: int16;
@@ -104,8 +106,8 @@ procedure eyes is
         if whandle <= 0 then
             return;
         end if;
-        dummy := wind_get(whandle, WF_WORKXYWH, work);
-        dummy := wind_get(whandle, WF_FIRSTXYWH, box);
+        dummy := Window.Get(whandle, Window.WF_WORKXYWH, work);
+        dummy := Window.Get(whandle, Window.WF_FIRSTXYWH, box);
         loop
             exit when box.g_w <= 0 or else box.g_h <= 0;
             if rc_intersect(work, box) then
@@ -138,7 +140,7 @@ procedure eyes is
                     mouse_on;
                 end if;
             end if;
-            dummy := wind_get(whandle, WF_NEXTXYWH, box);
+            dummy := Window.Get(whandle, Window.WF_NEXTXYWH, box);
         end loop;
     end;
 
@@ -148,24 +150,24 @@ procedure eyes is
 		desk: GRECT;
     begin
         if whandle <= 0 then
-        	dummy := wind_get(0, WF_WORKXYWH, desk);
-            whandle := wind_create(PARTS, desk);
+        	dummy := Window.Get(Window.DESK, Window.WF_WORKXYWH, desk);
+            whandle := Window.Create(PARTS, desk);
             if whandle<=0 then
                 return;
             end if;
-            dummy := wind_set(whandle, WF_NAME, title(title'First)'Unchecked_Access);
+            dummy := Window.Set(whandle, Window.WF_NAME, title(title'First)'Unchecked_Access);
             mouse_off;
             if wx = -1 then
-                wind_calc(WC_BORDER, PARTS, 100, 100, 100, 100,
+                Window.Calc(Window.WC_BORDER, PARTS, 100, 100, 100, 100,
                     calc.g_x, calc.g_y, calc.g_w, calc.g_h);
                 wx := (max_x - calc.g_w) / 2;
                 wy := 16 + (max_y - calc.g_h) / 2;
             end if;
-            dummy := wind_open(whandle, wx, wy, 100, 100);
+            dummy := Window.Open(whandle, wx, wy, 100, 100);
             mouse_on;
             Graf.Mkstate(oldx, oldy, button, kstate);
         else
-            dummy := wind_set(whandle, WF_TOP);
+            dummy := Window.Set(whandle, Window.WF_TOP);
         end if;
     end;
 
@@ -173,44 +175,44 @@ procedure eyes is
 	begin
 		if whandle > 0
 		then
-			dummy := wind_close(whandle);
-			dummy := wind_delete(whandle);
+			dummy := Window.Close(whandle);
+			dummy := Window.Delete(whandle);
 			whandle := 0;
 		end if;
 	end;
 
-    function handle_message(pipe: Message_Buffer) return boolean is
+    function handle_message(pipe: Event.Message_Buffer) return boolean is
         dummy2: int16;
     begin
         -- Text_IO.Put_Line("got message " & pipe.simple.msgtype'image);
         case pipe.simple.msgtype is
-            when WM_REDRAW =>
+            when Event.WM_REDRAW =>
                 redrawwindow(DRAW_ALL, -1, -1);
-            when WM_TOPPED =>
+            when Event.WM_TOPPED =>
                 if pipe.simple.handle = whandle then
-                    dummy := wind_set(whandle, WF_TOP);
+                    dummy := Window.Set(whandle, Window.WF_TOP);
                 end if;
-            when WM_CLOSED =>
+            when Event.WM_CLOSED =>
                 if pipe.simple.handle = whandle then
-                    dummy := wind_get(whandle, WF_CURRXYWH, wx, wy, dummy, dummy2);
+                    dummy := Window.Get(whandle, Window.WF_CURRXYWH, wx, wy, dummy, dummy2);
                     close_window;
                 end if;
                 if Application.is_Application then
                     return true;
                 end if;
-            when AP_TERM =>
+            when Event.AP_TERM =>
             	close_window;
             	return true;
-            when WM_MOVED =>
+            when Event.WM_MOVED =>
                 if pipe.simple.handle = whandle then
-                    dummy := wind_set(whandle, WF_CURRXYWH, pipe.rect.rect);
+                    dummy := Window.Set(whandle, Window.WF_CURRXYWH, pipe.rect.rect);
                     redrawwindow(DRAW_ALL, -1, -1);
                 end if;
-            when AC_OPEN =>
+            when Event.AC_OPEN =>
                 if pipe.simple.menu_id = menu_id then
                     open_window;
                 end if;
-            when AC_CLOSE =>
+            when Event.AC_CLOSE =>
                 whandle := 0;
             when others =>
                 null;
@@ -221,33 +223,32 @@ procedure eyes is
     function event_loop return boolean is
         x, y, key, clicks: int16;
         kstate, state: int16;
-        event: int16;
         quit: boolean;
-        pipe: Message_Buffer;
+        pipe: Event.Message_Buffer;
         events: int16;
     begin
         quit := false;
         
         loop
             if whandle > 0 then
-                events := MU_MESAG or MU_M1;
+                events := Event.MU_MESAG or Event.MU_M1;
             else
-                events := MU_MESAG;
+                events := Event.MU_MESAG;
             end if;
-            event := evnt_multi(events, 0, 0, 0,
+            events := Event.Multi(events, 0, 0, 0,
                 1, oldx, oldy, 1, 1,
                 0, 0, 0, 0, 0,
                 pipe,
                 100,
                 x, y, state, kstate, key, clicks);
-            dummy := wind_update(BEG_UPDATE);
-            if (event and MU_MESAG) /= 0 then
+            dummy := Window.Update(Window.BEG_UPDATE);
+            if (events and Event.MU_MESAG) /= 0 then
                 quit := handle_message(pipe);
             end if;
-            if (event and MU_M1) /= 0 then
+            if (events and Event.MU_M1) /= 0 then
                 redrawwindow(EYES, x, y);
             end if;
-            dummy := wind_update(END_UPDATE);
+            dummy := Window.Update(Window.END_UPDATE);
             exit when quit;
         end loop;
         return quit;

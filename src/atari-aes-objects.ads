@@ -2,6 +2,10 @@ with Interfaces.C.Extensions;
 
 package Atari.Aes.Objects is
 
+    NIL                 : constant  := -1;                      -- *< Value for no more object in object
+    ROOT                : constant  := 0;                       -- *< index of the root object of a formular
+    MAX_DEPTH           : constant  := 8;                       -- max depth of search or draw
+
     --  object types
     G_BOX                : constant  := 20;
     G_TEXT               : constant  := 21;
@@ -328,7 +332,7 @@ package Atari.Aes.Objects is
                 tree      : OBJECT_ptr;
                 Start     : int16;
                 Depth     : int16;
-                r         : in GRECT);
+                r         : in Rectangle);
 
     function Find(
                 tree      : OBJECT_ptr;
@@ -364,7 +368,7 @@ package Atari.Aes.Objects is
                 Kchar     : int16;
                 Index     : in out int16;
                 Kind      : int16;
-                r         : out GRECT)
+                r         : out Rectangle)
                return int16;
 
     procedure Change(
@@ -382,7 +386,7 @@ package Atari.Aes.Objects is
                 tree      : OBJECT_ptr;
                 Start     : int16;
                 Depth     : int16;
-                r         : in GRECT;
+                r         : in Rectangle;
                 NewState  : int16;
                 Redraw    : int16);
 
@@ -428,7 +432,7 @@ package Atari.Aes.Objects is
                 tree      : OBJECT_ptr;
                 Start     : int16;
                 Depth     : int16;
-                r         : in GRECT) renames Draw;
+                r         : in Rectangle) renames Draw;
 
     function objc_find(
                 tree      : OBJECT_ptr;
@@ -464,7 +468,7 @@ package Atari.Aes.Objects is
                 Kchar     : int16;
                 Index     : in out int16;
                 Kind      : int16;
-                r         : out GRECT)
+                r         : out Rectangle)
                return int16 renames Edit;
 
     procedure objc_change(
@@ -482,7 +486,7 @@ package Atari.Aes.Objects is
                 tree      : OBJECT_ptr;
                 Start     : int16;
                 Depth     : int16;
-                r         : in GRECT;
+                r         : in Rectangle;
                 NewState  : int16;
                 Redraw    : int16) renames Change;
 

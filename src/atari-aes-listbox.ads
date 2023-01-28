@@ -76,7 +76,7 @@ package Atari.Aes.Listbox is
                 pause_b  : Int16)
                return Listbox_Ptr;
 
-    procedure Update(box: Listbox_Ptr; rect: in GRECT);
+    procedure Update(box: Listbox_Ptr; rect: in Rectangle);
 
     function Run(box: Listbox_Ptr; Obj: Int16) return Int16;
 
@@ -108,7 +108,7 @@ package Atari.Aes.Listbox is
 
     function Get_B_First(box: Listbox_Ptr) return Int16;
 
-    procedure Set_A_Slider(box: Listbox_Ptr; first: Int16; rect: in GRECT);
+    procedure Set_A_Slider(box: Listbox_Ptr; first: Int16; rect: in Rectangle);
 
     procedure Set_Items(box: Listbox_Ptr; items: Listbox_Item_Ptr);
 
@@ -116,13 +116,13 @@ package Atari.Aes.Listbox is
 
     procedure Free_List(items: Listbox_Item_Ptr);
 
-    procedure A_Scroll_To(box: Listbox_Ptr; first: Int16; box_rect: in GRECT; slider_rect: in GRECT);
+    procedure A_Scroll_To(box: Listbox_Ptr; first: Int16; box_rect: in Rectangle; slider_rect: in Rectangle);
 
-    procedure Set_B_Slider(box: Listbox_Ptr; first: Int16; rect: in GRECT);
+    procedure Set_B_Slider(box: Listbox_Ptr; first: Int16; rect: in Rectangle);
 
     procedure Set_B_Entries(box: Listbox_Ptr; entries: Int16);
 
-    procedure B_Scroll_To(box: Listbox_Ptr; first: Int16; box_rect: in GRECT; slider_rect: in GRECT);
+    procedure B_Scroll_To(box: Listbox_Ptr; first: Int16; box_rect: in Rectangle; slider_rect: in Rectangle);
 
 
     --  alternative names for listboxes with only one slider
@@ -130,9 +130,9 @@ package Atari.Aes.Listbox is
         renames Get_A_Visible;
     function Get_First(box: Listbox_Ptr) return Int16
         renames Get_A_First;
-    procedure Set_Slider(box: Listbox_Ptr; first: Int16; rect: in GRECT)
+    procedure Set_Slider(box: Listbox_Ptr; first: Int16; rect: in Rectangle)
         renames Set_A_Slider;
-    procedure Scroll_To(box: Listbox_Ptr; first: Int16; box_rect: in GRECT; slider_rect: in GRECT)
+    procedure Scroll_To(box: Listbox_Ptr; first: Int16; box_rect: in Rectangle; slider_rect: in Rectangle)
         renames A_Scroll_To;
 
 
@@ -157,7 +157,7 @@ package Atari.Aes.Listbox is
                return Listbox_Ptr
              renames Create;
 
-    procedure lbox_update(box: Listbox_Ptr; rect: in GRECT)
+    procedure lbox_update(box: Listbox_Ptr; rect: in Rectangle)
         renames Update;
 
     function lbox_do(box: Listbox_Ptr; Obj: Int16) return Int16
@@ -205,7 +205,7 @@ package Atari.Aes.Listbox is
     function lbox_get_bfirst(box: Listbox_Ptr) return Int16
         renames Get_B_First;
 
-    procedure lbox_set_asldr(box: Listbox_Ptr; first: Int16; rect: in GRECT)
+    procedure lbox_set_asldr(box: Listbox_Ptr; first: Int16; rect: in Rectangle)
         renames Set_A_Slider;
 
     procedure lbox_set_items(box: Listbox_Ptr; items: Listbox_Item_Ptr)
@@ -217,16 +217,16 @@ package Atari.Aes.Listbox is
     procedure lbox_free_list(items: Listbox_Item_Ptr)
         renames Free_List;
 
-    procedure lbox_ascroll_to(box: Listbox_Ptr; first: Int16; box_rect: in GRECT; slider_rect: in GRECT)
+    procedure lbox_ascroll_to(box: Listbox_Ptr; first: Int16; box_rect: in Rectangle; slider_rect: in Rectangle)
         renames A_Scroll_To;
 
-    procedure lbox_set_bsldr(box: Listbox_Ptr; first: Int16; rect: in GRECT)
+    procedure lbox_set_bsldr(box: Listbox_Ptr; first: Int16; rect: in Rectangle)
         renames Set_B_Slider;
 
     procedure lbox_set_bentries(box: Listbox_Ptr; entries: Int16)
         renames Set_B_Entries;
 
-    procedure lbox_bscroll_to(box: Listbox_Ptr; first: Int16; box_rect: in GRECT; slider_rect: in GRECT)
+    procedure lbox_bscroll_to(box: Listbox_Ptr; first: Int16; box_rect: in Rectangle; slider_rect: in Rectangle)
         renames B_Scroll_To;
 
 end Atari.Aes.Listbox;

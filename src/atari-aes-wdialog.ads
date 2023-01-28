@@ -1,4 +1,5 @@
 with Atari.Aes.Objects;
+with Atari.Aes.Event;
 use Atari;
 
 package Atari.Aes.Wdialog is
@@ -36,7 +37,7 @@ package Atari.Aes.Wdialog is
             key     : aliased int16;
             mclicks : aliased int16;
             reserved: aliased short_array(0..8);
-            msg     : aliased Message_Buffer;
+            msg     : aliased Event.Message_Buffer;
             unused  : aliased short_array(0..7);
         end record
     	with Convention => C;
@@ -88,7 +89,7 @@ package Atari.Aes.Wdialog is
 
     function wdlg_get_tree(
                 dialog: DIALOG_ptr;
-                r     : out GRECT)
+                r     : out Rectangle)
                return Objects.Aestree_Ptr;
 
     function wdlg_get_edit(
@@ -112,12 +113,12 @@ package Atari.Aes.Wdialog is
 
     function wdlg_set_size(
                 dialog: DIALOG_ptr;
-                size  : in GRECT)
+                size  : in Rectangle)
                return int16;
 
 	function wdlg_set_iconify(
 	            dialog: DIALOG_ptr;
-	            g     : in GRECT;
+	            g     : in Rectangle;
 	            title : const_chars_ptr;
 	            tree  : Objects.Aestree_Ptr;
 	            obj   : int16)
@@ -125,7 +126,7 @@ package Atari.Aes.Wdialog is
 
 	function wdlg_set_iconify(
 	            dialog: DIALOG_ptr;
-	            g     : in GRECT;
+	            g     : in Rectangle;
 	            title : in String;
 	            tree  : Objects.Aestree_Ptr;
 	            obj   : int16)
@@ -133,14 +134,14 @@ package Atari.Aes.Wdialog is
 
     function wdlg_set_uniconify(
                 dialog: DIALOG_ptr;
-                g     : in GRECT;
+                g     : in Rectangle;
                 title : const_chars_ptr;
                 tree  : Objects.Aestree_Ptr)
                return int16;
 
     function wdlg_set_uniconify(
                 dialog: DIALOG_ptr;
-                g     : in GRECT;
+                g     : in Rectangle;
                 title : in String;
                 tree  : Objects.Aestree_Ptr)
                return int16;
@@ -152,7 +153,7 @@ package Atari.Aes.Wdialog is
 
     procedure wdlg_redraw(
                 dialog: DIALOG_ptr;
-                rect  : in GRECT;
+                rect  : in Rectangle;
                 obj   : int16;
                 depth : int16);
 

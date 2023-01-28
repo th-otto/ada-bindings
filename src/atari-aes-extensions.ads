@@ -55,14 +55,14 @@ package Atari.Aes.Extensions is
                 tree   : Objects.Object_Ptr;
                 start  : int16;
                 depth  : int16;
-                clip   : in GRECT;
+                clip   : in Rectangle;
                 whandle: int16);
 
     procedure objc_wchange(
                 tree     : Objects.Object_Ptr;
                 obj      : int16;
                 new_state: int16;
-                clip     : access GRECT;
+                clip     : access Rectangle;
                 whandle  : int16);
 
     function graf_wwatchbox(
@@ -106,7 +106,7 @@ package Atari.Aes.Extensions is
                 key   : int16;
                 xpos  : in out int16;
                 subfn : int16;
-                r     : in GRECT)
+                r     : in Rectangle)
                return int16;
 
     function form_popup(
@@ -161,8 +161,8 @@ package Atari.Aes.Extensions is
 
     function form_xdial(
                 fo_diflag : int16;
-                fo_dilittl: in GRECT;
-                fo_dibig  : in GRECT;
+                fo_dilittl: in Rectangle;
+                fo_dibig  : in Rectangle;
                 flydial   : void_ptr_ptr)
                return int16;
 

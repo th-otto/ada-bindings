@@ -121,7 +121,7 @@ end;
 
 function wdlg_get_tree(
             dialog: DIALOG_ptr;
-            r     : out GRECT)
+            r     : out Rectangle)
            return Objects.Aestree_Ptr is
     tree: Objects.Aestree_Ptr;
 begin
@@ -223,7 +223,7 @@ end;
 
 function wdlg_set_size(
             dialog: DIALOG_ptr;
-            size  : in GRECT)
+            size  : in Rectangle)
            return int16 is
 begin
 	aes_control.opcode := 165;
@@ -241,7 +241,7 @@ end;
 
 function wdlg_set_iconify(
             dialog: DIALOG_ptr;
-            g     : in GRECT;
+            g     : in Rectangle;
             title : const_chars_ptr;
             tree  : Objects.Aestree_Ptr;
             obj   : int16)
@@ -265,7 +265,7 @@ end;
 
 function wdlg_set_iconify(
             dialog: DIALOG_ptr;
-            g     : in GRECT;
+            g     : in Rectangle;
             title : in String;
             tree  : Objects.Aestree_Ptr;
             obj   : int16)
@@ -290,7 +290,7 @@ end;
 
 function wdlg_set_uniconify(
             dialog: DIALOG_ptr;
-            g     : in GRECT;
+            g     : in Rectangle;
             title : const_chars_ptr;
             tree  : Objects.Aestree_Ptr)
            return int16 is
@@ -312,7 +312,7 @@ end;
 
 function wdlg_set_uniconify(
             dialog: DIALOG_ptr;
-            g     : in GRECT;
+            g     : in Rectangle;
             title : in String;
             tree  : Objects.Aestree_Ptr)
            return int16 is
@@ -352,7 +352,7 @@ end;
 
 procedure wdlg_redraw(
             dialog: DIALOG_ptr;
-            rect  : in GRECT;
+            rect  : in Rectangle;
             obj   : int16;
             depth : int16) is
 begin

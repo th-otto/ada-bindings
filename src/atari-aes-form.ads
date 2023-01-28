@@ -46,8 +46,8 @@ package Atari.Aes.Form is
 
     function Dial(
                 Flag      : int16;
-                little    : in GRECT;
-                big       : in GRECT)
+                little    : in Rectangle;
+                big       : in Rectangle)
                return int16;
 
     function Alert(fo_adefbttn: int16; alertstr: String) return int16;
@@ -67,7 +67,7 @@ package Atari.Aes.Form is
 
     function Center(
                 tree      : Objects.Object_Ptr;
-                r         : out GRECT)
+                r         : out Rectangle)
                return int16;
 
     function Keybd(
