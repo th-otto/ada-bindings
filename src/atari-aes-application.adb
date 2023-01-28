@@ -1,7 +1,6 @@
 pragma No_Strict_Aliasing;
 with System.Machine_Code;
 use System.Machine_Code;
-with Interfaces; use Interfaces;
 
 package body Atari.Aes.Application is
 

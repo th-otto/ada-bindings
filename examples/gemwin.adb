@@ -12,12 +12,12 @@ with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
 with Atari.Vdi; use Atari.Vdi;
 use Atari;
+with Interfaces; use Interfaces;
 with Atari.Aes.Application;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
 with Atari.Aes.Event;
 with Atari.Aes.Window;
-with Interfaces; use Interfaces;
 
 procedure gemwin is
 	win_h: int16;

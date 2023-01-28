@@ -1,6 +1,5 @@
 pragma No_Strict_Aliasing;
 with Ada.Unchecked_Conversion;
-with Interfaces; use Interfaces;
 
 package body Atari.Aes.Wdialog is
 

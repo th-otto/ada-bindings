@@ -2,8 +2,6 @@ pragma No_Strict_Aliasing;
 with System.Machine_Code;
 use System.Machine_Code;
 with Ada.Unchecked_Conversion;
-with Interfaces;
-use Interfaces;
 
 package body Atari.gemdos is
 

@@ -1,5 +1,3 @@
-with Interfaces; use Interfaces;
-
 package body Atari.Aes.Pdlg is
 
 pragma Suppress (Range_Check);

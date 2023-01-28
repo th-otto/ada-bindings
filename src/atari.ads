@@ -1,4 +1,4 @@
-with Interfaces;
+with Interfaces; use Interfaces;
 with System;
 
 package Atari is

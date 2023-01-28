@@ -1,5 +1,4 @@
 pragma No_Strict_Aliasing;
-with Interfaces; use Interfaces;
 with Ada.Unchecked_Conversion;
 with System.Storage_Elements; use System.Storage_Elements;
 

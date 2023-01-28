@@ -1,6 +1,3 @@
-with Interfaces;
-use Interfaces;
-
 package body Atari is
 
     pragma Suppress (Range_Check);

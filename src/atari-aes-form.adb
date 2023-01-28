@@ -1,5 +1,4 @@
 pragma No_Strict_Aliasing;
-with Interfaces; use Interfaces;
 
 package body Atari.Aes.Form is
 

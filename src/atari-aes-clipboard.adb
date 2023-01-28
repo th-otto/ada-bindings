@@ -1,7 +1,5 @@
 pragma No_Strict_Aliasing;
 
-with Interfaces; use Interfaces;
-
 package body Atari.Aes.Clipboard is
 
 pragma Suppress (Range_Check);

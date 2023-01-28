@@ -1,7 +1,6 @@
 pragma No_Strict_Aliasing;
 with System;
 with Ada.Unchecked_Conversion;
-with Interfaces; use Interfaces;
 
 package body Atari.Aes.Fontsel is
 

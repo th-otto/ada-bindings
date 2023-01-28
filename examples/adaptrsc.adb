@@ -4,11 +4,11 @@ with Atari.Gemdos;
 with Atari.Aes.Application;
 with Atari.Aes.Extensions; use Atari.Aes.Extensions;
 with Atari.Aes.Resource;
-with Interfaces; use Interfaces;
 with System;
 with System.Storage_Elements; use System.Storage_Elements;
 with Atari.Vdi; use Atari.Vdi;
 use Atari.Aes;
+with Interfaces; use Interfaces;
 with Atari.Aes.Objects; use Atari.Aes.Objects;
 
 package body adaptrsc is
