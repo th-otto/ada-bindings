@@ -10,6 +10,7 @@
 
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
+with Atari.Aes.Application;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
 with Atari.Vdi; use Atari.Vdi;
@@ -194,7 +195,7 @@ procedure eyes is
                     dummy := wind_get(whandle, WF_CURRXYWH, wx, wy, dummy, dummy2);
                     close_window;
                 end if;
-                if is_Application then
+                if Application.is_Application then
                     return true;
                 end if;
             when AP_TERM =>
@@ -254,14 +255,14 @@ procedure eyes is
 
 
 begin
-    if appl_init /= -1 then
+    if Application.Init /= -1 then
         if open_vwork then
             dummy := vswr_mode(handle, MD_REPLACE);
             wx := -1;
             oldx := -1;
             oldy := -1;
-            if not Is_Application then
-                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+            if not Application.Is_Application then
+                menu_id := Menu.Register(Application.Id, menu_name(menu_name'First)'Unchecked_Access);
             else
                 Graf.Mouse(ARROW);
                 open_window;
@@ -271,6 +272,6 @@ begin
             end loop;
             close_vwork;
         end if;
-        appl_exit;
+        Application.AExit;
     end if;
 end eyes;

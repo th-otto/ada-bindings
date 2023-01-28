@@ -13,6 +13,7 @@ with Atari.Aes; use Atari.Aes;
 with Atari.Vdi; use Atari.Vdi;
 with Atari.Gemdos;
 use Atari;
+with Atari.Aes.Application;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
 with Interfaces; use Interfaces;
@@ -253,7 +254,7 @@ pragma Suppress (Overflow_Check);
                     dummy := wind_get(whandle, WF_CURRXYWH, wx, wy, dummy, dummy2);
                     close_window;
                 end if;
-                if is_Application then
+                if Application.Is_Application then
                     return true;
                 end if;
             when AP_TERM =>
@@ -275,9 +276,9 @@ pragma Suppress (Overflow_Check);
                     dummy := wind_set(whandle, WF_CURRXYWH, msg.rect.rect);
                     dummy := wind_get(whandle, WF_WORKXYWH, msg.rect.rect);
                     msg.simple.msgtype := WM_REDRAW;
-                    msg.simple.from := gl_apid;
+                    msg.simple.from := Application.Id;
                     msg.simple.size := 0;
-                    dummy := appl_write(gl_apid, msg);
+                    dummy := Application.Write(Application.Id, msg);
                 end if;
             when AC_OPEN =>
                 if msg.simple.menu_id = menu_id then
@@ -326,11 +327,11 @@ pragma Suppress (Overflow_Check);
     end;
 
 begin
-    if appl_init /= -1 then
+    if Application.Init /= -1 then
         if open_vwork then
             wx := -1;
-            if not Is_Application then
-                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+            if not Application.Is_Application then
+                menu_id := Menu.Register(Application.Id, menu_name(menu_name'First)'Unchecked_Access);
             else
                 Graf.Mouse(ARROW);
                 open_window;
@@ -338,7 +339,7 @@ begin
             event_loop;
             close_vwork;
         end if;
-        appl_exit;
+        Application.AExit;
     end if;
 
 end clock;

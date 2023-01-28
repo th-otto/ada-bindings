@@ -11,6 +11,7 @@
 with System;
 with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
+with Atari.Aes.Application;
 with Atari.Aes.Resource;
 with Atari.Aes.Objects; use Atari.Aes.Objects;
 with Atari.Aes.Menu;
@@ -60,7 +61,7 @@ procedure wdlgdemo is
         out1, out2, out3, out4: int16;
     begin
         if dialog = null then
-            if appl_xgetinfo(7, out1, out2, out3, out4) = false or else (out1 and 1) = 0 then
+            if Application.Get_Info(7, out1, out2, out3, out4) = false or else (out1 and 1) = 0 then
                 dummy := Form.Alert(1, "[3][No WDIALOG functions available][Abort]");
                 return;
             end if;
@@ -129,7 +130,7 @@ procedure wdlgdemo is
             end if;
             if quit then
                 close_window;
-                if not Is_Application then
+                if not Application.Is_Application then
                     quit := false;
                 end if;
             end if;
@@ -140,7 +141,7 @@ procedure wdlgdemo is
 
 
 begin
-    if appl_init /= -1 then
+    if Application.Init /= -1 then
         dialog := null;
         Graf.Mouse(ARROW);
         if Resource.Load("wdlgrsc.rsc") = 0 then
@@ -150,8 +151,8 @@ begin
             adaptrsc.get_aes_info;
             tree := Resource.Get_Address(TEST);
             adaptrsc.substitute_objects(tree, Num_Objects, adaptrsc.aes_flags);
-            if not Is_Application then
-                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+            if not Application.Is_Application then
+                menu_id := Menu.Register(Application.Id, menu_name(menu_name'First)'Unchecked_Access);
             else
                 open_window;
             end if;
@@ -161,7 +162,7 @@ begin
             adaptrsc.substitute_free;
             dummy := Resource.Free;
         end if;
-        appl_exit;
+        Application.AExit;
     end if;
 
 end wdlgdemo;

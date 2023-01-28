@@ -6,7 +6,7 @@ all:: libgem.a
 OBJS = \
 	atari.o \
 	atari-aes.o \
-	atari-aes-appl.ali \
+	atari-aes-application.o \
 	atari-aes-event.ali \
 	atari-aes-menu.o \
 	atari-aes-objects.o \
@@ -41,7 +41,7 @@ atari.o: atari.adb atari.ads
 atari-aes.o: atari-aes.adb atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
-atari-aes-appl.ali: atari-aes-appl.ads atari-aes.ads atari.ads
+atari-aes-application.o: atari-aes-application.adb atari-aes-application.ads atari-aes.ads atari.ads
 	$(GNAT) -c $< -o $@ $(GNATCFLAGS)
 
 atari-aes-event.ali: atari-aes-event.ads atari-aes.ads atari.ads

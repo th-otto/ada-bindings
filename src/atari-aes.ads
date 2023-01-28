@@ -35,103 +35,6 @@ package Atari.Aes is
     G_LYELLOW            : constant int16 := 14;
     G_LMAGENTA           : constant int16 := 15;
 
-    APC_SYSTEM          : constant  := 2;
-    APC_HIDE            : constant  := 10;                      -- *< Hide application -- see mt_appl_control()
-    APC_SHOW            : constant  := 11;                      -- *< Show application -- see mt_appl_control()
-    APC_TOP             : constant  := 12;                      -- *< Bring application to front -- see
-    APC_HIDENOT         : constant  := 13;                      -- *< Hide all applications except the
-    APC_INFO            : constant  := 14;                      -- *< Get the application parameter -
-    APC_MENU            : constant  := 15;                      -- *< The last used menu tree is returned
-    APC_WIDGETS         : constant  := 16;                      -- *< Inquires or sets the 'default'
-    APC_APP_CONFIG      : constant  := 17;                      -- *< Change some way to manage application
-    APC_INFORM_MESAG    : constant  := 18;                      -- *< Request/Remove the sent an user
-
-    APCI_HIDDEN         : constant  := 16#1#;                   -- *< the application is hidden -- subopcode
-    APCI_HASMBAR        : constant  := 16#2#;                   -- *< the application has a menu bar
-    APCI_HASDESK        : constant  := 16#4#;                   -- *< the application has a own desk
-
-    AES_LARGEFONT       : constant  := 0;                       -- *< see  mt_appl_getinfo()
-    AES_SMALLFONT       : constant  := 1;                       -- *< see  mt_appl_getinfo()
-    AES_SYSTEM          : constant  := 2;                       -- *< see  mt_appl_getinfo()
-    AES_LANGUAGE        : constant  := 3;                       -- *< see  mt_appl_getinfo()
-    AES_PROCESS         : constant  := 4;                       -- *< see  mt_appl_getinfo()
-    AES_PCGEM           : constant  := 5;                       -- *< see  mt_appl_getinfo()
-    AES_INQUIRE         : constant  := 6;                       -- *< see  mt_appl_getinfo()
-    AES_WDIALOG         : constant  := 7;                       -- *< see  mt_appl_getinfo()
-    AES_MOUSE           : constant  := 8;                       -- *< see  mt_appl_getinfo()
-    AES_MENU            : constant  := 9;                       -- *< see  mt_appl_getinfo()
-    AES_SHELL           : constant  := 10;                      -- *< see  mt_appl_getinfo()
-    AES_WINDOW          : constant  := 11;                      -- *< see  mt_appl_getinfo()
-    AES_MESSAGE         : constant  := 12;                      -- *< see  mt_appl_getinfo()
-    AES_OBJECT          : constant  := 13;                      -- *< see  mt_appl_getinfo()
-    AES_FORM            : constant  := 14;                      -- *< see  mt_appl_getinfo()
-    AES_EXTENDED        : constant  := 64;                      -- *< see  mt_appl_getinfo()
-    AES_NAES            : constant  := 65;                      -- *< see  mt_appl_getinfo()
-    AES_VERSION         : constant  := 96;                      -- *< see  mt_appl_getinfo() and  mt_appl_getinfo_str()
-    AES_WOPTS           : constant  := 97;                      -- *< see  mt_appl_getinfo()
-    AES_WFORM           : constant  := 98;                      -- *< see  mt_appl_getinfo()
-    AES_FUNCTIONS       : constant  := 98;                      -- *< see  mt_appl_getinfo()
-    AES_AOPTS           : constant  := 99;                      -- *< see  mt_appl_getinfo()
-    AES_APPL_OPTION     : constant  := 99;                      -- *< see  mt_appl_getinfo()
-    AES_WINX            : constant  := 22360;                   -- *< AES WINX information, see  mt_appl_getinfo()
-
-    SYSTEM_FONT         : constant  := 0;                       -- *< see  mt_appl_getinfo()
-    OUTLINE_FONT        : constant  := 1;                       -- *< see  mt_appl_getinfo()
-
-    AESLANG_ENGLISH     : constant  := 0;                       -- *< see  mt_appl_getinfo()
-    AESLANG_GERMAN      : constant  := 1;                       -- *< see  mt_appl_getinfo()
-    AESLANG_FRENCH      : constant  := 2;                       -- *< see  mt_appl_getinfo()
-    AESLANG_SPANISH     : constant  := 4;                       -- *< see  mt_appl_getinfo()
-    AESLANG_ITALIAN     : constant  := 5;                       -- *< see  mt_appl_getinfo()
-    AESLANG_SWEDISH     : constant  := 6;                       -- *< see  mt_appl_getinfo()
-
-    AES_DEVSTATUS_ALPHA : constant  := 0;                       -- *< see  mt_appl_getinfo()
-    AES_DEVSTATUS_BETA  : constant  := 1;                       -- *< see  mt_appl_getinfo()
-    AES_DEVSTATUS_RELEASE: constant  := 2;                      -- *< see  mt_appl_getinfo()
-    AES_FDEVSTATUS_STABLE: constant  := 16#100#;                -- *< see  mt_appl_getinfo()
-
-    AES_ARCH_M68000      : constant  := 0;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_M68010      : constant  := 1;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_M68020      : constant  := 2;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_M68030      : constant  := 3;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_M68040      : constant  := 4;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_M68060      : constant  := 5;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_M6802060    : constant  := 6;                      -- *< see  mt_appl_getinfo()
-    AES_ARCH_COLDFIRE    : constant  := 7;                      -- *< see  mt_appl_getinfo()
-
-    AGI_WFORM            : constant  := 1;                      -- *< see  mt_appl_getinfo()
-    AGI_AOPTS            : constant  := 2;                      -- *< see  mt_appl_getinfo()
-
-    AO0_WF_SLIDE         : constant  := 1;                      -- *< see  mt_appl_options()
-    AO0_OBJC_EDIT        : constant  := 2;                      -- *< see  mt_appl_options()
-
-    --  appl_read modes
-    APR_NOWAIT           : constant  := -1;                     -- *< Do not wait for message -- see mt_appl_read()
-
-    --  appl_search modes
-    APP_FIRST            : constant  := 0;                      -- *< see mt_appl_search()
-    APP_NEXT             : constant  := 1;                      -- *< see mt_appl_search()
-    APP_DESK             : constant  := 2;                      -- *< see mt_appl_search()
-    X_APS_CHILD0         : constant  := 16#7100#; -- Geneva
-    X_APS_CHILD          : constant  := 16#7101#; -- Geneva
-    X_APS_CHEXIT         : constant  := -1;       -- Geneva
-
-    --  application type (appl_search return values)
-    APP_SYSTEM           : constant  := 16#1#;                  -- *< see mt_appl_search()
-    APP_APPLICATION      : constant  := 16#2#;                  -- *< see mt_appl_search()
-    APP_ACCESSORY        : constant  := 16#4#;                  -- *< see mt_appl_search()
-    APP_SHELL            : constant  := 16#8#;                  -- *< see mt_appl_search()
-    APP_AESSYS           : constant  := 16#10#;                 -- *< see mt_appl_search()
-    APP_AESTHREAD        : constant  := 16#20#;                 -- *< see mt_appl_search()
-    APP_TASKINFO         : constant  := 16#100#; -- XaAES extension for taskbar applications.
-    APP_HIDDEN           : constant  := 16#100#; -- Task is disabled; XaAES only for APP_TASKINFO
-    APP_FOCUS            : constant  := 16#200#; -- Active application; XaAES only for APP_TASKINFO
-
-    APPEVNT_TIMER        : constant  := 0;                      -- *< see struct pEvntrec
-    APPEVNT_BUTTON       : constant  := 1;                      -- *< see struct pEvntrec
-    APPEVNT_MOUSE        : constant  := 2;                      -- *< see struct pEvntrec
-    APPEVNT_KEYBOARD     : constant  := 3;                      -- *< see struct pEvntrec
-
     LEFT_BUTTON          : constant  := 16#1#;                  -- *< mask for left mouse button, see mt_evnt_button()
     RIGHT_BUTTON         : constant  := 16#2#;                  -- *< mask for right mouse button, see mt_evnt_button()
     MIDDLE_BUTTON        : constant  := 16#4#;                  -- *< mask for middle mouse button, see mt_evnt_button()
@@ -830,12 +733,6 @@ package Atari.Aes is
     type MFORM_ptr is access all MFORM;
     type MFORM_const_ptr is access constant MFORM;
 
-    type EVNTREC is
-        record
-            ap_event: aliased int32;
-            ap_value: aliased int32;
-        end record;
-
     --  tail for default shell
     type SHELTAIL is
         record
@@ -922,14 +819,6 @@ package Atari.Aes is
             flags  : aliased int32;
         end record;
 
-    --  extended appl_write structure
-    type XAESMSG is record
-        dst_apid: int16;
-        unique_flg: int16;
-        attached_mem: void_ptr;
-        msgbuf: short_ptr;
-    end record;
-
     type proc_func_ptr is access function(
                 par: void_ptr)
                return int32;
@@ -983,9 +872,6 @@ package Atari.Aes is
     type Message_Buffer_ptr is access all Message_Buffer;
 
     aes_global: aliased AESglobal;
-    function gl_ap_version return int16 with Inline;
-    function gl_numapps return int16 with Inline;
-    function gl_apid return int16 with Inline;
 
     -- FIXME: how to make private to sub-packages?
     aes_control: aliased AESContrl;
@@ -997,80 +883,13 @@ package Atari.Aes is
     procedure crystal(pb: AESPB_ptr) with Inline;
     procedure aes_trap with Inline;
 
+    function vq_aes return int16;
+    function vq_aes return boolean;
+
 
     --  old C-style names
 	subtype GRECT is Rectangle;
 
-
-    function appl_init return int16;
-    procedure appl_exit;
-    function appl_read(
-                ap_id     : int16;
-                length    : int16;
-                ap_pbuff  : void_ptr)
-               return int16;
-    function appl_write(
-                ap_id     : int16;
-                length    : int16;
-                ap_pbuff  : void_ptr)
-               return int16;
-    function appl_write(
-                ap_id     : int16;
-                ap_pbuff  : Message_Buffer)
-               return int16;
-    function appl_find(name: chars_ptr) return int16;
-    function appl_find(name: String) return int16;
-    procedure appl_tplay(
-                mem       : void_ptr;
-                num       : int16;
-                scale     : int16);
-    function appl_trecord(
-                mem       : void_ptr;
-                count     : int16)
-               return int16;
-    function appl_bvset(
-                bvdisk    : int16;
-                bvhard    : int16)
-               return int16;
-    procedure appl_yield;
-    function appl_search(
-                mode      : int16;
-                fname     : chars_ptr;
-                c_type    : out int16;
-                ap_id     : out int16)
-               return int16;
-    function appl_search(
-                mode      : int16;
-                fname     : String;
-                c_type    : out int16;
-                ap_id     : out int16)
-               return int16;
-    function appl_control(
-                ap_cid    : int16;
-                ap_cwhat  : int16;
-                ap_cout   : void_ptr)
-               return int16;
-    function appl_getinfo(
-                c_type    : int16;
-                out1      : out int16;
-                out2      : out int16;
-                out3      : out int16;
-                out4      : out int16)
-               return boolean;
-    function appl_xgetinfo(
-                c_type    : int16;
-                out1      : out int16;
-                out2      : out int16;
-                out3      : out int16;
-                out4      : out int16)
-               return boolean;
-    function appl_getinfo(
-                c_type    : int16;
-                out1      : chars_ptr;
-                out2      : chars_ptr;
-                out3      : chars_ptr;
-                out4      : chars_ptr)
-               return boolean;
 
 
     function evnt_keybd return int16;
@@ -1395,9 +1214,6 @@ package Atari.Aes is
                 sh_hkey   : chars_ptr)
                return int16;
 
-    function vq_aes return int16;
-    function vq_aes return boolean;
-
 
 
 
@@ -1423,8 +1239,5 @@ package Atari.Aes is
     procedure grect_to_array(
                 area   : in Rectangle;
                 c_array: out short_array);
-
-    function Is_Application return boolean with inline;
-	function Is_MultiTask return boolean with inline;
 
 end Atari.Aes;

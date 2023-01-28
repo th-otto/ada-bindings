@@ -12,6 +12,7 @@ with Ada.Characters;
 with Atari.Aes; use Atari.Aes;
 with Atari.Vdi; use Atari.Vdi;
 use Atari;
+with Atari.Aes.Application;
 with Atari.Aes.Menu;
 with Atari.Aes.Graf;
 with Interfaces; use Interfaces;
@@ -118,7 +119,7 @@ procedure gemwin is
 	                if msg_buf.simple.handle = win_h then
 	                	close_window;
 	                end if;
-	                if is_Application then
+	                if Application.is_Application then
 						exit;
 					end if;
 	            when AP_TERM =>
@@ -166,10 +167,10 @@ procedure gemwin is
 	end;
 
 begin
-    if appl_init /= -1 then
+    if Application.Init /= -1 then
 		if open_vwk then
-            if not Is_Application then
-                menu_id := Menu.Register(gl_apid, menu_name(menu_name'First)'Unchecked_Access);
+            if not Application.Is_Application then
+                menu_id := Menu.Register(Application.Id, menu_name(menu_name'First)'Unchecked_Access);
             else
                 Graf.Mouse(ARROW);
                 open_window;
@@ -178,6 +179,6 @@ begin
 
 			v_clsvwk(vdi_h);
 		end if;
-		appl_exit;
+		Application.AExit;
 	end if;
 end gemwin;

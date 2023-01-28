@@ -1,6 +1,7 @@
 with Ada.Unchecked_Conversion;
 with Atari.Bios;
 with Atari.Gemdos;
+with Atari.Aes.Application;
 with Atari.Aes.Extensions; use Atari.Aes.Extensions;
 with Atari.Aes.Resource;
 with Interfaces; use Interfaces;
@@ -160,11 +161,11 @@ begin
     ver_3d := 0;
     radio_bgcol := G_WHITE;
 
-    if (appl_find("?AGI") = 0) then -- appl_getinfo() vorhanden?
+    if (Application.Find("?AGI") = 0) then -- appl_getinfo() vorhanden?
         flags := flags or GAI_INFO;
     end if;
 
-    if (gl_ap_version >= 16#0401#) then -- mindestens AES 4.01?
+    if (Application.Version >= 16#0401#) then -- mindestens AES 4.01?
         flags := flags or GAI_INFO;
     end if;
 
@@ -179,19 +180,19 @@ begin
     end if;
 
     if (flags and GAI_INFO) /= 0 then       -- ist appl_getinfo() vorhanden?
-        if appl_getinfo(2, ag1, ag2, ag3, ag4) and then ag3 /= 0 then -- Unterfunktion 2, Farben
+        if Application.Get_Info(2, ag1, ag2, ag3, ag4) and then ag3 /= 0 then -- Unterfunktion 2, Farben
             flags := flags or GAI_CICN;
         end if;
 
-        if appl_getinfo(7, ag1, ag2, ag3, ag4) then -- Unterfunktion 7
+        if Application.Get_Info(7, ag1, ag2, ag3, ag4) then -- Unterfunktion 7
             flags := flags or uint16(ag1 and (GAI_WDLG or GAI_LBOX or GAI_FNTS or GAI_FSEL or GAI_PDLG));
         end if;
 
-        if appl_getinfo(12, ag1, ag2, ag3, ag4) and then (ag1 and 8) /= 0 then -- AP_TERM?
+        if Application.Get_Info(12, ag1, ag2, ag3, ag4) and then (ag1 and 8) /= 0 then -- AP_TERM?
             flags := flags or GAI_APTERM;
         end if;
 
-        if appl_getinfo(13, ag1, ag2, ag3, ag4) then -- Unterfunktion 13, Objekte
+        if Application.Get_Info(13, ag1, ag2, ag3, ag4) then -- Unterfunktion 13, Objekte
             if (flags and GAI_MAGIC) /= 0 then -- MagiC spezifische Funktion!
                 if (ag4 and 8) /= 0 then -- G_SHORTCUT supported ?
                     flags := flags or GAI_GSHORTCUT;
