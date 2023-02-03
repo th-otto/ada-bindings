@@ -14,9 +14,6 @@ with System.Storage_Elements; use System.Storage_Elements;
 --  v_pat_rotate
 --  vs_grayoverride
 
---  v_opnbm
---  v_clsbm
-
 --  v_get_driver_info
 --  vqt_real_extent
 
@@ -31,7 +28,6 @@ with System.Storage_Elements; use System.Storage_Elements;
 
 --  vqt_xfntinfo
 --  vq_ext_devinfo
---  vqt_ext_name
 --  vqt_name_and_id
 --  vst_name
 
@@ -50,9 +46,6 @@ with System.Storage_Elements; use System.Storage_Elements;
 --  v_delete_itab
 --  v_get_ctab_id
 --  v_get_outline
---  v_open_bm
---  v_resize_bm
---  v_setrgb
 --  v_value2color
 --  vq_ctab
 --  vq_ctab_entry
@@ -75,7 +68,6 @@ with System.Storage_Elements; use System.Storage_Elements;
 --  vqr_fg_color
 --  vqt_bg_color
 --  vqt_fg_color
---  vr_transfer_bits
 --  vs_ctab
 --  vs_ctab_entry
 --  vs_dflt_ctab
@@ -94,6 +86,10 @@ with System.Storage_Elements; use System.Storage_Elements;
 --  vsr_fg_color
 --  vst_bg_color
 --  vst_fg_color
+--  vr_clip_rects_by_dst
+--  vr_clip_rects_by_src
+--  vr_clip_rects32_by_dst
+--  vr_clip_rects32_by_src
 --
 
 
@@ -104,17 +100,16 @@ pragma Suppress (Overflow_Check);
 pragma Suppress (Access_Check);
 
 
-function To_chars_ptr is
-  new Ada.Unchecked_Conversion (System.Address, chars_ptr);
-
 function To_Address is
   new Ada.Unchecked_Conversion (chars_ptr, System.Address);
 
-   function "+" (Left : chars_ptr; Right : Integer) return chars_ptr is
-   pragma Inline ("+");
-   begin
-      return To_chars_ptr (To_Address (Left) + Storage_Offset(Right));
-   end "+";
+function "+" (Left : chars_ptr; Right : Integer) return chars_ptr is
+pragma Inline ("+");
+   function To_chars_ptr is
+      new Ada.Unchecked_Conversion (System.Address, chars_ptr);
+begin
+   return To_chars_ptr (To_Address (Left) + Storage_Offset(Right));
+end "+";
 
 
 
@@ -131,50 +126,34 @@ end;
 
 
 procedure set_intin_pointer(offset: Integer; val: System.Address) is
-    type address_ptr is access all System.Address;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, address_ptr);
     ptr: System.Address;
-    pptr: aliased address_ptr;
 begin
     ptr := vdi_intin(offset)'Address;
-    pptr := to_address(ptr);
-    pptr.all := val;
+    void_ptr'Deref(ptr) := val;
 end;
 
 
 procedure set_intin_long(offset: Integer; val: int32) is
-    type int32_ptr is access all int32;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, int32_ptr);
     ptr: System.Address;
-    pptr: aliased int32_ptr;
 begin
     ptr := vdi_intin(offset)'Address;
-    pptr := to_address(ptr);
-    pptr.all := val;
+    int32'Deref(ptr) := val;
 end;
 
 
 function get_intout_pointer(offset: Integer) return System.Address is
-    type address_ptr is access all System.Address;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, address_ptr);
     ptr: System.Address;
-    pptr: aliased address_ptr;
 begin
     ptr := vdi_intout(offset)'Address;
-    pptr := to_address(ptr);
-    return pptr.all;
+    return void_ptr'Deref(ptr);
 end;
 
 
 function get_intout_long(offset: Integer) return int32 is
-    type int32_ptr is access all int32;
-    function to_address is new Ada.Unchecked_Conversion(System.Address, int32_ptr);
     ptr: System.Address;
-    pptr: aliased int32_ptr;
 begin
     ptr := vdi_intout(offset)'Address;
-    pptr := to_address(ptr);
-    return pptr.all;
+    return int32'Deref(ptr);
 end;
 
 
@@ -505,8 +484,145 @@ begin
 end;
 
 
+function v_open_bm(
+            base_handle: VdiHdl;
+            bitmap: GCBITMAP_ptr;
+            color_flags: int16;
+            unit_flags: int16;
+            pixel_width, pixel_height: int16) return VdiHdl is
+begin
+    vdi_control.opcode := 100;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 4;
+    vdi_control.subcode := 3;
+    vdi_control.handle := base_handle;
+	vdi_control.ptr1 := bitmap.all'Address;
+
+    vdi_intin(0) := color_flags;
+    vdi_intin(1) := unit_flags;
+    vdi_intin(2) := pixel_width;
+    vdi_intin(3) := pixel_height;
+    
+    vdi_trap;
+    
+    return vdi_intout(0);
+end;
 
 
+function vqt_ext_name(
+            handle     : VdiHdl;
+            index      : int16;
+            name       : out String;
+            vector_font: out int16;
+            font_format: out int16;
+            flags      : out int16)
+           return int16 is
+begin
+    vdi_intin(0) := index;
+    vdi_intin(1) := 0;
 
+    vdi_control.opcode := 130;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 2;
+    vdi_control.subcode := 1;
+    vdi_control.handle := handle;
+
+	--  set the 0 as return value in case NVDI is not present
+	vdi_intout(0) := 0;
+	
+    vdi_trap;
+
+    vdi_to_string(name, 32, 1);
+
+	if (vdi_control.num_intout > 34) then
+		vector_font  := vdi_intout(33);
+		flags        := int16(Shift_Right(uint16(vdi_intout(34)), 8) and 255);
+		font_format  := vdi_intout(34) and 255;
+	else if (vdi_control.num_intout > 33 ) then
+		vector_font	 := vdi_intout(33);
+		flags		 := 0;
+		font_format  := (if vdi_intout(33) /= 0 then 0 else 1);
+	else
+		vector_font	 := 0;
+		flags		 := 0;
+		font_format  := 0;
+	end if; end if;
+
+    return vdi_intout(0);
+end;
+
+
+procedure v_setrgb(
+            handle: VdiHdl;
+            c_type: int16;
+            r     : int16;
+            g     : int16;
+            b     : int16) is
+begin
+    vdi_control.opcode := 138;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 3;
+    vdi_control.subcode := c_type;
+    vdi_control.handle := handle;
+
+    vdi_intin(0) := r;
+    vdi_intin(1) := g;
+    vdi_intin(2) := b;
+    
+    vdi_trap;
+end;
+
+
+procedure vr_transfer_bits(
+            handle  : VdiHdl;
+            src_bm  : in GCBITMAP;
+            dst_bm  : in GCBITMAP;
+            src_rect: in RECT16;
+            dst_rect: in RECT16;
+            mode    : int16) is
+begin
+    vdi_control.opcode := 170;
+    vdi_control.num_ptsin := 4;
+    vdi_control.num_intin := 4;
+    vdi_control.subcode := 0;
+    vdi_control.handle := handle;
+
+    vdi_intin(0) := mode;
+    vdi_intin(1) := 0;
+    vdi_intin(2) := 0;
+    vdi_intin(3) := 0;
+    vdi_ptsin(0) := src_rect.x1;
+    vdi_ptsin(1) := src_rect.y1;
+    vdi_ptsin(2) := src_rect.x2;
+    vdi_ptsin(3) := src_rect.y2;
+    vdi_ptsin(4) := dst_rect.x1;
+    vdi_ptsin(5) := dst_rect.y1;
+    vdi_ptsin(6) := dst_rect.x2;
+    vdi_ptsin(7) := dst_rect.y2;
+    vdi_control.ptr1 := src_bm'Address;
+    vdi_control.ptr2 := dst_bm'Address;
+    vdi_control.ptr3 := System.Null_Address;
+    
+    vdi_trap;
+end;
+
+
+function v_create_driver_info(
+            handle   : VdiHdl;
+            driver_id: int16)
+           return Aes.Pdlg.DRV_INFO_ptr is
+begin
+    vdi_control.opcode := 180;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 1;
+    vdi_control.subcode := 0;
+    vdi_control.handle := handle;
+
+    vdi_intin(0) := driver_id;
+    
+    vdi_trap;
+    
+    return Aes.Pdlg.DRV_INFO_ptr'Deref(vdi_intout(0)'Address);
+end;
 
 end Atari.Vdi.Nvdi;

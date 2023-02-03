@@ -259,7 +259,8 @@ package Atari.Vdi is
         handle: int16;          -- [6]
         ptr1: System.Address;   -- [7/8]
         ptr2: System.Address;   -- [9/10]
-        unused: short_array(11..15);
+        ptr3: System.Address;   -- [11/12]
+        unused: short_array(13..15);
     end record;
 
     subtype VDIIntIn is short_array(0..1023);
@@ -830,7 +831,23 @@ package Atari.Vdi is
                 handle  : in out VdiHdl;
                 work_out: out vdi_workout_array);
 
+    procedure v_opnbm(
+                work_in : in short_array;
+                bitmap  : in out MFDB;
+                handle  : in out VdiHdl;
+                work_out: out vdi_workout_array);
+
+    function v_resize_bm(
+                handle : VdiHdl;
+                width  : int16;
+                height : int16;
+                byte_width: int32;
+                addr   : void_ptr)
+               return boolean;
+
     procedure v_clsvwk(handle: VdiHdl);
+
+    procedure v_clsbm(handle: VdiHdl);
 
     procedure vq_extnd(
                 handle     : VdiHdl;

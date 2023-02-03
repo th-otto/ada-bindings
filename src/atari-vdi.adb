@@ -1865,6 +1865,57 @@ begin
 end;
 
 
+procedure v_opnbm(
+            work_in : in short_array;
+            bitmap  : in out MFDB;
+            handle  : in out VdiHdl;
+            work_out: out vdi_workout_array) is
+    pb: aliased VDIPB;
+begin
+    vdi_control.opcode := 100;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 20;
+    vdi_control.subcode := 1;
+    vdi_control.handle := handle;
+	vdi_control.ptr1 := bitmap'Address;
+	
+    pb.control := vdi_control'Access;
+    void_ptr'Deref(pb.intin'Address) := work_in(0)'Address;
+    pb.ptsin := vdi_ptsin'Access;
+    void_ptr'Deref(pb.intout'Address) := work_out(0)'Address;
+    void_ptr'Deref(pb.ptsout'Address) := work_out(45)'Address;
+    
+    vdicall(pb'Unchecked_Access);
+    
+    handle := vdi_control.handle;
+end;
+
+
+function v_resize_bm(
+            handle : VdiHdl;
+            width  : int16;
+            height : int16;
+            byte_width: int32;
+            addr   : void_ptr)
+           return boolean is
+begin
+    vdi_control.opcode := 100;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 6;
+    vdi_control.subcode := 2;
+    vdi_control.handle := handle;
+
+    vdi_intin(0) := width;
+    vdi_intin(1) := height;
+    int32'Deref(vdi_intin(2)'Address) := byte_width;
+    void_ptr'Deref(vdi_intin(4)'Address) := addr;
+    
+    vdi_trap;
+    
+    return vdi_intout(0) /= 0;
+end;
+
+
 procedure v_clsvwk(handle: VdiHdl) is
 begin
     vdi_control.opcode := 101;
@@ -1877,13 +1928,23 @@ begin
 end;
 
 
+procedure v_clsbm(handle: VdiHdl) is
+begin
+    vdi_control.opcode := 101;
+    vdi_control.num_ptsin := 0;
+    vdi_control.num_intin := 0;
+    vdi_control.subcode := 1;
+    vdi_control.handle := handle;
+
+    vdi_trap;
+end;
+
+
 procedure vq_extnd(
             handle     : VdiHdl;
             flag       : int16;
             work_out:  out vdi_workout_array) is
     pb: aliased VDIPB;
-    function to_intout is new Ada.Unchecked_Conversion(System.Address, VDIIntOut_ptr);
-    function to_ptsout is new Ada.Unchecked_Conversion(System.Address, VDIPtsOut_ptr);
 begin
     vdi_control.opcode := 102;
     vdi_control.num_ptsin := 0;
@@ -1894,8 +1955,8 @@ begin
     pb.control := vdi_control'Access;
     pb.intin := vdi_intin'Access;
     pb.ptsin := vdi_ptsin'Access;
-    pb.intout := to_intout(work_out(0)'Address);
-    pb.ptsout := to_ptsout(work_out(45)'Address);
+    void_ptr'Deref(pb.intout'Address) := work_out(0)'Address;
+    void_ptr'Deref(pb.ptsout'Address) := work_out(45)'Address;
     vdicall(pb'Unchecked_Access);
 end;
 
@@ -1904,7 +1965,6 @@ procedure vq_scrninfo(
             handle  : int16;
             work_out: out short_array) is
     pb: aliased VDIPB;
-    function to_intout is new Ada.Unchecked_Conversion(System.Address, VDIIntOut_ptr);
 begin
     vdi_control.opcode := 102;
     vdi_control.num_ptsin := 0;
@@ -1915,7 +1975,7 @@ begin
     pb.control := vdi_control'Access;
     pb.intin := vdi_intin'Access;
     pb.ptsin := vdi_ptsin'Access;
-    pb.intout := to_intout(work_out(0)'Address);
+    void_ptr'Deref(pb.intout'Address) := work_out(0)'Address;
     pb.ptsout := vdi_ptsout'Access;
     vdicall(pb'Unchecked_Access);
 end;

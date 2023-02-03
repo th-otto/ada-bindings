@@ -1,3 +1,5 @@
+with Atari.Aes.Pdlg;
+
 package Atari.Vdi.Nvdi is
 
 	subtype fix31 is int32;
@@ -284,6 +286,8 @@ package Atari.Vdi.Nvdi is
             color_space: aliased int32;
             reserved1  : aliased int32;
         end record;
+    type GCBITMAP_ptr is access all GCBITMAP;
+
 
     function vs_calibrate(
                 handle: VdiHdl;
@@ -328,6 +332,42 @@ package Atari.Vdi.Nvdi is
     procedure vqt_cachesize(handle: VdiHdl; which_cache: int16; size: out int32);
 
 	function vq_devinfo(handle: VdiHdl; device: int16; dev_exists: out boolean; filename: out String; device_name: out String) return int16;
+
+    function v_open_bm(
+                base_handle: VdiHdl;
+                bitmap: GCBITMAP_ptr;
+                color_flags: int16;
+                unit_flags: int16;
+                pixel_width, pixel_height: int16) return VdiHdl;
+
+    function vqt_ext_name(
+                handle     : VdiHdl;
+                index      : int16;
+                name       : out String;
+                vector_font: out int16;
+                font_format: out int16;
+                flags      : out int16)
+               return int16;
+
+    procedure v_setrgb(
+                handle: VdiHdl;
+                c_type: int16;
+                r     : int16;
+                g     : int16;
+                b     : int16);
+
+    procedure vr_transfer_bits(
+                handle  : VdiHdl;
+                src_bm  : in GCBITMAP;
+                dst_bm  : in GCBITMAP;
+                src_rect: in RECT16;
+                dst_rect: in RECT16;
+                mode    : int16);
+
+    function v_create_driver_info(
+                handle   : VdiHdl;
+                driver_id: int16)
+               return Aes.Pdlg.DRV_INFO_ptr;
 
 -- utilities
 
